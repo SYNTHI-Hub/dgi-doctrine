@@ -78,7 +78,7 @@ jobs:
         REDIS_URL=redis://localhost:6379/0
         CELERY_BROKER_URL=redis://localhost:6379/0
         CELERY_RESULT_BACKEND=redis://localhost:6379/0
-        DJANGO_SETTINGS_MODULE=config.settings.testing
+        DJANGO_SETTINGS_MODULE=core.settings.testing
         EOF
 
     - name: Wait for services
@@ -94,18 +94,18 @@ jobs:
 
     - name: Run Django system checks
       run: |
-        python manage.py check --settings=config.settings.testing
+        python manage.py check --settings=core.settings
 
     - name: Run code quality checks
       run: |
         # Linting avec flake8
-        flake8 documents/ config/ --count --max-line-length=88 --exclude=migrations --statistics
+        flake8 documents/ core/ --count --max-line-length=88 --exclude=migrations --statistics
         
         # Vérification du formatage avec black
-        black --check documents/ config/ --exclude=migrations
+        black --check documents/ core/ --exclude=migrations
         
         # Vérification des imports avec isort
-        isort --check-only documents/ config/ --skip=migrations
+        isort --check-only documents/ core/ --skip=migrations
 
     - name: Run security checks
       run: |
@@ -113,19 +113,19 @@ jobs:
         safety check --json || echo "Security vulnerabilities found"
         
         # Analyse de sécurité du code avec bandit
-        bandit -r documents/ config/ -f json -o bandit-report.json || echo "Security issues found"
+        bandit -r documents/ core/ -f json -o bandit-report.json || echo "Security issues found"
 
     - name: Setup database and run migrations
       run: |
-        python manage.py migrate --settings=config.settings.testing
+        python manage.py migrate --settings=core.settings.testing
 
     - name: Collect static files
       run: |
-        python manage.py collectstatic --noinput --settings=config.settings.testing
+        python manage.py collectstatic --noinput --settings=core.settings.testing
 
     - name: Run tests with coverage
       run: |
-        coverage run -m pytest tests/ -v --tb=short --settings=config.settings.testing
+        coverage run -m pytest tests/ -v --tb=short --settings=core.settings.testing
         coverage report --show-missing --fail-under=80
         coverage xml
 
@@ -139,7 +139,7 @@ jobs:
 
     - name: Test document processing functionality
       run: |
-        python manage.py shell --settings=config.settings.testing -c "
+        python manage.py shell --settings=core.settings -c "
         import os
         import tempfile
         from django.contrib.auth import get_user_model
@@ -258,7 +258,7 @@ jobs:
         EXPOSE 8000
         
         ENTRYPOINT ["docker-entrypoint.sh"]
-        CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "config.wsgi:application"]
+        CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "core.wsgi:application"]
         EOF
 
     - name: Create docker-entrypoint.sh
@@ -441,16 +441,16 @@ jobs:
         SECRET_KEY=perf-test-secret-key
         DATABASE_URL=postgres://postgres:postgres@localhost:5432/perf_test_db
         REDIS_URL=redis://localhost:6379/0
-        DJANGO_SETTINGS_MODULE=config.settings.testing
+        DJANGO_SETTINGS_MODULE=core.settings.testing
         EOF
 
     - name: Setup database
       run: |
-        python manage.py migrate --settings=config.settings.testing
+        python manage.py migrate --settings=core.settings.testing
 
     - name: Run performance benchmarks
       run: |
-        python -m pytest tests/performance/ --benchmark-only --benchmark-json=benchmark_results.json --settings=config.settings.testing
+        python -m pytest tests/performance/ --benchmark-only --benchmark-json=benchmark_results.json --settings=core.settings.testing
       continue-on-error: true
 
     - name: Upload benchmark results
@@ -471,7 +471,7 @@ jobs:
     - name: Checkout GitOps repo
       uses: actions/checkout@v4
       with:
-        repository: ${{ github.repository_owner }}/gitops-config
+        repository: ${{ github.repository_owner }}/gitops-core
         token: ${{ secrets.GITOPS_TOKEN }}
         path: gitops
 
@@ -490,14 +490,14 @@ jobs:
         cd gitops/apps/document-management/overlays/staging
         kustomize edit set image django-document-mgmt=${{ steps.get-tag.outputs.image-tag }}
         
-        # Mise à jour de la configuration staging
-        cat > env-config.yaml << EOF
+        # Mise à jour de la coreuration staging
+        cat > env-core.yaml << EOF
         apiVersion: v1
-        kind: ConfigMap
+        kind: coreMap
         metadata:
-          name: django-env-config
+          name: django-env-core
         data:
-          DJANGO_SETTINGS_MODULE: "config.settings.staging"
+          DJANGO_SETTINGS_MODULE: "core.settings.staging"
           DEBUG: "False"
           ENVIRONMENT: "staging"
           RUN_MIGRATIONS: "true"
@@ -523,8 +523,8 @@ jobs:
                 image: ${{ steps.get-tag.outputs.image-tag }}
                 command: ["python", "manage.py", "migrate", "--noinput"]
                 envFrom:
-                - configMapRef:
-                    name: django-env-config
+                - coreMapRef:
+                    name: django-env-core
                 - secretRef:
                     name: django-secrets
         EOF
@@ -532,8 +532,8 @@ jobs:
     - name: Commit and push changes
       run: |
         cd gitops
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
+        git core user.name "GitHub Actions"
+        git core user.email "actions@github.com"
         git add .
         git commit -m "🚀 Deploy to staging: ${{ steps.get-tag.outputs.image-tag }}" || echo "No changes to commit"
         git push
@@ -556,7 +556,7 @@ jobs:
     - name: Checkout GitOps repo
       uses: actions/checkout@v4
       with:
-        repository: ${{ github.repository_owner }}/gitops-config
+        repository: ${{ github.repository_owner }}/gitops-core
         token: ${{ secrets.GITOPS_TOKEN }}
         path: gitops
 
@@ -611,14 +611,14 @@ jobs:
         cd gitops/apps/document-management/overlays/production
         kustomize edit set image django-document-mgmt=${{ steps.get-tag.outputs.image-tag }}
         
-        # Configuration production
-        cat > env-config.yaml << EOF
+        # coreuration production
+        cat > env-core.yaml << EOF
         apiVersion: v1
-        kind: ConfigMap
+        kind: coreMap
         metadata:
-          name: django-env-config
+          name: django-env-core
         data:
-          DJANGO_SETTINGS_MODULE: "config.settings.production"
+          DJANGO_SETTINGS_MODULE: "core.settings.production"
           DEBUG: "False"
           ENVIRONMENT: "production"
           SECURE_SSL_REDIRECT: "True"
@@ -646,8 +646,8 @@ jobs:
                 image: ${{ steps.get-tag.outputs.image-tag }}
                 command: ["python", "manage.py", "migrate", "--noinput"]
                 envFrom:
-                - configMapRef:
-                    name: django-env-config
+                - coreMapRef:
+                    name: django-env-core
                 - secretRef:
                     name: django-secrets
         EOF
@@ -655,8 +655,8 @@ jobs:
     - name: Commit and push changes
       run: |
         cd gitops
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
+        git core user.name "GitHub Actions"
+        git core user.email "actions@github.com"
         git add .
         git commit -m "🚀 Deploy to production: ${{ steps.get-tag.outputs.image-tag }}"
         git push
@@ -691,7 +691,7 @@ jobs:
           - ✅ Vulnerability scanning completed
           - ✅ Container security validated
           - ✅ HTTPS/TLS enforced
-          - ✅ Security headers configured
+          - ✅ Security headers coreured
           
           **⚡ Performance:**
           - ✅ Load testing passed
@@ -702,7 +702,7 @@ jobs:
           **📊 Monitoring:**
           - 🏥 Health checks enabled
           - 📈 Metrics collection active
-          - 🚨 Alerting configured
+          - 🚨 Alerting coreured
         draft: false
         prerelease: false
 
