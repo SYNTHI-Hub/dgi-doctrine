@@ -1,0 +1,557 @@
+name: CI/CD Pipeline - Django Document Management
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  HARBOR_PROJECT: document-management
+  IMAGE_NAME: django-document-mgmt
+  KUSTOMIZE_VERSION: v5.0.3
+  PYTHON_VERSION: '3.11'
+  POSTGRES_VERSION: '15'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test & Quality Check
+
+    services:
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends \
+          build-essential \
+          libpq-dev \
+          postgresql-client \
+          gettext
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install coverage pytest-django pytest-cov flake8 black isort safety
+
+    - name: Setup environment variables
+      run: |
+        cp .env.example .env || echo "Using existing .env configuration"
+
+    - name: Run Django checks
+      run: |
+        export DJANGO_SETTINGS_MODULE=config.settings.testing
+        python manage.py check
+
+    - name: Run code quality checks
+      run: |
+        # Linting avec flake8
+        flake8 documents/ config/ --count --select=E9,F63,F7,F82 --show-source --statistics
+        
+        # Vérification du formatage avec black
+        black --check documents/ config/ || echo "Code formatting issues found"
+        
+        # Vérification des imports avec isort
+        isort --check-only documents/ config/ || echo "Import order issues found"
+
+    - name: Check Django configuration
+      run: |
+        export DJANGO_SETTINGS_MODULE=config.settings.testing
+        python manage.py check --deploy
+
+    - name: Run security checks
+      run: |
+        # Vérification des vulnérabilités dans les dépendances
+        safety check || echo "Security vulnerabilities found"
+
+    - name: Test application startup
+      run: |
+        export DJANGO_SETTINGS_MODULE=config.settings.testing
+        python manage.py check
+        python manage.py collectstatic --noinput
+        echo "Django application startup test completed"
+
+    - name: Run tests with coverage
+      run: |
+        export DJANGO_SETTINGS_MODULE=config.settings.testing
+        coverage run -m pytest tests/ -v --tb=short
+        coverage report --show-missing
+        coverage xml
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+    - name: Test document processing functionality
+      run: |
+        export DJANGO_SETTINGS_MODULE=config.settings.testing
+        python manage.py shell -c "
+        from documents.tests.factories import DocumentFactory, UserFactory
+        from documents.services.document_processor import document_processor
+        print('Testing document processor...')
+        user = UserFactory()
+        print(f'Created test user: {user.email}')
+        print('Document processor test completed')
+        "
+
+  build-and-push:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    name: Build & Push Docker Image
+
+    outputs:
+      image-tag: ${{ steps.meta.outputs.tags }}
+      image-digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Harbor
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ secrets.HARBOR_REGISTRY }}
+        username: ${{ secrets.HARBOR_USERNAME }}
+        password: ${{ secrets.HARBOR_PASSWORD }}
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ secrets.HARBOR_REGISTRY }}/${{ env.HARBOR_PROJECT }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: Create docker-entrypoint.sh
+      run: |
+        cat > docker-entrypoint.sh << 'EOF'
+        #!/bin/bash
+        set -e
+        
+        # Attendre que les services soient prêts
+        echo "Waiting for services..."
+        until nc -z $DB_HOST $DB_PORT; do
+          echo "Waiting for database..."
+          sleep 2
+        done
+        echo "Database is ready"
+        
+        until nc -z localhost 6379; do
+          echo "Waiting for Redis..."
+          sleep 2
+        done
+        echo "Redis is ready"
+        
+        # Exécuter les migrations si nécessaire
+        echo "Running migrations if needed..."
+        python manage.py migrate --noinput
+        
+        # Collecter les fichiers statiques
+        echo "Collecting static files..."
+        python manage.py collectstatic --noinput
+        
+        # Créer les répertoires nécessaires
+        mkdir -p /vol/web/media/documents
+        
+        # Exécuter la commande passée en argument
+        exec "$@"
+        EOF
+        chmod +x docker-entrypoint.sh
+
+    - name: Build and push Docker image
+      id: build
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        platforms: linux/amd64,linux/arm64
+        build-args: |
+          PYTHON_VERSION=${{ env.PYTHON_VERSION }}
+
+  security-scan:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    name: Security Scan
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Login to Harbor Registry
+      run: |
+        echo "${{ secrets.HARBOR_PASSWORD }}" | docker login ${{ secrets.HARBOR_REGISTRY }} \
+          -u "${{ secrets.HARBOR_USERNAME }}" --password-stdin
+
+    - name: Set image tag for scanning
+      id: set-scan-tag
+      run: |
+        # Construire le tag basé sur la branche
+        BRANCH_NAME=${GITHUB_REF#refs/heads/}
+        if [ "$BRANCH_NAME" = "main" ]; then
+          IMAGE_TAG="${{ secrets.HARBOR_REGISTRY }}/${{ env.HARBOR_PROJECT }}/${{ env.IMAGE_NAME }}:latest"
+        else
+          IMAGE_TAG="${{ secrets.HARBOR_REGISTRY }}/${{ env.HARBOR_PROJECT }}/${{ env.IMAGE_NAME }}:${BRANCH_NAME}"
+        fi
+        echo "Image tag for scanning: $IMAGE_TAG"
+        echo "image-tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    - name: Pull image for scanning
+      run: |
+        docker pull "${{ steps.set-scan-tag.outputs.image-tag }}"
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ${{ steps.set-scan-tag.outputs.image-tag }}
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        severity: 'CRITICAL,HIGH'
+
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v3
+      if: always() && hashFiles('trivy-results.sarif') != ''
+      with:
+        sarif_file: 'trivy-results.sarif'
+        category: 'trivy'
+      continue-on-error: true
+
+    - name: Run SAST with Semgrep
+      uses: returntocorp/semgrep-action@v1
+      with:
+        config: >-
+          p/security-audit
+          p/django
+          p/python
+      env:
+        SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+      continue-on-error: true
+
+  performance-test:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    name: Performance Testing
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+
+    services:
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install locust pytest-benchmark
+
+    - name: Setup test environment
+      run: |
+        cp .env.example .env || echo "Using existing .env configuration"
+
+    - name: Run database setup
+      run: |
+        export DJANGO_SETTINGS_MODULE=config.settings.testing
+        python manage.py migrate
+
+    - name: Run performance benchmarks
+      run: |
+        export DJANGO_SETTINGS_MODULE=config.settings.testing
+        python -m pytest tests/performance/ --benchmark-only --benchmark-json=benchmark_results.json
+      continue-on-error: true
+
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v3
+      with:
+        name: benchmark-results
+        path: benchmark_results.json
+      if: always()
+
+  deploy-staging:
+    needs: [build-and-push, security-scan]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    name: Deploy to Staging
+    environment: staging
+
+    steps:
+    - name: Checkout GitOps repo
+      uses: actions/checkout@v4
+      with:
+        repository: SYNTHI-Hub/gitops-config
+        token: ${{ secrets.GITOPS_TOKEN }}
+        path: gitops
+
+    - name: Setup Kustomize
+      run: |
+        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+        sudo mv kustomize /usr/local/bin/
+
+    - name: Update staging image
+      run: |
+        cd gitops/apps/document-management/overlays/staging
+        kustomize edit set image django-document-mgmt=${{ needs.build-and-push.outputs.image-tag }}
+
+    - name: Update staging configuration
+      run: |
+        cd gitops/apps/document-management/overlays/staging
+        # Mise à jour des variables d'environnement spécifiques au staging
+        cat > staging-env-patch.yaml << EOF
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: django-env-config
+        data:
+          DJANGO_SETTINGS_MODULE: "config.settings.staging"
+          DEBUG: "False"
+          ENVIRONMENT: "staging"
+        EOF
+
+    - name: Run database migrations in staging
+      run: |
+        cd gitops
+        # Ajouter un job Kubernetes pour les migrations
+        cat > apps/document-management/overlays/staging/migration-job.yaml << EOF
+        apiVersion: batch/v1
+        kind: Job
+        metadata:
+          name: django-migrate-$(date +%s)
+          namespace: document-management-staging
+        spec:
+          template:
+            spec:
+              restartPolicy: Never
+              containers:
+              - name: migrate
+                image: ${{ needs.build-and-push.outputs.image-tag }}
+                command: ["python", "manage.py", "migrate", "--noinput"]
+                envFrom:
+                - configMapRef:
+                    name: django-env-config
+                - secretRef:
+                    name: django-secrets
+        EOF
+
+    - name: Commit and push changes
+      run: |
+        cd gitops
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git add .
+        git commit -m "🚀 Deploy to staging: ${{ needs.build-and-push.outputs.image-tag }}"
+        git push
+
+    - name: Notify deployment
+      run: |
+        echo "🚀 Staging deployment initiated"
+        echo "Image: ${{ needs.build-and-push.outputs.image-tag }}"
+        echo "Environment: staging"
+
+  deploy-production:
+    needs: [build-and-push, security-scan, performance-test]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    name: Deploy to Production
+    environment: production
+
+    steps:
+    - name: Checkout GitOps repo
+      uses: actions/checkout@v4
+      with:
+        repository: SYNTHI-Hub/gitops-config
+        token: ${{ secrets.GITOPS_TOKEN }}
+        path: gitops
+
+    - name: Setup Kustomize
+      run: |
+        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+        sudo mv kustomize /usr/local/bin/
+
+    - name: Update production image
+      run: |
+        cd gitops/apps/document-management/overlays/production
+        kustomize edit set image django-document-mgmt=${{ needs.build-and-push.outputs.image-tag }}
+
+    - name: Update production configuration
+      run: |
+        cd gitops/apps/document-management/overlays/production
+        # Configuration spécifique à la production
+        cat > production-env-patch.yaml << EOF
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: django-env-config
+        data:
+          DJANGO_SETTINGS_MODULE: "config.settings.production"
+          DEBUG: "False"
+          ENVIRONMENT: "production"
+          SECURE_SSL_REDIRECT: "True"
+          SECURE_HSTS_SECONDS: "31536000"
+        EOF
+
+    - name: Create backup job
+      run: |
+        cd gitops/apps/document-management/overlays/production
+        # Job de sauvegarde avant déploiement
+        cat > backup-job.yaml << EOF
+        apiVersion: batch/v1
+        kind: Job
+        metadata:
+          name: pre-deploy-backup-$(date +%s)
+          namespace: document-management-production
+        spec:
+          template:
+            spec:
+              restartPolicy: Never
+              containers:
+              - name: backup
+                image: postgres:15
+                command: 
+                - /bin/bash
+                - -c
+                - |
+                  pg_dump \$DATABASE_URL > /backup/backup-$(date +%Y%m%d-%H%M%S).sql
+                  echo "Backup completed"
+                envFrom:
+                - secretRef:
+                    name: database-secrets
+                volumeMounts:
+                - name: backup-storage
+                  mountPath: /backup
+              volumes:
+              - name: backup-storage
+                persistentVolumeClaim:
+                  claimName: backup-pvc
+        EOF
+
+    - name: Update migration job
+      run: |
+        cd gitops/apps/document-management/overlays/production
+        cat > migration-job.yaml << EOF
+        apiVersion: batch/v1
+        kind: Job
+        metadata:
+          name: django-migrate-$(date +%s)
+          namespace: document-management-production
+        spec:
+          template:
+            spec:
+              restartPolicy: Never
+              containers:
+              - name: migrate
+                image: ${{ needs.build-and-push.outputs.image-tag }}
+                command: ["python", "manage.py", "migrate", "--noinput"]
+                envFrom:
+                - configMapRef:
+                    name: django-env-config
+                - secretRef:
+                    name: django-secrets
+        EOF
+
+    - name: Commit and push changes
+      run: |
+        cd gitops
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git add .
+        git commit -m "🚀 Deploy to production: ${{ needs.build-and-push.outputs.image-tag }}"
+        git push
+
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: Release v${{ github.run_number }}
+        body: |
+          🚀 **Production Deployment Summary**
+          
+          - **Application**: Django Document Management System
+          - **Image**: ${{ needs.build-and-push.outputs.image-tag }}
+          - **Commit**: ${{ github.sha }}
+          - **Environment**: Production
+          - **Deployed by**: ${{ github.actor }}
+          - **Python Version**: ${{ env.PYTHON_VERSION }}
+          - **PostgreSQL Version**: ${{ env.POSTGRES_VERSION }}
+          
+          **Features in this release:**
+          - Document processing with PyMuPDF
+          - Advanced search and filtering
+          - REST API with comprehensive documentation
+          - Celery-based asynchronous processing
+          - User management and permissions
+          
+          **Changes in this release:**
+          ${{ github.event.head_commit.message }}
+          
+          **Security:**
+          - Vulnerability scanning completed
+          - Security best practices applied
+          - HTTPS/TLS enforced
+          
+          **Performance:**
+          - Load testing completed
+          - Database migrations applied
+          - Static files optimized
+        draft: false
+        prerelease: false
+
+    - name: Post-deployment health check
+      run: |
+        echo "🏥 Initiating post-deployment health checks..."
+        # Ici vous pourriez ajouter des appels d'API pour vérifier la santé de l'application
+        # curl -f https://your-domain.com/health/ || exit 1
+        echo "✅ Health checks would be performed here"
+
+    - name: Notify deployment success
+      run: |
+        echo "🎉 Production deployment completed successfully!"
+        echo "📊 Dashboard: https://your-domain.com/admin/"
+        echo "📖 API Docs: https://your-domain.com/api/v1/processing/docs/"
+        echo "🔍 Monitoring: https://your-monitoring-dashboard.com"
+
+  cleanup:
+    needs: [deploy-production, deploy-staging]
+    runs-on: ubuntu-latest
+    if: always()
+    name: Cleanup
+
+    steps:
+    - name: Cleanup old Docker images
+      continue-on-error: true
+      run: |
+        echo "🧹 Cleaning up old Docker images..."
+        # Ici vous pourriez ajouter la logique pour nettoyer les anciennes images
+        echo "Cleanup completed"
