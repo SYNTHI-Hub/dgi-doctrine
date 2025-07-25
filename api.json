@@ -1,0 +1,548 @@
+{
+	"info": {
+		"_postman_id": "YOUR_COLLECTION_ID",
+		"name": "DGI Extractor API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "YOUR_EXPORTER_ID",
+		"description": "API Endpoints for Document Management and Processing, including file upload, content extraction, search, and statistics."
+	},
+	"item": [
+		{
+			"name": "Processing Endpoints",
+			"item": [
+				{
+					"name": "Upload and Process Document",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ACCESS_TOKEN",
+								"type": "text",
+								"description": "Bearer token obtained from OAuth2 /o/token/ endpoint"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/path/to/your/document.pdf",
+									"description": "The document file (PDF, DOC, DOCX) to upload."
+								},
+								{
+									"key": "title",
+									"value": "My Uploaded Document Title",
+									"type": "text",
+									"description": "Required: Title of the document."
+								},
+								{
+									"key": "description",
+									"value": "An optional description for the document.",
+									"type": "text",
+									"description": "Optional: Description of the document."
+								},
+								{
+									"key": "theme_id",
+									"value": "123e4567-e89b-12d3-a456-426614174000",
+									"type": "text",
+									"description": "Required: UUID of the theme associated with the document."
+								},
+								{
+									"key": "category_id",
+									"value": "123e4567-e89b-12d3-a456-426614174001",
+									"type": "text",
+									"description": "Required: UUID of the category associated with the document."
+								},
+								{
+									"key": "visibility",
+									"value": "public",
+									"type": "text",
+									"description": "Optional: Document visibility (public/private/restricted). Default: public"
+								},
+								{
+									"key": "language",
+									"value": "fr",
+									"type": "text",
+									"description": "Optional: Document language (fr/en/es). Default: fr"
+								},
+								{
+									"key": "auto_process",
+									"value": "true",
+									"type": "text",
+									"description": "Optional: Whether to automatically start content processing after upload (true/false). Default: true"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/processing/documents/upload_and_process/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"processing",
+								"documents",
+								"upload_and_process",
+								""
+							]
+						},
+						"description": "Uploads a document file and optionally initiates automatic processing."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Document List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ACCESS_TOKEN",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/processing/documents/?page=1&page_size=15",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"processing",
+								"documents",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number",
+									"disabled": false
+								},
+								{
+									"key": "page_size",
+									"value": "15",
+									"description": "Number of items per page",
+									"disabled": false
+								},
+								{
+									"key": "search",
+									"value": "",
+									"description": "Textual search in title, description, filename",
+									"disabled": true
+								},
+								{
+									"key": "ordering",
+									"value": "-created_at",
+									"description": "Sorting field (-created_at, title, status, file_size)",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "processed",
+									"description": "Filter by processing status (pending, processing, processed, error)",
+									"disabled": true
+								},
+								{
+									"key": "file_type",
+									"value": "pdf",
+									"description": "Filter by file type (pdf, doc, docx)",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Retrieves a paginated list of documents with optional filtering and search."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Document Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ACCESS_TOKEN",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/processing/documents/{{document_id}}/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"processing",
+								"documents",
+								"{{document_id}}",
+								""
+							]
+						},
+						"description": "Retrieves the details of a specific document by its ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Process Document Content",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ACCESS_TOKEN",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"force\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/processing/documents/{{document_id}}/process_content/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"processing",
+								"documents",
+								"{{document_id}}",
+								"process_content",
+								""
+							]
+						},
+						"description": "Initiates the content extraction process for a specified document. Use `force: true` to re-process."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Processing Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ACCESS_TOKEN",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/processing/documents/{{document_id}}/processing_status/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"processing",
+								"documents",
+								"{{document_id}}",
+								"processing_status",
+								""
+							]
+						},
+						"description": "Retrieves the current processing status of a document."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Extracted Content",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ACCESS_TOKEN",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/processing/documents/{{document_id}}/extracted_content/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"processing",
+								"documents",
+								"{{document_id}}",
+								"extracted_content",
+								""
+							]
+						},
+						"description": "Retrieves the raw extracted content (text) of a document."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Document Structure",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ACCESS_TOKEN",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/processing/documents/{{document_id}}/structure/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"processing",
+								"documents",
+								"{{document_id}}",
+								"structure",
+								""
+							]
+						},
+						"description": "Retrieves the hierarchical structure (sections, paragraphs, tables) of a document."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Extracted Tables",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ACCESS_TOKEN",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/processing/documents/{{document_id}}/tables/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"processing",
+								"documents",
+								"{{document_id}}",
+								"tables",
+								""
+							]
+						},
+						"description": "Retrieves extracted tables from a document."
+					},
+					"response": []
+				},
+				{
+					"name": "Export Document",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ACCESS_TOKEN",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/processing/documents/{{document_id}}/export/?format=json",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"processing",
+								"documents",
+								"{{document_id}}",
+								"export",
+								""
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json",
+									"description": "Format for export (json/markdown/txt). Default: json",
+									"disabled": false
+								}
+							]
+						},
+						"description": "Exports document content in a specified format (JSON, Markdown, or TXT)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Processing Statistics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ACCESS_TOKEN",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/processing/statistics/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"processing",
+								"statistics",
+								""
+							]
+						},
+						"description": "Retrieves global statistics related to document processing."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Content",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer YOUR_ACCESS_TOKEN",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/processing/search/?q=your_search_term&page=1&page_size=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"processing",
+								"search",
+								""
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "your_search_term",
+									"description": "Required: Search term (minimum 3 characters).",
+									"disabled": false
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"description": "Page number.",
+									"disabled": false
+								},
+								{
+									"key": "page_size",
+									"value": "10",
+									"description": "Number of items per page.",
+									"disabled": false
+								}
+							]
+						},
+						"description": "Performs a full-text search within extracted document content."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Get OAuth Token (Client Credentials)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic BASE64_ENCODED_CLIENT_ID_AND_SECRET",
+								"type": "text",
+								"description": "Base64 encoded string of 'client_id:client_secret'"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/o/token/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"o",
+								"token",
+								""
+							]
+						},
+						"description": "Obtains an OAuth2 access token using the Client Credentials grant type. Requires a confidential client configured for this grant type."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000",
+			"type": "string",
+			"description": "Base URL of your Django application"
+		},
+		{
+			"key": "document_id",
+			"value": "123e4567-e89b-12d3-a456-426614174002",
+			"type": "string",
+			"description": "Placeholder for a document ID (UUID). Update with an actual ID from your system."
+		}
+	]
+}
