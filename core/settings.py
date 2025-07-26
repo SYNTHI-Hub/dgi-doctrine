@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-h&*^&l%sch@cq+8a8j+e8ik&f)mdor_m)s+c_=dhlcw%bfp30g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['dotrine-a0gffybte5a5e2b2.canadacentral-01.azurewebsites.net','*']
 
 AUTH_USER_MODEL = 'doctrine.User'
 # Application definition
