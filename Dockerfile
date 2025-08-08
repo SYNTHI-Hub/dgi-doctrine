@@ -33,8 +33,16 @@ RUN mkdir -p /vol/web/media /vol/web/static /app/logs /app/staticfiles \
  && chmod -R 755 /vol/web /app/logs /app/staticfiles
 
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
 
 COPY . /app
+
+
+RUN mkdir -p /vol/web/media /vol/web/static /app/logs /app/staticfiles \
+ && chown -R appuser:appgroup /vol/web /app/logs /app/staticfiles \
+ && chmod -R 755 /vol/web /app/logs /app/staticfiles
+
+RUN pip install gunicorn
 
 COPY ./docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
@@ -43,6 +51,6 @@ EXPOSE 8000
 
 USER appuser
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+#ENTRYPOINT ["docker-entrypoint.sh"]
 
 CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:8000"]
