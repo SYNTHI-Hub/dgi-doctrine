@@ -16,31 +16,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
-from oauth2_provider import urls as oauth2_urls
-...
-
-schema_view = get_schema_view(
-   openapi.Info(
-      title="Snippets API",
-      default_version='v1',
-      description="Test description",
-      terms_of_service="https://www.synthi-ai.com/policies/terms/",
-      contact=openapi.Contact(email="contact@synthi-ai.com"),
-      license=openapi.License(name="SYNTHI AI License"),
-   ),
-   public=True,
-   permission_classes=(permissions.AllowAny,),
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
 )
 
 urlpatterns = [
+    # Admin interface
     path('admin/', admin.site.urls),
-    path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path('doctrine/',include('doctrine.urls')),
-    path('o/', include(oauth2_urls)),
-    ]
+
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+
+    path('doctrine/', include('doctrine.urls')),
+
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='schema-swagger-ui'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='schema-redoc'),
+]

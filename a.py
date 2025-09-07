@@ -4,7 +4,6 @@ from appwrite.client import Client
 from appwrite.services.databases import Databases
 from appwrite.services.storage import Storage
 from appwrite.id import ID
-from appwrite.query import Query
 from datetime import datetime
 
 # Initialize the Appwrite client
@@ -13,118 +12,124 @@ client.set_endpoint(os.getenv('NEXT_PUBLIC_APPWRITE_ENDPOINT', 'https://syd.clou
 client.set_project(os.getenv('NEXT_PUBLIC_APPWRITE_PROJECT_ID', '6882384d00032ba96226'))
 client.set_key('standard_09172d050204786418044d916a1bfb5b308036025ab4138c577c9d67cc3abebbb6b11d11fda92156aaced3503345eb2482e23873a773107e7a8dd62357dcb9a10048e5d0ef5d183c347cb6ed5d5833960c9bc08a32357e0f1f8690f67f5e24a6cda92f7c51aa2a483370851ccafb51a3267ccf63ff3e4bc66a437869d1a9e5af')  # Set API key for authentication
 
+
 databases = Databases(client)
 storage = Storage(client)
 
-# Database and collection IDs
+# IDs - récupérés depuis variables d'environnement ou valeurs par défaut
 DATABASE_ID = os.getenv('NEXT_PUBLIC_DATABASE_ID', '68823942003cec72f927')
-COLLECTION_ID_SOLUTIONS = os.getenv('NEXT_PUBLIC_COLLECTION_ID_SOLUTIONS', '6882399700312fffced9')
-COLLECTION_ID_TECHNOLOGIES = 'technologies'
-COLLECTION_ID_USE_CASES = 'use_cases'
-COLLECTION_ID_OBJECTIFS = 'objectifs'
-COLLECTION_ID_AUTEURS = 'auteurs'
 
-def create_database():
-    """Create the database if it doesn't exist."""
-    try:
-        databases.create(DATABASE_ID, name='Solutions Database')
-        print(f"Database {DATABASE_ID} created successfully.")
-    except Exception as e:
-        if 'already exists' in str(e).lower():
-            print(f"Database {DATABASE_ID} already exists.")
-        else:
-            print(f"Error creating database: {e}")
-            raise
+COLLECTION_ID_SOLUTIONS = os.getenv('NEXT_PUBLIC_COLLECTION_ID_SOLUTIONS', '6895f48b00104b1c6afe')
+COLLECTION_ID_TECHNOLOGIES = os.getenv('NEXT_PUBLIC_COLLECTION_ID_TECHNOLOGIES', '6895f4c800177aedc217')
+COLLECTION_ID_USE_CASES = os.getenv('NEXT_PUBLIC_COLLECTION_ID_USE_CASES', '6895f4e4003014f7a29d')
+COLLECTION_ID_OBJECTIFS = os.getenv('NEXT_PUBLIC_COLLECTION_ID_OBJECTIVES', '6895f509001027c30af4b')  # attention au nom variable
+COLLECTION_ID_AUTEURS = os.getenv('NEXT_PUBLIC_COLLECTION_ID_AUTHORS', '6895f5220037445d3b8b')
+
 
 def create_collection(collection_id, collection_name, attributes):
-    """Create a collection with the specified attributes."""
     try:
         databases.create_collection(
             database_id=DATABASE_ID,
             collection_id=collection_id,
             name=collection_name
         )
-        print(f"Collection {collection_name} ({collection_id}) created successfully.")
-
-        # Create attributes for the collection
-        for attr in attributes:
-            databases.create_ip_attribute(
-                database_id=DATABASE_ID,
-                collection_id=collection_id,
-                **attr
-            )
-            print(f"Attribute {attr['key']} created for collection {collection_name}.")
-            time.sleep(1)  # Add delay to ensure attribute is fully created
+        print(f"Collection {collection_name} ({collection_id}) créée avec succès.")
     except Exception as e:
         if 'already exists' in str(e).lower():
-            print(f"Collection {collection_name} ({collection_id}) already exists.")
+            print(f"Collection {collection_name} ({collection_id}) existe déjà.")
         else:
-            print(f"Error creating collection {collection_name}: {e}")
+            print(f"Erreur lors de la création de la collection {collection_name} : {e}")
             raise
 
+    # Création des attributs (champs)
+    for attr in attributes:
+        try:
+            # Utilisation de la bonne méthode selon le type
+            if attr['type'] == 'string':
+                databases.create_string_attribute(
+                    database_id=DATABASE_ID,
+                    collection_id=collection_id,
+                    key=attr['key'],
+                    size=attr.get('size', 255),
+                    required=attr.get('required', False),
+                    array=attr.get('array', False)
+                )
+            elif attr['type'] == 'datetime':
+                databases.create_datetime_attribute(
+                    database_id=DATABASE_ID,
+                    collection_id=collection_id,
+                    key=attr['key'],
+                    required=attr.get('required', False)
+                )
+            else:
+                # Ajouter d'autres types si nécessaire
+                print(f"Type d'attribut non géré: {attr['type']} pour {attr['key']}")
+            print(f"Attribut {attr['key']} créé pour {collection_name}.")
+            time.sleep(1)  # éviter de surcharger l'API
+        except Exception as e:
+            if 'already exists' in str(e).lower():
+                print(f"Attribut {attr['key']} existe déjà dans {collection_name}.")
+            else:
+                print(f"Erreur lors de la création de l'attribut {attr['key']} : {e}")
+                raise
+
+
 def create_collections():
-    """Create all collections with their schemas."""
-    # Solutions collection attributes
     solution_attributes = [
         {'key': 'slug', 'type': 'string', 'size': 500, 'required': True},
         {'key': 'titre', 'type': 'string', 'size': 500, 'required': True},
-        {'key': 'description_courte', 'type': 'string', 'size': 5000, 'required': False},
-        {'key': 'description_longue', 'type': 'string', 'size': 10000, 'required': False},
-        {'key': 'images', 'type': 'string', 'size': 500, 'required': False, 'array': True},
-        {'key': 'videos_demo', 'type': 'string', 'size': 500, 'required': False, 'array': True},
-        {'key': 'technologies_utilisees', 'type': 'string', 'size': 500, 'required': False, 'array': True},
-        {'key': 'icon', 'type': 'string', 'size': 500, 'required': False},
-        {'key': 'categorie', 'type': 'string', 'size': 100, 'required': False},
-        {'key': 'fonctionnalites', 'type': 'string', 'size': 500, 'required': False, 'array': True},
-        {'key': 'objectifs', 'type': 'string', 'size': 500, 'required': False, 'array': True},
-        {'key': 'use_cases', 'type': 'string', 'size': 500, 'required': False, 'array': True},
-        {'key': 'liens_externes', 'type': 'string', 'size': 500, 'required': False, 'array': True},
-        {'key': 'auteur', 'type': 'string', 'size': 500, 'required': False},
+        {'key': 'description_courte', 'type': 'string', 'size': 500, 'required': True},
+        {'key': 'description_longue', 'type': 'string', 'size': 1000, 'required': True},
+        {'key': 'images', 'type': 'string', 'size': 500, 'array': True, 'required': False},
+        {'key': 'videos_demo', 'type': 'string', 'size': 500, 'array': True, 'required': False},
+        {'key': 'technologies_utilisees', 'type': 'string', 'size': 100, 'array': True, 'required': True},  # IDs de technologies
+        {'key': 'icon', 'type': 'string', 'size': 255, 'required': False},
+        {'key': 'categorie', 'type': 'string', 'size': 100, 'required': True},
+        {'key': 'fonctionnalites', 'type': 'string', 'size': 500, 'array': True, 'required': True},
+        {'key': 'objectifs', 'type': 'string', 'size': 100, 'array': True, 'required': True},  # IDs d'objectifs
+        {'key': 'use_cases', 'type': 'string', 'size': 100, 'array': True, 'required': True},  # IDs de cas d'usage
+        {'key': 'liens_externes', 'type': 'string', 'size': 500, 'array': True, 'required': False},
+        {'key': 'auteur', 'type': 'string', 'size': 100, 'required': True},  # ID auteur
         {'key': 'date_de_creation', 'type': 'datetime', 'required': True},
-        {'key': 'statut', 'type': 'string', 'size': 500, 'required': True},
+        {'key': 'statut', 'type': 'string', 'size': 50, 'required': True},
+        {'key': 'tags', 'type': 'string', 'size': 255, 'array': True, 'required': False},
     ]
 
-    # Technologies collection attributes
     technology_attributes = [
-        {'key': 'nom', 'type': 'string', 'size': 500, 'required': True},
-        {'key': 'type', 'type': 'string', 'size': 100, 'required': False},
+        {'key': 'nom', 'type': 'string', 'size': 255, 'required': True},
+        {'key': 'type', 'type': 'string', 'size': 50, 'required': True},
         {'key': 'icone', 'type': 'string', 'size': 255, 'required': False},
         {'key': 'url_doc', 'type': 'string', 'size': 255, 'required': False},
     ]
 
-    # Use Cases collection attributes
     use_case_attributes = [
         {'key': 'titre', 'type': 'string', 'size': 255, 'required': True},
-        {'key': 'description', 'type': 'string', 'size': 1000, 'required': False},
+        {'key': 'description', 'type': 'string', 'size': 250, 'required': False},
         {'key': 'image', 'type': 'string', 'size': 255, 'required': False},
     ]
 
-    # Objectives collection attributes
     objective_attributes = [
         {'key': 'titre', 'type': 'string', 'size': 255, 'required': True},
-        {'key': 'description', 'type': 'string', 'size': 1000, 'required': False},
+        {'key': 'description', 'type': 'string', 'size': 250, 'required': False},
         {'key': 'icon', 'type': 'string', 'size': 255, 'required': False},
     ]
 
-    # Authors collection attributes
     author_attributes = [
         {'key': 'nom', 'type': 'string', 'size': 255, 'required': True},
         {'key': 'poste', 'type': 'string', 'size': 255, 'required': False},
         {'key': 'photo', 'type': 'string', 'size': 255, 'required': False},
-        {'key': 'email', 'type': 'string', 'size': 255, 'required': False},
+        {'key': 'email', 'type': 'string', 'size': 255, 'required': True},
     ]
 
-    # Create all collections
     create_collection(COLLECTION_ID_SOLUTIONS, 'Solutions', solution_attributes)
     create_collection(COLLECTION_ID_TECHNOLOGIES, 'Technologies', technology_attributes)
     create_collection(COLLECTION_ID_USE_CASES, 'Use Cases', use_case_attributes)
     create_collection(COLLECTION_ID_OBJECTIFS, 'Objectifs', objective_attributes)
     create_collection(COLLECTION_ID_AUTEURS, 'Auteurs', author_attributes)
 
+
 def insert_sample_data():
-    """Insert sample data into the collections."""
     try:
-        # Insert sample author
         author_data = {
             'nom': 'John Doe',
             'poste': 'Lead Developer',
@@ -138,12 +143,11 @@ def insert_sample_data():
             data=author_data
         )
         author_id = author['$id']
-        print(f"Sample author created with ID: {author_id}")
+        print(f"Auteur sample créé avec ID: {author_id}")
 
-        # Insert sample technology
         technology_data = {
             'nom': 'Python',
-            'type': 'Programming Language',
+            'type': 'langage',
             'icone': 'python-icon-id',
             'url_doc': 'https://python.org'
         }
@@ -154,9 +158,8 @@ def insert_sample_data():
             data=technology_data
         )
         technology_id = technology['$id']
-        print(f"Sample technology created with ID: {technology_id}")
+        print(f"Technologie sample créée avec ID: {technology_id}")
 
-        # Insert sample use case
         use_case_data = {
             'titre': 'Data Analysis',
             'description': 'Analyze large datasets efficiently.',
@@ -169,9 +172,8 @@ def insert_sample_data():
             data=use_case_data
         )
         use_case_id = use_case['$id']
-        print(f"Sample use case created with ID: {use_case_id}")
+        print(f"Cas d’usage sample créé avec ID: {use_case_id}")
 
-        # Insert sample objective
         objective_data = {
             'titre': 'Improve Performance',
             'description': 'Enhance system performance and scalability.',
@@ -184,9 +186,8 @@ def insert_sample_data():
             data=objective_data
         )
         objective_id = objective['$id']
-        print(f"Sample objective created with ID: {objective_id}")
+        print(f"Objectif sample créé avec ID: {objective_id}")
 
-        # Insert sample solution
         solution_data = {
             'slug': 'sample-solution',
             'titre': 'Sample Solution',
@@ -196,14 +197,15 @@ def insert_sample_data():
             'videos_demo': ['https://example.com/demo.mp4'],
             'technologies_utilisees': [technology_id],
             'icon': 'solution-icon-id',
-            'categorie': 'Productivity',
+            'categorie': 'Automatisation',  # Doit correspondre à l'enum SolutionCategory
             'fonctionnalites': ['Feature 1', 'Feature 2'],
             'objectifs': [objective_id],
             'use_cases': [use_case_id],
             'liens_externes': ['https://example.com'],
             'auteur': author_id,
-            'date_de_creation': datetime.now().isoformat(),
-            'statut': 'active'
+            'date_de_creation': datetime.utcnow().isoformat(),
+            'statut': 'active',
+            'tags': ['sample', 'test']
         }
         solution = databases.create_document(
             database_id=DATABASE_ID,
@@ -211,23 +213,24 @@ def insert_sample_data():
             document_id=ID.unique(),
             data=solution_data
         )
-        print(f"Sample solution created with ID: {solution['$id']}")
+        print(f"Solution sample créée avec ID: {solution['$id']}")
 
     except Exception as e:
-        print(f"Error inserting sample data: {e}")
+        print(f"Erreur lors de l’insertion des données sample: {e}")
         raise
+
 
 def main():
-    """Main function to initialize schema and insert data."""
     try:
-        #create_database()
+        #create_database()  # facultatif si base déjà créée
         create_collections()
-        time.sleep(2)  # Wait for collections to be fully created
+        time.sleep(2)
         insert_sample_data()
-        print("Database schema and sample data initialized successfully.")
+        print("Initialisation des collections et données sample terminée.")
     except Exception as e:
-        print(f"Error in initialization: {e}")
+        print(f"Erreur lors de l'initialisation : {e}")
         raise
+
 
 if __name__ == "__main__":
     main()

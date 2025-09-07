@@ -12,12 +12,30 @@ import hashlib
 import os
 from decimal import Decimal
 from django.utils import timezone
-
-from doctrine.managers import CustomUserManager
+from django.contrib.auth.models import BaseUserManager
 
 
 def get_default_time():
     return timezone.now()
+
+
+class CustomUserManager(BaseUserManager):
+    """Manager personnalisé pour le modèle User"""
+
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('L\'email est obligatoire')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(email, password, **extra_fields)
+
 
 class TimeStampedModel(models.Model):
     """Modèle abstrait pour les timestamps"""
@@ -26,69 +44,6 @@ class TimeStampedModel(models.Model):
 
     class Meta:
         abstract = True
-
-class Table(TimeStampedModel):
-    """Tableaux extraits des documents"""
-
-    class TableType(models.TextChoices):
-        DATA = 'data', _('Données')
-        FINANCIAL = 'financial', _('Financier')
-        COMPARISON = 'comparison', _('Comparaison')
-        SCHEDULE = 'schedule', _('Planning')
-        REFERENCE = 'reference', _('Référence')
-        MATRIX = 'matrix', _('Matrice')
-        SUMMARY = 'summary', _('Résumé')
-
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    #section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='tables',
-    #                            verbose_name=_("Section"))
-
-    title = models.CharField(max_length=500, blank=True, verbose_name=_("Titre"))
-    caption = models.TextField(blank=True, verbose_name=_("Légende"))
-    table_type = models.CharField(max_length=20, choices=TableType.choices,
-                                  default=TableType.DATA, verbose_name=_("Type de tableau"))
-
-    headers = ArrayField(models.CharField(max_length=200), default=list, verbose_name=_("En-têtes"))
-    data = models.JSONField(default=dict, verbose_name=_("Données"))
-    raw_data = models.JSONField(default=dict, blank=True, verbose_name=_("Données brutes"))
-    processed_data = models.JSONField(default=dict, blank=True, verbose_name=_("Données traitées"))
-
-    row_count = models.PositiveIntegerField(default=0, verbose_name=_("Nombre de lignes"))
-    column_count = models.PositiveIntegerField(default=0, verbose_name=_("Nombre de colonnes"))
-
-    # Organisation
-    order_index = models.PositiveIntegerField(default=0, verbose_name=_("Ordre"))
-
-    # Métadonnées d'extraction
-    extraction_confidence = models.DecimalField(max_digits=5, decimal_places=4, default=Decimal('0.0000'),
-                                                verbose_name=_("Confiance d'extraction"))
-    extraction_method = models.CharField(max_length=50, blank=True, verbose_name=_("Méthode d'extraction"))
-    bbox_coordinates = models.JSONField(default=dict, blank=True, verbose_name=_("Coordonnées"))
-
-    # Formatage
-    styling = models.JSONField(default=dict, blank=True, verbose_name=_("Style"))
-    borders = models.JSONField(default=dict, blank=True, verbose_name=_("Bordures"))
-    column_widths = ArrayField(models.PositiveIntegerField(), default=list, blank=True,
-                               verbose_name=_("Largeurs de colonnes"))
-
-    # Configuration
-    has_header_row = models.BooleanField(default=True, verbose_name=_("Ligne d'en-tête"))
-    has_totals_row = models.BooleanField(default=False, verbose_name=_("Ligne de totaux"))
-    is_transposed = models.BooleanField(default=False, verbose_name=_("Transposé"))
-    is_complex = models.BooleanField(default=False, verbose_name=_("Complexe"))
-
-    class Meta:
-        verbose_name = _("Tableau")
-        verbose_name_plural = _("Tableaux")
-        ordering = ['order_index']
-        indexes = [
-            models.Index(fields=[ 'order_index']),
-            models.Index(fields=['table_type']),
-        ]
-
-    def __str__(self):
-        title_part = self.title or f"Tableau {self.order_index}"
-        return f"{self.section.topic.title} - {title_part}"
 
 
 class SoftDeleteModel(models.Model):
@@ -1037,3 +992,67 @@ class Paragraph(TimeStampedModel):
             self.sentence_count = len([s for s in sentences if s.strip()])
 
         super().save(*args, **kwargs)
+
+
+class Table(TimeStampedModel):
+    """Tableaux extraits des documents"""
+
+    class TableType(models.TextChoices):
+        DATA = 'data', _('Données')
+        FINANCIAL = 'financial', _('Financier')
+        COMPARISON = 'comparison', _('Comparaison')
+        SCHEDULE = 'schedule', _('Planning')
+        REFERENCE = 'reference', _('Référence')
+        MATRIX = 'matrix', _('Matrice')
+        SUMMARY = 'summary', _('Résumé')
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='tables',
+                                verbose_name=_("Section"))
+
+    title = models.CharField(max_length=500, blank=True, verbose_name=_("Titre"))
+    caption = models.TextField(blank=True, verbose_name=_("Légende"))
+    table_type = models.CharField(max_length=20, choices=TableType.choices,
+                                  default=TableType.DATA, verbose_name=_("Type de tableau"))
+
+    headers = ArrayField(models.CharField(max_length=200), default=list, verbose_name=_("En-têtes"))
+    data = models.JSONField(default=dict, verbose_name=_("Données"))
+    raw_data = models.JSONField(default=dict, blank=True, verbose_name=_("Données brutes"))
+    processed_data = models.JSONField(default=dict, blank=True, verbose_name=_("Données traitées"))
+
+    row_count = models.PositiveIntegerField(default=0, verbose_name=_("Nombre de lignes"))
+    column_count = models.PositiveIntegerField(default=0, verbose_name=_("Nombre de colonnes"))
+
+    # Organisation
+    order_index = models.PositiveIntegerField(default=0, verbose_name=_("Ordre"))
+
+    # Métadonnées d'extraction
+    extraction_confidence = models.DecimalField(max_digits=5, decimal_places=4, default=Decimal('0.0000'),
+                                                verbose_name=_("Confiance d'extraction"))
+    extraction_method = models.CharField(max_length=50, blank=True, verbose_name=_("Méthode d'extraction"))
+    bbox_coordinates = models.JSONField(default=dict, blank=True, verbose_name=_("Coordonnées"))
+
+    # Formatage
+    styling = models.JSONField(default=dict, blank=True, verbose_name=_("Style"))
+    borders = models.JSONField(default=dict, blank=True, verbose_name=_("Bordures"))
+    column_widths = ArrayField(models.PositiveIntegerField(), default=list, blank=True,
+                               verbose_name=_("Largeurs de colonnes"))
+
+    # Configuration
+    has_header_row = models.BooleanField(default=True, verbose_name=_("Ligne d'en-tête"))
+    has_totals_row = models.BooleanField(default=False, verbose_name=_("Ligne de totaux"))
+    is_transposed = models.BooleanField(default=False, verbose_name=_("Transposé"))
+    is_complex = models.BooleanField(default=False, verbose_name=_("Complexe"))
+
+    class Meta:
+        verbose_name = _("Tableau")
+        verbose_name_plural = _("Tableaux")
+        ordering = ['order_index']
+        indexes = [
+            models.Index(fields=['order_index']),
+            models.Index(fields=['table_type']),
+        ]
+
+    def __str__(self):
+        title_part = self.title or f"Tableau {self.order_index}"
+        return f"{self.section.topic.title} - {title_part}"

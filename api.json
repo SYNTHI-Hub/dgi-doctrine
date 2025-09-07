@@ -1,548 +1,2204 @@
-{
-	"info": {
-		"_postman_id": "YOUR_COLLECTION_ID",
-		"name": "DGI Extractor API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "YOUR_EXPORTER_ID",
-		"description": "API Endpoints for Document Management and Processing, including file upload, content extraction, search, and statistics."
-	},
-	"item": [
-		{
-			"name": "Processing Endpoints",
-			"item": [
-				{
-					"name": "Upload and Process Document",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer YOUR_ACCESS_TOKEN",
-								"type": "text",
-								"description": "Bearer token obtained from OAuth2 /o/token/ endpoint"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/path/to/your/document.pdf",
-									"description": "The document file (PDF, DOC, DOCX) to upload."
-								},
-								{
-									"key": "title",
-									"value": "My Uploaded Document Title",
-									"type": "text",
-									"description": "Required: Title of the document."
-								},
-								{
-									"key": "description",
-									"value": "An optional description for the document.",
-									"type": "text",
-									"description": "Optional: Description of the document."
-								},
-								{
-									"key": "theme_id",
-									"value": "123e4567-e89b-12d3-a456-426614174000",
-									"type": "text",
-									"description": "Required: UUID of the theme associated with the document."
-								},
-								{
-									"key": "category_id",
-									"value": "123e4567-e89b-12d3-a456-426614174001",
-									"type": "text",
-									"description": "Required: UUID of the category associated with the document."
-								},
-								{
-									"key": "visibility",
-									"value": "public",
-									"type": "text",
-									"description": "Optional: Document visibility (public/private/restricted). Default: public"
-								},
-								{
-									"key": "language",
-									"value": "fr",
-									"type": "text",
-									"description": "Optional: Document language (fr/en/es). Default: fr"
-								},
-								{
-									"key": "auto_process",
-									"value": "true",
-									"type": "text",
-									"description": "Optional: Whether to automatically start content processing after upload (true/false). Default: true"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{base_url}}/api/v1/processing/documents/upload_and_process/",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"processing",
-								"documents",
-								"upload_and_process",
-								""
-							]
-						},
-						"description": "Uploads a document file and optionally initiates automatic processing."
-					},
-					"response": []
-				},
-				{
-					"name": "Get Document List",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer YOUR_ACCESS_TOKEN",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/processing/documents/?page=1&page_size=15",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"processing",
-								"documents",
-								""
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "1",
-									"description": "Page number",
-									"disabled": false
-								},
-								{
-									"key": "page_size",
-									"value": "15",
-									"description": "Number of items per page",
-									"disabled": false
-								},
-								{
-									"key": "search",
-									"value": "",
-									"description": "Textual search in title, description, filename",
-									"disabled": true
-								},
-								{
-									"key": "ordering",
-									"value": "-created_at",
-									"description": "Sorting field (-created_at, title, status, file_size)",
-									"disabled": true
-								},
-								{
-									"key": "status",
-									"value": "processed",
-									"description": "Filter by processing status (pending, processing, processed, error)",
-									"disabled": true
-								},
-								{
-									"key": "file_type",
-									"value": "pdf",
-									"description": "Filter by file type (pdf, doc, docx)",
-									"disabled": true
-								}
-							]
-						},
-						"description": "Retrieves a paginated list of documents with optional filtering and search."
-					},
-					"response": []
-				},
-				{
-					"name": "Get Document Details",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer YOUR_ACCESS_TOKEN",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/processing/documents/{{document_id}}/",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"processing",
-								"documents",
-								"{{document_id}}",
-								""
-							]
-						},
-						"description": "Retrieves the details of a specific document by its ID."
-					},
-					"response": []
-				},
-				{
-					"name": "Process Document Content",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer YOUR_ACCESS_TOKEN",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"force\": true\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/api/v1/processing/documents/{{document_id}}/process_content/",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"processing",
-								"documents",
-								"{{document_id}}",
-								"process_content",
-								""
-							]
-						},
-						"description": "Initiates the content extraction process for a specified document. Use `force: true` to re-process."
-					},
-					"response": []
-				},
-				{
-					"name": "Get Processing Status",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer YOUR_ACCESS_TOKEN",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/processing/documents/{{document_id}}/processing_status/",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"processing",
-								"documents",
-								"{{document_id}}",
-								"processing_status",
-								""
-							]
-						},
-						"description": "Retrieves the current processing status of a document."
-					},
-					"response": []
-				},
-				{
-					"name": "Get Extracted Content",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer YOUR_ACCESS_TOKEN",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/processing/documents/{{document_id}}/extracted_content/",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"processing",
-								"documents",
-								"{{document_id}}",
-								"extracted_content",
-								""
-							]
-						},
-						"description": "Retrieves the raw extracted content (text) of a document."
-					},
-					"response": []
-				},
-				{
-					"name": "Get Document Structure",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer YOUR_ACCESS_TOKEN",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/processing/documents/{{document_id}}/structure/",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"processing",
-								"documents",
-								"{{document_id}}",
-								"structure",
-								""
-							]
-						},
-						"description": "Retrieves the hierarchical structure (sections, paragraphs, tables) of a document."
-					},
-					"response": []
-				},
-				{
-					"name": "Get Extracted Tables",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer YOUR_ACCESS_TOKEN",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/processing/documents/{{document_id}}/tables/",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"processing",
-								"documents",
-								"{{document_id}}",
-								"tables",
-								""
-							]
-						},
-						"description": "Retrieves extracted tables from a document."
-					},
-					"response": []
-				},
-				{
-					"name": "Export Document",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer YOUR_ACCESS_TOKEN",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/processing/documents/{{document_id}}/export/?format=json",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"processing",
-								"documents",
-								"{{document_id}}",
-								"export",
-								""
-							],
-							"query": [
-								{
-									"key": "format",
-									"value": "json",
-									"description": "Format for export (json/markdown/txt). Default: json",
-									"disabled": false
-								}
-							]
-						},
-						"description": "Exports document content in a specified format (JSON, Markdown, or TXT)."
-					},
-					"response": []
-				},
-				{
-					"name": "Get Processing Statistics",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer YOUR_ACCESS_TOKEN",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/processing/statistics/",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"processing",
-								"statistics",
-								""
-							]
-						},
-						"description": "Retrieves global statistics related to document processing."
-					},
-					"response": []
-				},
-				{
-					"name": "Search Content",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer YOUR_ACCESS_TOKEN",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/processing/search/?q=your_search_term&page=1&page_size=10",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"processing",
-								"search",
-								""
-							],
-							"query": [
-								{
-									"key": "q",
-									"value": "your_search_term",
-									"description": "Required: Search term (minimum 3 characters).",
-									"disabled": false
-								},
-								{
-									"key": "page",
-									"value": "1",
-									"description": "Page number.",
-									"disabled": false
-								},
-								{
-									"key": "page_size",
-									"value": "10",
-									"description": "Number of items per page.",
-									"disabled": false
-								}
-							]
-						},
-						"description": "Performs a full-text search within extracted document content."
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Authentication",
-			"item": [
-				{
-					"name": "Get OAuth Token (Client Credentials)",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Basic BASE64_ENCODED_CLIENT_ID_AND_SECRET",
-								"type": "text",
-								"description": "Base64 encoded string of 'client_id:client_secret'"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "grant_type",
-									"value": "client_credentials",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{base_url}}/o/token/",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"o",
-								"token",
-								""
-							]
-						},
-						"description": "Obtains an OAuth2 access token using the Client Credentials grant type. Requires a confidential client configured for this grant type."
-					},
-					"response": []
-				}
-			]
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "base_url",
-			"value": "http://127.0.0.1:8000",
-			"type": "string",
-			"description": "Base URL of your Django application"
-		},
-		{
-			"key": "document_id",
-			"value": "123e4567-e89b-12d3-a456-426614174002",
-			"type": "string",
-			"description": "Placeholder for a document ID (UUID). Update with an actual ID from your system."
-		}
-	]
-}
+openapi: 3.0.3
+info:
+  title: Document Management API
+  version: 1.0.0
+  description: API for managing documents with OAuth2 authentication
+paths:
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /doctrine/api/v1/processing/documents/:
+    get:
+      operationId: doctrine_api_v1_processing_documents_list
+      description: ViewSet spécialisé pour le traitement et l'extraction de documents
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - doctrine
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDocumentListList'
+          description: ''
+    post:
+      operationId: doctrine_api_v1_processing_documents_create
+      description: ViewSet spécialisé pour le traitement et l'extraction de documents
+      tags:
+      - doctrine
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentList'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DocumentList'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentList'
+          description: ''
+  /doctrine/api/v1/processing/documents/{id}/:
+    get:
+      operationId: doctrine_api_v1_processing_documents_retrieve
+      description: ViewSet spécialisé pour le traitement et l'extraction de documents
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Document.
+        required: true
+      tags:
+      - doctrine
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDetail'
+          description: ''
+    put:
+      operationId: doctrine_api_v1_processing_documents_update
+      description: ViewSet spécialisé pour le traitement et l'extraction de documents
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Document.
+        required: true
+      tags:
+      - doctrine
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DocumentDetail'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDetail'
+          description: ''
+    patch:
+      operationId: doctrine_api_v1_processing_documents_partial_update
+      description: ViewSet spécialisé pour le traitement et l'extraction de documents
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Document.
+        required: true
+      tags:
+      - doctrine
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDocumentDetail'
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDetail'
+          description: ''
+    delete:
+      operationId: doctrine_api_v1_processing_documents_destroy
+      description: ViewSet spécialisé pour le traitement et l'extraction de documents
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Document.
+        required: true
+      tags:
+      - doctrine
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /doctrine/api/v1/processing/documents/{id}/export/:
+    get:
+      operationId: doctrine_api_v1_processing_documents_export_retrieve
+      description: Exporte le contenu extrait en JSON, Markdown ou texte brut
+      summary: Exporter le contenu en différents formats
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - markdown
+          - txt
+          default: json
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Document.
+        required: true
+      tags:
+      - doctrine
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /doctrine/api/v1/processing/documents/{id}/extracted_content/:
+    get:
+      operationId: doctrine_api_v1_processing_documents_extracted_content_retrieve
+      description: Récupère le contenu structuré extrait d'un document
+      summary: Contenu extrait d'un document
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Document.
+        required: true
+      tags:
+      - doctrine
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentContent'
+          description: ''
+  /doctrine/api/v1/processing/documents/{id}/process_content/:
+    post:
+      operationId: doctrine_api_v1_processing_documents_process_content_create
+      description: Démarre l'extraction du contenu pour un document spécifique
+      summary: Lance le traitement d'extraction pour un document
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Document.
+        required: true
+      tags:
+      - doctrine
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DocumentDetail'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDetail'
+          description: ''
+  /doctrine/api/v1/processing/documents/{id}/processing_status/:
+    get:
+      operationId: doctrine_api_v1_processing_documents_processing_status_retrieve
+      description: Récupère le statut et les détails du traitement d'un document
+      summary: Statut du traitement d'un document
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Document.
+        required: true
+      tags:
+      - doctrine
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        example:
+          content:
+            application/json:
+              schema:
+                document_id: uuid
+                status: string
+                created_at: datetime
+                updated_at: datetime
+                processing_log: array
+                has_content: boolean
+                extraction_metadata: object
+                content_stats:
+                  word_count: integer
+                  page_count: integer
+                  topics_count: integer
+                  sections_count: integer
+                  paragraphs_count: integer
+                  tables_count: integer
+                  extraction_confidence: float
+                  processing_duration: string
+          description: ''
+  /doctrine/api/v1/processing/documents/{id}/structure/:
+    get:
+      operationId: doctrine_api_v1_processing_documents_structure_retrieve
+      description: Récupère la structure complète (topics, sections, paragraphes)
+        du document
+      summary: Structure hiérarchique du document
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Document.
+        required: true
+      tags:
+      - doctrine
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        example:
+          content:
+            application/json:
+              schema:
+                document_id: uuid
+                document_title: string
+                structure:
+                - id: uuid
+                  title: string
+                  sections:
+                  - id: uuid
+                    title: string
+                    paragraphs:
+                    - id: uuid
+                      content: string
+                stats:
+                  topics_count: integer
+                  sections_count: integer
+                  paragraphs_count: integer
+          description: ''
+  /doctrine/api/v1/processing/documents/{id}/tables/:
+    get:
+      operationId: doctrine_api_v1_processing_documents_tables_list
+      description: Récupère tous les tableaux extraits du document
+      summary: Tableaux extraits du document
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Document.
+        required: true
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - doctrine
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTableList'
+          description: ''
+  /doctrine/api/v1/processing/documents/upload_and_process/:
+    post:
+      operationId: doctrine_api_v1_processing_documents_upload_and_process_create
+      description: Upload un document (PDF/Word) et lance automatiquement l'extraction
+        du contenu
+      summary: Upload et traitement automatique d'un document
+      tags:
+      - doctrine
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                title:
+                  type: string
+                description:
+                  type: string
+                theme_id:
+                  type: string
+                  format: uuid
+                category_id:
+                  type: string
+                  format: uuid
+                visibility:
+                  type: string
+                  enum:
+                  - public
+                  - private
+                  - restricted
+                language:
+                  type: string
+                  enum:
+                  - fr
+                  - en
+                  - es
+                auto_process:
+                  type: boolean
+                  default: true
+              required:
+              - file
+              - title
+              - theme_id
+              - category_id
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDetail'
+          description: ''
+  /doctrine/api/v1/processing/search/:
+    get:
+      operationId: doctrine_api_v1_processing_search_retrieve
+      description: Recherche full-text dans le contenu extrait des documents
+      summary: Recherche dans le contenu extrait
+      parameters:
+      - in: query
+        name: q
+        schema:
+          type: string
+        description: Terme de recherche
+        required: true
+      tags:
+      - doctrine
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        example:
+          content:
+            application/json:
+              schema:
+                query: string
+                results:
+                - document: {}
+                  content_id: uuid
+                  excerpt: string
+                  rank: float
+                  word_count: integer
+                  extraction_confidence: float
+                count: integer
+          description: ''
+  /doctrine/api/v1/processing/statistics/:
+    get:
+      operationId: doctrine_api_v1_processing_statistics_retrieve
+      description: Récupère les statistiques globales de traitement des documents
+      summary: Statistiques de traitement des documents
+      tags:
+      - doctrine
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        example:
+          content:
+            application/json:
+              schema:
+                summary:
+                  total_documents: integer
+                  processed_documents: integer
+                  processing_documents: integer
+                  error_documents: integer
+                status_distribution:
+                - status: string
+                  count: integer
+                file_type_distribution:
+                - file_type: string
+                  count: integer
+                content_statistics:
+                  avg_word_count: float
+                  avg_page_count: float
+                  avg_extraction_confidence: float
+                  total_processed: integer
+                extraction_methods:
+                - extraction_method: string
+                  count: integer
+                recent_processed: []
+          description: ''
+components:
+  schemas:
+    CategoryTypeEnum:
+      enum:
+      - legal
+      - administrative
+      - technical
+      - regulatory
+      - policy
+      - guidance
+      - case_study
+      - template
+      type: string
+      description: |-
+        * `legal` - Juridique
+        * `administrative` - Administratif
+        * `technical` - Technique
+        * `regulatory` - Réglementaire
+        * `policy` - Politique
+        * `guidance` - Guide
+        * `case_study` - Étude de cas
+        * `template` - Modèle
+    ContentTypeEnum:
+      enum:
+      - raw_text
+      - structured
+      - html
+      - markdown
+      - json
+      - xml
+      type: string
+      description: |-
+        * `raw_text` - Texte brut
+        * `structured` - Structuré
+        * `html` - HTML
+        * `markdown` - Markdown
+        * `json` - JSON
+        * `xml` - XML
+    DefaultVisibilityEnum:
+      enum:
+      - public
+      - private
+      - restricted
+      type: string
+      description: |-
+        * `public` - Public
+        * `private` - Privé
+        * `restricted` - Restreint
+    DocumentCategoryList:
+      type: object
+      description: Serializer pour la liste des catégories de documents
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 100
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+        category_type:
+          allOf:
+          - $ref: '#/components/schemas/CategoryTypeEnum'
+          title: Type de catégorie
+        color:
+          type: string
+          title: Couleur
+          maxLength: 7
+        icon:
+          type: string
+          title: Icône
+          maxLength: 50
+        requires_approval:
+          type: boolean
+          title: Nécessite approbation
+        default_visibility:
+          allOf:
+          - $ref: '#/components/schemas/DefaultVisibilityEnum'
+          title: Visibilité par défaut
+        retention_days:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          title: Jours de rétention
+        max_file_size_mb:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Taille max fichier (MB)
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - slug
+      - updated_at
+    DocumentContent:
+      type: object
+      description: Serializer pour le contenu de document
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        document:
+          allOf:
+          - $ref: '#/components/schemas/DocumentMinimal'
+          readOnly: true
+        raw_content:
+          type: string
+          title: Contenu brut
+        structured_content:
+          title: Contenu structuré
+        html_content:
+          type: string
+          title: Contenu HTML
+        markdown_content:
+          type: string
+          title: Contenu Markdown
+        clean_content:
+          type: string
+          title: Contenu nettoyé
+        content_type:
+          allOf:
+          - $ref: '#/components/schemas/ContentTypeEnum'
+          title: Type de contenu
+        extraction_method:
+          allOf:
+          - $ref: '#/components/schemas/ExtractionMethodEnum'
+          title: Méthode d'extraction
+        processing_status:
+          allOf:
+          - $ref: '#/components/schemas/ProcessingStatusEnum'
+          title: Statut de traitement
+        extraction_confidence:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,4})?$
+          title: Confiance d'extraction
+        word_count:
+          type: integer
+          readOnly: true
+          title: Nombre de mots
+        character_count:
+          type: integer
+          readOnly: true
+          title: Nombre de caractères
+        sentence_count:
+          type: integer
+          readOnly: true
+          title: Nombre de phrases
+        paragraph_count:
+          type: integer
+          readOnly: true
+          title: Nombre de paragraphes
+        page_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Nombre de pages
+        table_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Nombre de tableaux
+        image_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Nombre d'images
+        entities_extracted:
+          title: Entités extraites
+        keywords_extracted:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          title: Mots-clés extraits
+        topics_detected:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          title: Sujets détectés
+        sentiment_score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,2})?$
+          nullable: true
+          title: Score de sentiment
+        readability_score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+          title: Score de lisibilité
+        complexity_score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+          title: Score de complexité
+        processed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          title: Traité le
+        processing_duration:
+          type: string
+          readOnly: true
+          nullable: true
+          title: Durée de traitement
+        processing_errors:
+          title: Erreurs de traitement
+        quality_checks:
+          title: Vérifications qualité
+        encoding_detected:
+          type: string
+          readOnly: true
+          title: Encodage détecté
+        language_detected:
+          type: string
+          readOnly: true
+          title: Langue détectée
+        language_confidence:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,4})?$
+          readOnly: true
+          nullable: true
+          title: Confiance détection langue
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - character_count
+      - created_at
+      - document
+      - encoding_detected
+      - id
+      - language_confidence
+      - language_detected
+      - paragraph_count
+      - processed_at
+      - processing_duration
+      - raw_content
+      - sentence_count
+      - updated_at
+      - word_count
+    DocumentDetail:
+      type: object
+      description: Serializer détaillé pour un document
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          title: Titre
+          maxLength: 500
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+        summary:
+          type: string
+          title: Résumé
+        abstract:
+          type: string
+          title: Résumé exécutif
+        original_filename:
+          type: string
+          title: Nom de fichier original
+          maxLength: 255
+        file_path:
+          type: string
+          format: uri
+          title: Fichier
+          pattern: (?:pdf|doc|docx)$
+        file_type:
+          type: string
+          title: Type de fichier
+          maxLength: 10
+        file_size:
+          type: integer
+          readOnly: true
+          title: Taille du fichier (bytes)
+        file_size_mb:
+          type: number
+          format: double
+          readOnly: true
+        file_checksum:
+          type: string
+          readOnly: true
+          title: Empreinte du fichier
+        mime_type:
+          type: string
+          readOnly: true
+          title: Type MIME
+        theme:
+          allOf:
+          - $ref: '#/components/schemas/ThemeDetail'
+          readOnly: true
+        category:
+          allOf:
+          - $ref: '#/components/schemas/DocumentCategoryList'
+          readOnly: true
+        uploaded_by:
+          allOf:
+          - $ref: '#/components/schemas/UserMinimal'
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          title: Statut
+        reviewed_by:
+          allOf:
+          - $ref: '#/components/schemas/UserMinimal'
+          readOnly: true
+        approved_by:
+          allOf:
+          - $ref: '#/components/schemas/UserMinimal'
+          readOnly: true
+        reviewed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          title: Révisé le
+        approved_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          title: Approuvé le
+        rejection_reason:
+          type: string
+          title: Raison du rejet
+        visibility:
+          allOf:
+          - $ref: '#/components/schemas/VisibilityEnum'
+          title: Visibilité
+        security_classification:
+          type: string
+          title: Classification sécurité
+          maxLength: 20
+        access_groups:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        authorized_users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserMinimal'
+          readOnly: true
+        language:
+          allOf:
+          - $ref: '#/components/schemas/LanguageEnum'
+          title: Langue
+        priority:
+          allOf:
+          - $ref: '#/components/schemas/PriorityEnum'
+          title: Priorité
+        publication_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de publication
+        effective_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date d'effet
+        expiration_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date d'expiration
+        review_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de révision
+        is_expired:
+          type: boolean
+          readOnly: true
+        needs_review:
+          type: boolean
+          readOnly: true
+        legal_reference:
+          type: string
+          title: Référence légale
+          maxLength: 200
+        regulation_number:
+          type: string
+          title: Numéro de règlement
+          maxLength: 100
+        jurisdiction:
+          type: string
+          title: Juridiction
+          maxLength: 100
+        legal_status:
+          type: string
+          title: Statut légal
+          maxLength: 50
+        compliance_requirements:
+          type: array
+          items:
+            type: string
+            maxLength: 200
+          title: Exigences de conformité
+        view_count:
+          type: integer
+          readOnly: true
+          title: Nombre de vues
+        download_count:
+          type: integer
+          readOnly: true
+          title: Nombre de téléchargements
+        share_count:
+          type: integer
+          readOnly: true
+          title: Nombre de partages
+        comment_count:
+          type: integer
+          readOnly: true
+          title: Nombre de commentaires
+        rating_score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,2})?$
+          readOnly: true
+          title: Score de notation
+        rating_count:
+          type: integer
+          readOnly: true
+          title: Nombre de notations
+        metadata:
+          title: Métadonnées
+        extraction_metadata:
+          title: Métadonnées d'extraction
+        search_keywords:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          title: Mots-clés de recherche
+        auto_generated_tags:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          title: Tags générés automatiquement
+        is_featured:
+          type: boolean
+          title: Document vedette
+        is_searchable:
+          type: boolean
+          title: Recherchable
+        is_downloadable:
+          type: boolean
+          title: Téléchargeable
+        is_shareable:
+          type: boolean
+          title: Partageable
+        is_commentable:
+          type: boolean
+          title: Commentable
+        is_ratable:
+          type: boolean
+          title: Notifiable
+        requires_approval:
+          type: boolean
+          title: Nécessite approbation
+        allow_anonymous_access:
+          type: boolean
+          title: Accès anonyme autorisé
+        version:
+          type: string
+          maxLength: 20
+        parent_document:
+          allOf:
+          - $ref: '#/components/schemas/DocumentMinimal'
+          readOnly: true
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentMinimal'
+          readOnly: true
+        is_latest_version:
+          type: boolean
+          title: Dernière version
+        version_notes:
+          type: string
+          title: Notes de version
+        related_documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentMinimal'
+          readOnly: true
+        processing_log:
+          readOnly: true
+          title: Journal de traitement
+        quality_score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,4})?$
+          nullable: true
+          title: Score de qualité
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - access_groups
+      - approved_at
+      - approved_by
+      - authorized_users
+      - category
+      - comment_count
+      - created_at
+      - download_count
+      - file_checksum
+      - file_path
+      - file_size
+      - file_size_mb
+      - file_type
+      - id
+      - is_expired
+      - mime_type
+      - needs_review
+      - original_filename
+      - parent_document
+      - processing_log
+      - rating_count
+      - rating_score
+      - related_documents
+      - reviewed_at
+      - reviewed_by
+      - share_count
+      - slug
+      - theme
+      - title
+      - updated_at
+      - uploaded_by
+      - versions
+      - view_count
+    DocumentList:
+      type: object
+      description: Serializer pour la liste des documents
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          title: Titre
+          maxLength: 500
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+        original_filename:
+          type: string
+          title: Nom de fichier original
+          maxLength: 255
+        file_type:
+          type: string
+          title: Type de fichier
+          maxLength: 10
+        file_size_mb:
+          type: number
+          format: double
+          readOnly: true
+        theme:
+          allOf:
+          - $ref: '#/components/schemas/ThemeMinimal'
+          readOnly: true
+        category:
+          type: string
+          readOnly: true
+        uploaded_by:
+          allOf:
+          - $ref: '#/components/schemas/UserMinimal'
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          title: Statut
+        visibility:
+          allOf:
+          - $ref: '#/components/schemas/VisibilityEnum'
+          title: Visibilité
+        language:
+          allOf:
+          - $ref: '#/components/schemas/LanguageEnum'
+          title: Langue
+        priority:
+          allOf:
+          - $ref: '#/components/schemas/PriorityEnum'
+          title: Priorité
+        publication_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de publication
+        effective_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date d'effet
+        expiration_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date d'expiration
+        is_expired:
+          type: boolean
+          readOnly: true
+        needs_review:
+          type: boolean
+          readOnly: true
+        view_count:
+          type: integer
+          readOnly: true
+          title: Nombre de vues
+        download_count:
+          type: integer
+          readOnly: true
+          title: Nombre de téléchargements
+        rating_score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,2})?$
+          readOnly: true
+          title: Score de notation
+        rating_count:
+          type: integer
+          readOnly: true
+          title: Nombre de notations
+        is_featured:
+          type: boolean
+          title: Document vedette
+        version:
+          type: string
+          maxLength: 20
+        is_latest_version:
+          type: boolean
+          title: Dernière version
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - category
+      - created_at
+      - download_count
+      - file_size_mb
+      - file_type
+      - id
+      - is_expired
+      - needs_review
+      - original_filename
+      - rating_count
+      - rating_score
+      - slug
+      - theme
+      - title
+      - updated_at
+      - uploaded_by
+      - view_count
+    DocumentMinimal:
+      type: object
+      description: Serializer minimal pour les références de document
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          title: Titre
+          maxLength: 500
+        slug:
+          type: string
+          maxLength: 520
+          pattern: ^[-a-zA-Z0-9_]+$
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          title: Statut
+        visibility:
+          allOf:
+          - $ref: '#/components/schemas/VisibilityEnum'
+          title: Visibilité
+        file_size_mb:
+          type: number
+          format: double
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Date de création
+      required:
+      - created_at
+      - file_size_mb
+      - id
+      - slug
+      - title
+    ExtractionMethodEnum:
+      enum:
+      - automatic
+      - manual
+      - ocr
+      - hybrid
+      - ai_enhanced
+      type: string
+      description: |-
+        * `automatic` - Automatique
+        * `manual` - Manuel
+        * `ocr` - OCR
+        * `hybrid` - Hybride
+        * `ai_enhanced` - Amélioré par IA
+    LanguageEnum:
+      enum:
+      - fr
+      - en
+      - es
+      - de
+      - it
+      - pt
+      type: string
+      description: |-
+        * `fr` - Français
+        * `en` - Anglais
+        * `es` - Espagnol
+        * `de` - Allemand
+        * `it` - Italien
+        * `pt` - Portugais
+    PaginatedDocumentListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentList'
+    PaginatedTableList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Table'
+    PatchedDocumentDetail:
+      type: object
+      description: Serializer détaillé pour un document
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          title: Titre
+          maxLength: 500
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+        summary:
+          type: string
+          title: Résumé
+        abstract:
+          type: string
+          title: Résumé exécutif
+        original_filename:
+          type: string
+          title: Nom de fichier original
+          maxLength: 255
+        file_path:
+          type: string
+          format: uri
+          title: Fichier
+          pattern: (?:pdf|doc|docx)$
+        file_type:
+          type: string
+          title: Type de fichier
+          maxLength: 10
+        file_size:
+          type: integer
+          readOnly: true
+          title: Taille du fichier (bytes)
+        file_size_mb:
+          type: number
+          format: double
+          readOnly: true
+        file_checksum:
+          type: string
+          readOnly: true
+          title: Empreinte du fichier
+        mime_type:
+          type: string
+          readOnly: true
+          title: Type MIME
+        theme:
+          allOf:
+          - $ref: '#/components/schemas/ThemeDetail'
+          readOnly: true
+        category:
+          allOf:
+          - $ref: '#/components/schemas/DocumentCategoryList'
+          readOnly: true
+        uploaded_by:
+          allOf:
+          - $ref: '#/components/schemas/UserMinimal'
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          title: Statut
+        reviewed_by:
+          allOf:
+          - $ref: '#/components/schemas/UserMinimal'
+          readOnly: true
+        approved_by:
+          allOf:
+          - $ref: '#/components/schemas/UserMinimal'
+          readOnly: true
+        reviewed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          title: Révisé le
+        approved_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          title: Approuvé le
+        rejection_reason:
+          type: string
+          title: Raison du rejet
+        visibility:
+          allOf:
+          - $ref: '#/components/schemas/VisibilityEnum'
+          title: Visibilité
+        security_classification:
+          type: string
+          title: Classification sécurité
+          maxLength: 20
+        access_groups:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        authorized_users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserMinimal'
+          readOnly: true
+        language:
+          allOf:
+          - $ref: '#/components/schemas/LanguageEnum'
+          title: Langue
+        priority:
+          allOf:
+          - $ref: '#/components/schemas/PriorityEnum'
+          title: Priorité
+        publication_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de publication
+        effective_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date d'effet
+        expiration_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date d'expiration
+        review_date:
+          type: string
+          format: date
+          nullable: true
+          title: Date de révision
+        is_expired:
+          type: boolean
+          readOnly: true
+        needs_review:
+          type: boolean
+          readOnly: true
+        legal_reference:
+          type: string
+          title: Référence légale
+          maxLength: 200
+        regulation_number:
+          type: string
+          title: Numéro de règlement
+          maxLength: 100
+        jurisdiction:
+          type: string
+          title: Juridiction
+          maxLength: 100
+        legal_status:
+          type: string
+          title: Statut légal
+          maxLength: 50
+        compliance_requirements:
+          type: array
+          items:
+            type: string
+            maxLength: 200
+          title: Exigences de conformité
+        view_count:
+          type: integer
+          readOnly: true
+          title: Nombre de vues
+        download_count:
+          type: integer
+          readOnly: true
+          title: Nombre de téléchargements
+        share_count:
+          type: integer
+          readOnly: true
+          title: Nombre de partages
+        comment_count:
+          type: integer
+          readOnly: true
+          title: Nombre de commentaires
+        rating_score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,2})?$
+          readOnly: true
+          title: Score de notation
+        rating_count:
+          type: integer
+          readOnly: true
+          title: Nombre de notations
+        metadata:
+          title: Métadonnées
+        extraction_metadata:
+          title: Métadonnées d'extraction
+        search_keywords:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          title: Mots-clés de recherche
+        auto_generated_tags:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          title: Tags générés automatiquement
+        is_featured:
+          type: boolean
+          title: Document vedette
+        is_searchable:
+          type: boolean
+          title: Recherchable
+        is_downloadable:
+          type: boolean
+          title: Téléchargeable
+        is_shareable:
+          type: boolean
+          title: Partageable
+        is_commentable:
+          type: boolean
+          title: Commentable
+        is_ratable:
+          type: boolean
+          title: Notifiable
+        requires_approval:
+          type: boolean
+          title: Nécessite approbation
+        allow_anonymous_access:
+          type: boolean
+          title: Accès anonyme autorisé
+        version:
+          type: string
+          maxLength: 20
+        parent_document:
+          allOf:
+          - $ref: '#/components/schemas/DocumentMinimal'
+          readOnly: true
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentMinimal'
+          readOnly: true
+        is_latest_version:
+          type: boolean
+          title: Dernière version
+        version_notes:
+          type: string
+          title: Notes de version
+        related_documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentMinimal'
+          readOnly: true
+        processing_log:
+          readOnly: true
+          title: Journal de traitement
+        quality_score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,4})?$
+          nullable: true
+          title: Score de qualité
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PriorityEnum:
+      enum:
+      - low
+      - normal
+      - high
+      - urgent
+      - critical
+      type: string
+      description: |-
+        * `low` - Faible
+        * `normal` - Normal
+        * `high` - Élevée
+        * `urgent` - Urgente
+        * `critical` - Critique
+    ProcessingStatusEnum:
+      enum:
+      - pending
+      - processing
+      - completed
+      - failed
+      - needs_review
+      type: string
+      description: |-
+        * `pending` - En attente
+        * `processing` - En cours
+        * `completed` - Terminé
+        * `failed` - Échec
+        * `needs_review` - Nécessite révision
+    StatusEnum:
+      enum:
+      - draft
+      - pending
+      - processing
+      - processed
+      - published
+      - archived
+      - error
+      - rejected
+      type: string
+      description: |-
+        * `draft` - Brouillon
+        * `pending` - En attente
+        * `processing` - En traitement
+        * `processed` - Traité
+        * `published` - Publié
+        * `archived` - Archivé
+        * `error` - Erreur
+        * `rejected` - Rejeté
+    Table:
+      type: object
+      description: Serializer détaillé pour un tableau
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          title: Titre
+          maxLength: 500
+        caption:
+          type: string
+          title: Légende
+        table_type:
+          allOf:
+          - $ref: '#/components/schemas/TableTypeEnum'
+          title: Type de tableau
+        headers:
+          type: array
+          items:
+            type: string
+            maxLength: 200
+          title: En-têtes
+        data:
+          title: Données
+        raw_data:
+          title: Données brutes
+        processed_data:
+          title: Données traitées
+        row_count:
+          type: integer
+          readOnly: true
+          title: Nombre de lignes
+        column_count:
+          type: integer
+          readOnly: true
+          title: Nombre de colonnes
+        order_index:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Ordre
+        extraction_confidence:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,1}(?:\.\d{0,4})?$
+          readOnly: true
+          title: Confiance d'extraction
+        extraction_method:
+          type: string
+          title: Méthode d'extraction
+          maxLength: 50
+        bbox_coordinates:
+          title: Coordonnées
+        styling:
+          title: Style
+        borders:
+          title: Bordures
+        column_widths:
+          type: array
+          items:
+            type: integer
+            maximum: 2147483647
+            minimum: 0
+          title: Largeurs de colonnes
+        has_header_row:
+          type: boolean
+          title: Ligne d'en-tête
+        has_totals_row:
+          type: boolean
+          title: Ligne de totaux
+        is_transposed:
+          type: boolean
+          title: Transposé
+        is_complex:
+          type: boolean
+          title: Complexe
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - column_count
+      - created_at
+      - extraction_confidence
+      - id
+      - row_count
+      - updated_at
+    TableTypeEnum:
+      enum:
+      - data
+      - financial
+      - comparison
+      - schedule
+      - reference
+      - matrix
+      - summary
+      type: string
+      description: |-
+        * `data` - Données
+        * `financial` - Financier
+        * `comparison` - Comparaison
+        * `schedule` - Planning
+        * `reference` - Référence
+        * `matrix` - Matrice
+        * `summary` - Résumé
+    ThemeDetail:
+      type: object
+      description: Serializer détaillé pour un thème
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 200
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+        code:
+          type: string
+          maxLength: 50
+        theme_type:
+          allOf:
+          - $ref: '#/components/schemas/ThemeTypeEnum'
+          title: Type de thème
+        parent_theme:
+          allOf:
+          - $ref: '#/components/schemas/ThemeMinimal'
+          readOnly: true
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/ThemeMinimal'
+          readOnly: true
+        ancestors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ThemeMinimal'
+          readOnly: true
+        icon:
+          type: string
+          title: Icône
+          maxLength: 50
+        color:
+          type: string
+          title: Couleur
+          maxLength: 7
+        background_color:
+          type: string
+          title: Couleur de fond
+          maxLength: 7
+        text_color:
+          type: string
+          title: Couleur du texte
+          maxLength: 7
+        order_index:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Ordre d'affichage
+        level:
+          type: integer
+          readOnly: true
+          title: Niveau hiérarchique
+        path:
+          type: string
+          readOnly: true
+          title: Chemin hiérarchique
+        is_active:
+          type: boolean
+          title: Actif
+        is_featured:
+          type: boolean
+          title: Mis en avant
+        is_public:
+          type: boolean
+          title: Public
+        metadata:
+          title: Métadonnées
+        keywords:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          title: Mots-clés
+        aliases:
+          type: array
+          items:
+            type: string
+            maxLength: 100
+          title: Alias
+        documents_count:
+          type: integer
+          readOnly: true
+          title: Nombre de documents
+        views_count:
+          type: integer
+          readOnly: true
+          title: Nombre de vues
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/UserMinimal'
+          readOnly: true
+        managed_by:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserMinimal'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - ancestors
+      - children
+      - code
+      - created_at
+      - created_by
+      - documents_count
+      - id
+      - level
+      - managed_by
+      - name
+      - parent_theme
+      - path
+      - slug
+      - updated_at
+      - views_count
+    ThemeMinimal:
+      type: object
+      description: Serializer minimal pour les références de thème
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          title: Nom
+          maxLength: 200
+        slug:
+          type: string
+          maxLength: 220
+          pattern: ^[-a-zA-Z0-9_]+$
+        color:
+          type: string
+          title: Couleur
+          maxLength: 7
+        icon:
+          type: string
+          title: Icône
+          maxLength: 50
+      required:
+      - id
+      - name
+      - slug
+    ThemeTypeEnum:
+      enum:
+      - category
+      - subcategory
+      - tag
+      - domain
+      - jurisdiction
+      type: string
+      description: |-
+        * `category` - Catégorie
+        * `subcategory` - Sous-catégorie
+        * `tag` - Tag
+        * `domain` - Domaine
+        * `jurisdiction` - Juridiction
+    UserMinimal:
+      type: object
+      description: Serializer minimal pour les références utilisateur
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        first_name:
+          type: string
+          title: Prénom
+          maxLength: 150
+        last_name:
+          type: string
+          title: Nom
+          maxLength: 150
+        full_name:
+          type: string
+          readOnly: true
+      required:
+      - email
+      - first_name
+      - full_name
+      - id
+      - last_name
+    VisibilityEnum:
+      enum:
+      - public
+      - private
+      - restricted
+      - confidential
+      - secret
+      type: string
+      description: |-
+        * `public` - Public
+        * `private` - Privé
+        * `restricted` - Restreint
+        * `confidential` - Confidentiel
+        * `secret` - Secret
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: /o/authorize/
+          tokenUrl: /o/token/
+          refreshUrl: /o/token/
+          scopes:
+            read: Read access to resources
+            write: Write access to resources
+            groups: Access to group-related resources
+        clientCredentials:
+          tokenUrl: /o/token/
+          refreshUrl: /o/token/
+          scopes:
+            read: Read access to resources
+            write: Write access to resources
+            groups: Access to group-related resources
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

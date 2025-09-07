@@ -10,8 +10,7 @@ from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.http import HttpResponse
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
-import xlsxwriter
-from decimal import Decimal
+
 
 from .models import (
     User, Theme, DocumentCategory, Document, DocumentContent,
@@ -144,6 +143,8 @@ class BaseModelViewSet(viewsets.ModelViewSet):
         if hasattr(queryset.model, 'status'):
             status_distribution = queryset.values('status').annotate(
                 count=models.Count('id')
+            ).annotate(
+                count=models.Count('id')
             ).order_by('status')
             stats['status_distribution'] = list(status_distribution)
 
@@ -175,13 +176,18 @@ class UserViewSet(BaseModelViewSet):
         queryset = super().get_queryset()
         user = self.request.user
 
+        # Handle schema generation by drf-yasg
+        if getattr(self, 'swagger_fake_view', False):
+            return queryset.none()
+
+        if not user.is_authenticated:
+            return queryset.none()
+
         if user.role in [User.RoleChoices.ADMIN, User.RoleChoices.MODERATOR]:
             return queryset
         elif user.role == User.RoleChoices.ANALYST:
-            # Les analystes peuvent voir les utilisateurs de leur département
             return queryset.filter(department=user.department)
         else:
-            # Les autres ne voient que leur profil
             return queryset.filter(id=user.id)
 
     @action(detail=True, methods=['post'], permission_classes=[permissions.IsAuthenticated])
@@ -268,6 +274,13 @@ class ThemeViewSet(BaseModelViewSet):
         """Queryset avec filtrage par visibilité"""
         queryset = super().get_queryset()
         user = self.request.user
+
+        # Handle schema generation by drf-yasg
+        if getattr(self, 'swagger_fake_view', False):
+            return queryset.none()
+
+        if not user.is_authenticated:
+            return queryset.none()
 
         if user.is_staff or user.role in [User.RoleChoices.ADMIN, User.RoleChoices.MODERATOR]:
             return queryset
@@ -404,6 +417,13 @@ class DocumentViewSet(BaseModelViewSet):
         """Queryset avec gestion de la visibilité"""
         queryset = super().get_queryset()
         user = self.request.user
+
+        # Handle schema generation by drf-yasg
+        if getattr(self, 'swagger_fake_view', False):
+            return queryset.none()
+
+        if not user.is_authenticated:
+            return queryset.none()
 
         if user.is_staff or user.role in [User.RoleChoices.ADMIN, User.RoleChoices.MODERATOR]:
             return queryset
@@ -602,6 +622,13 @@ class DocumentContentViewSet(BaseModelViewSet):
         queryset = super().get_queryset()
         user = self.request.user
 
+        # Handle schema generation by drf-yasg
+        if getattr(self, 'swagger_fake_view', False):
+            return queryset.none()
+
+        if not user.is_authenticated:
+            return queryset.none()
+
         if user.is_staff or user.role in [User.RoleChoices.ADMIN, User.RoleChoices.MODERATOR]:
             return queryset
 
@@ -681,6 +708,13 @@ class TopicViewSet(BaseModelViewSet):
         queryset = super().get_queryset()
         user = self.request.user
 
+        # Handle schema generation by drf-yasg
+        if getattr(self, 'swagger_fake_view', False):
+            return queryset.none()
+
+        if not user.is_authenticated:
+            return queryset.none()
+
         if user.is_staff or user.role in [User.RoleChoices.ADMIN, User.RoleChoices.MODERATOR]:
             return queryset
 
@@ -742,28 +776,28 @@ class SectionViewSet(BaseModelViewSet):
     }
     serializer_class = SectionDetailSerializer
 
-    permission_classes = [permissions.IsAuthenticated, DocumentViewPermissions]
-
-    @action(detail=True, methods=['get'])
-    def paragraphs(self, request, pk=None):
-        """Paragraphes d'une section"""
-
-
-class SectionViewSet(BaseModelViewSet):
-    """ViewSet pour la gestion des sections"""
-    queryset = Section.objects.select_related('topic').prefetch_related('paragraphs')
-    filterset_class = SectionFilter
-    search_fields = ['title', 'content']
-    ordering_fields = ['order_index', 'title', 'word_count']
-    ordering = ['topic', 'order_index']
-
-    serializer_classes = {
-        'list': SectionListSerializer,
-        'retrieve': SectionDetailSerializer,
-    }
-    serializer_class = SectionDetailSerializer
-
     permission_classes = [permissions.IsAuthenticated, CanViewDocument]
+
+    def get_queryset(self):
+        """Queryset filtré par document accessible"""
+        queryset = super().get_queryset()
+        user = self.request.user
+
+        # Handle schema generation by drf-yasg
+        if getattr(self, 'swagger_fake_view', False):
+            return queryset.none()
+
+        if not user.is_authenticated:
+            return queryset.none()
+
+        if user.is_staff or user.role in [User.RoleChoices.ADMIN, User.RoleChoices.MODERATOR]:
+            return queryset
+
+        return queryset.filter(
+            models.Q(topic__document__visibility=Document.VisibilityChoices.PUBLIC) |
+            models.Q(topic__document__uploaded_by=user) |
+            models.Q(topic__document__authorized_users=user)
+        ).distinct()
 
     @action(detail=True, methods=['get'])
     def paragraphs(self, request, pk=None):
@@ -790,6 +824,27 @@ class ParagraphViewSet(BaseModelViewSet):
 
     permission_classes = [permissions.IsAuthenticated, CanViewDocument]
 
+    def get_queryset(self):
+        """Queryset filtré par document accessible"""
+        queryset = super().get_queryset()
+        user = self.request.user
+
+        # Handle schema generation by drf-yasg
+        if getattr(self, 'swagger_fake_view', False):
+            return queryset.none()
+
+        if not user.is_authenticated:
+            return queryset.none()
+
+        if user.is_staff or user.role in [User.RoleChoices.ADMIN, User.RoleChoices.MODERATOR]:
+            return queryset
+
+        return queryset.filter(
+            models.Q(section__topic__document__visibility=Document.VisibilityChoices.PUBLIC) |
+            models.Q(section__topic__document__uploaded_by=user) |
+            models.Q(section__topic__document__authorized_users=user)
+        ).distinct()
+
 
 class TableViewSet(BaseModelViewSet):
     """ViewSet pour la gestion des tableaux"""
@@ -807,12 +862,32 @@ class TableViewSet(BaseModelViewSet):
 
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        """Queryset filtré par document accessible"""
+        queryset = super().get_queryset()
+        user = self.request.user
+
+        # Handle schema generation by drf-yasg
+        if getattr(self, 'swagger_fake_view', False):
+            return queryset.none()
+
+        if not user.is_authenticated:
+            return queryset.none()
+
+        if user.is_staff or user.role in [User.RoleChoices.ADMIN, User.RoleChoices.MODERATOR]:
+            return queryset
+
+        return queryset.filter(
+            models.Q(section__topic__document__visibility=Document.VisibilityChoices.PUBLIC) |
+            models.Q(section__topic__document__uploaded_by=user) |
+            models.Q(section__topic__document__authorized_users=user)
+        ).distinct()
+
     @action(detail=True, methods=['get'])
     def export_csv(self, request, pk=None):
         """Exporter un tableau en CSV"""
         table = self.get_object()
 
-        # Ici, vous implémenteriez l'export CSV
         return Response({
             'message': 'CSV export would be implemented here',
             'table_id': table.id,
@@ -825,7 +900,6 @@ class TableViewSet(BaseModelViewSet):
         """Exporter un tableau en Excel"""
         table = self.get_object()
 
-        # Ici, vous implémenteriez l'export Excel
         return Response({
             'message': 'Excel export would be implemented here',
             'table_id': table.id

@@ -10,30 +10,27 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
-
-from decouple import config
+from decouple import config, Config, RepositoryEnv
 from pathlib import Path
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env_file = BASE_DIR / '.env'
+if env_file.exists():
+    config = Config(RepositoryEnv(env_file))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-h&*^&l%sch@cq+8a8j+e8ik&f)mdor_m)s+c_=dhlcw%bfp30g'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-h&*^&l%sch@cq+8a8j+e8ik&f)mdor_m)s+c_=dhlcw%bfp30g')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: [s.strip() for s in v.split(',')])
 
 AUTH_USER_MODEL = 'doctrine.User'
+
 # Application definition
-
-LOGIN_URL = '/admin/login/'
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'doctrine',
     'rest_framework',
     'drf_yasg',
@@ -54,6 +52,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',  # OAuth token middleware
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -63,8 +62,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,61 +76,92 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+try:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME', default='dgi_document'),
+            'USER': config('DB_USER', default='postgres'),
+            'PASSWORD': config('DB_PASSWORD', default='postgres'),
+            'HOST': config('DB_HOST', default='37.60.239.221'),
+            'PORT': config('DB_PORT', default='5433'),
+            'ATOMIC_REQUESTS': True,
+            'CONN_MAX_AGE': 600,
+        }
     }
-}
+except Exception as e:
+    raise ImproperlyConfigured(f"Database configuration error: {e}")
 
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME', default='document_management'),
-        'USER': config('DB_USER', default='postgres'),
-        'PASSWORD': config('DB_PASSWORD', default='postgres'),
-        'HOST': config('DB_HOST', default='20.80.106.250'),
-        'PORT': config('DB_PORT', default='5432'),
-
-        'ATOMIC_REQUESTS': True,
-    }
-}
-
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'oauth2_provider.backends.OAuth2Backend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
+# Ajoutez ces paramètres à votre SPECTACULAR_SETTINGS existant dans settings.py
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Document Management API',
+    'DESCRIPTION': 'API for managing documents with OAuth2 authentication',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': True,
+    'OAUTH2_FLOWS': ['authorizationCode', 'clientCredentials'],
+    'OAUTH2_AUTHORIZATION_URL': '/o/authorize/',
+    'OAUTH2_TOKEN_URL': '/o/token/',
+    'OAUTH2_REFRESH_URL': '/o/token/',
 
+    'COMPONENT_SPLIT_REQUEST': True,
+    'COMPONENT_NO_READ_ONLY_REQUIRED': True,
+    'ENUM_NAME_OVERRIDES': {
+        'ValidationErrorEnum': 'doctrine.serializers.ValidationErrorEnum',
+    },
+    'POSTPROCESSING_HOOKS': [
+        'drf_spectacular.hooks.postprocess_schema_enums',
+    ],
+    'PREPROCESSING_HOOKS': [
+        'drf_spectacular.hooks.preprocess_exclude_path_format',
+    ],
+    'SCHEMA_PATH_PREFIX': '/api/',
+    'SORT_OPERATIONS': False,
+    'DISABLE_ERRORS_AND_WARNINGS': False,
+
+    # Éviter les problèmes de récursion dans les serializers
+    'SCHEMA_COERCION_DISABLED': True,
+    'EXTENSIONS_INFO': {
+        'x-versions': ['1.0'],
+    },
+}
+# OAuth2 Provider settings
+OAUTH2_PROVIDER = {
+    'SCOPES': {
+        'read': 'Read access to resources',
+        'write': 'Write access to resources',
+        'groups': 'Access to group-related resources',
+    },
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 36000,
+    'REFRESH_TOKEN_EXPIRE_SECONDS': 1209600,
+    'AUTHORIZATION_CODE_EXPIRE_SECONDS': 600,
+    'ALLOWED_REDIRECT_URI_SCHEMES': ['http', 'https'] if DEBUG else ['https'],
+    'PKCE_REQUIRED': True,  # Enforce PKCE for public clients
+}
+
+# REST Framework configuration
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # OAuth2 for APIs
+        'rest_framework.authentication.SessionAuthentication',  # For admin/browsable API
+        'rest_framework.authentication.TokenAuthentication',  # DRF token auth (optional)
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
+        'oauth2_provider.contrib.rest_framework.TokenHasReadWriteScope',
     ],
     'DEFAULT_PAGINATION_CLASS': 'doctrine.pagination.StandardResultsSetPagination',
     'PAGE_SIZE': 20,
@@ -147,41 +176,49 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle'
+        'rest_framework.throttling.UserRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
         'anon': '100/hour',
-        'user': '1000/hour'
+        'user': '1000/hour',
     },
-   # 'EXCEPTION_HANDLER': 'doctrine.exceptions.custom_exception_handler',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',  # For drf-spectacular
+    # 'EXCEPTION_HANDLER': 'doctrine.exceptions.custom_exception_handler',  # Uncomment if needed
 }
 
+# API Documentation with drf-spectacular
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Document Management API',
+    'DESCRIPTION': 'API for managing documents with OAuth2 authentication',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': True,
+    'OAUTH2_FLOWS': ['authorizationCode', 'clientCredentials'],
+    'OAUTH2_AUTHORIZATION_URL': '/o/authorize/',
+    'OAUTH2_TOKEN_URL': '/o/token/',
+    'OAUTH2_REFRESH_URL': '/o/token/',
+}
 
+# Internationalization
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
+# Static and Media files
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
-# Media files (uploads)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
-# Ensure static and media directories exist
+# Ensure directories exist
 for path in [STATIC_ROOT, MEDIA_ROOT, *STATICFILES_DIRS]:
     os.makedirs(path, exist_ok=True)
 
-
+# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+# Celery configuration
 CELERY_BROKER_URL = config('CELERY_BROKER_URL', default='redis://37.60.239.221:6379/0')
 CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND', default='redis://37.60.239.221:6379/0')
 CELERY_ACCEPT_CONTENT = ['json']
@@ -189,24 +226,26 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_ENABLE_UTC = True
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True  # Auto-retry on startup
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}  # 1 hour
 
-# Configuration des tâches
+# Celery Beat schedule
 CELERY_BEAT_SCHEDULE = {
     'generate-daily-statistics': {
         'task': 'documents.tasks.generate_daily_statistics',
-        'schedule': 86400.0,  # Tous les jours
+        'schedule': 86400.0,  # Daily
     },
     'cleanup-old-files': {
         'task': 'documents.tasks.cleanup_old_files',
-        'schedule': 604800.0,  # Toutes les semaines
+        'schedule': 604800.0,  # Weekly
     },
     'monitor-processing-queue': {
         'task': 'documents.tasks.monitor_processing_queue',
-        'schedule': 300.0,  # Toutes les 5 minutes
+        'schedule': 300.0,  # Every 5 minutes
     },
 }
 
-# Routage des tâches
+# Celery task routes
 CELERY_TASK_ROUTES = {
     'documents.tasks.process_document_content': {'queue': 'document_processing'},
     'documents.tasks.update_search_index': {'queue': 'search_indexing'},
@@ -215,34 +254,41 @@ CELERY_TASK_ROUTES = {
     'documents.tasks.cleanup_old_files': {'queue': 'maintenance'},
 }
 
-# Limites de tâches
 CELERY_TASK_SOFT_TIME_LIMIT = 1800  # 30 minutes
-CELERY_TASK_TIME_LIMIT = 3600       # 1 heure
+CELERY_TASK_TIME_LIMIT = 3600  # 1 hour
 CELERY_WORKER_MAX_TASKS_PER_CHILD = 1000
 CELERY_WORKER_DISABLE_RATE_LIMITS = True
 
-# ===================================
-# CACHE CONFIGURATION
-# ===================================
-# 'LOCATION': 'redis://37.60.239.221:6379/1',
+# Cache configuration
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': config('REDIS_URL', default='redis://37.60.239.221:6379/1'),
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            #'PARSER_CLASS':'redis.connection.PythonParse' , #'redis.connection.HiredisParser',
             'CONNECTION_POOL_KWARGS': {
                 'max_connections': 50,
                 'retry_on_timeout': True,
+                'socket_keepalive': True,
+                'socket_keepalive_options': {},
+                'health_check_interval': 30,
             },
+            'IGNORE_EXCEPTIONS': True,
         },
         'KEY_PREFIX': 'doc_mgmt',
-        'TIMEOUT': 3600,  # 1 heure par défaut
-    }
+        'TIMEOUT': 3600,
+    },
+    'fallback': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+        'TIMEOUT': 300,
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000,
+        },
+    },
 }
 
-
+# Email configuration
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
 EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
 EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
@@ -251,35 +297,26 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@documentmanagement.com')
 
-# ===================================
-# FILE UPLOAD CONFIGURATION
-# ===================================
-
+# File upload configuration
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024   # 10MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
 FILE_UPLOAD_PERMISSIONS = 0o644
 
-# Types de fichiers autorisés
+# Allowed document types
 ALLOWED_DOCUMENT_TYPES = [
     'application/pdf',
     'application/msword',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 ]
 
-
-# API Rate Limiting
+# API Rate Limiting (aligned with DRF throttle)
 API_RATE_LIMIT_ENABLE = True
 API_RATE_LIMIT_REQUESTS = 1000
 API_RATE_LIMIT_WINDOW = 3600  # 1 hour
 
-
-LOGS_DIR = os.path.join(BASE_DIR, 'logs')
-
-if not os.path.exists(LOGS_DIR):
-    os.makedirs(LOGS_DIR)
-# ===================================
-# LOGGING CONFIGURATION
-# ===================================
+# Logging configuration
+LOGS_DIR = BASE_DIR / 'logs'
+os.makedirs(LOGS_DIR, exist_ok=True)
 
 LOGGING = {
     'version': 1,
@@ -298,13 +335,13 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs' / 'django.log',
+            'filename': LOGS_DIR / 'django.log',
             'formatter': 'verbose',
         },
         'document_processing': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs' / 'document_processing.log',
+            'filename': LOGS_DIR / 'document_processing.log',
             'formatter': 'verbose',
         },
         'console': {
@@ -337,4 +374,14 @@ LOGGING = {
     },
 }
 
-
+# Security settings for production
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True

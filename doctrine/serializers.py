@@ -1,7 +1,7 @@
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
+
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
-from decimal import Decimal
 from .models import (
     User, Theme, DocumentCategory, Document, DocumentContent,
     Topic, Section, Paragraph, Table
@@ -18,7 +18,7 @@ class BaseModelSerializer(serializers.ModelSerializer):
 
 class UserMinimalSerializer(serializers.ModelSerializer):
     """Serializer minimal pour les références utilisateur"""
-    full_name = serializers.ReadOnlyField()
+    full_name = serializers.CharField(read_only=True)
 
     class Meta:
         model = User
@@ -28,7 +28,7 @@ class UserMinimalSerializer(serializers.ModelSerializer):
 
 class UserListSerializer(BaseModelSerializer):
     """Serializer pour la liste des utilisateurs"""
-    full_name = serializers.ReadOnlyField()
+    full_name = serializers.CharField(read_only=True)
 
     class Meta:
         model = User
@@ -42,7 +42,7 @@ class UserListSerializer(BaseModelSerializer):
 
 class UserDetailSerializer(BaseModelSerializer):
     """Serializer détaillé pour un utilisateur"""
-    full_name = serializers.ReadOnlyField()
+    full_name = serializers.CharField(read_only=True)
     manager = UserMinimalSerializer(read_only=True)
     team_members = UserMinimalSerializer(many=True, read_only=True)
 
@@ -162,6 +162,7 @@ class ThemeDetailSerializer(BaseModelSerializer):
             'documents_count', 'views_count', 'created_at', 'updated_at'
         ]
 
+    @extend_schema_field(ThemeMinimalSerializer(many=True))
     def get_ancestors(self, obj):
         return ThemeMinimalSerializer(obj.get_ancestors(), many=True).data
 
@@ -225,7 +226,7 @@ class TableMinimalSerializer(BaseModelSerializer):
 
 class DocumentMinimalSerializer(serializers.ModelSerializer):
     """Serializer minimal pour les références de document"""
-    file_size_mb = serializers.ReadOnlyField()
+    file_size_mb = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Document
@@ -240,9 +241,9 @@ class DocumentListSerializer(BaseModelSerializer):
     theme = ThemeMinimalSerializer(read_only=True)
     category = serializers.StringRelatedField(read_only=True)
     uploaded_by = UserMinimalSerializer(read_only=True)
-    file_size_mb = serializers.ReadOnlyField()
-    is_expired = serializers.ReadOnlyField()
-    needs_review = serializers.ReadOnlyField()
+    file_size_mb = serializers.FloatField(read_only=True)
+    is_expired = serializers.BooleanField(read_only=True)
+    needs_review = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Document
@@ -273,9 +274,9 @@ class DocumentDetailSerializer(BaseModelSerializer):
     related_documents = DocumentMinimalSerializer(many=True, read_only=True)
     parent_document = DocumentMinimalSerializer(read_only=True)
     versions = DocumentMinimalSerializer(many=True, read_only=True)
-    file_size_mb = serializers.ReadOnlyField()
-    is_expired = serializers.ReadOnlyField()
-    needs_review = serializers.ReadOnlyField()
+    file_size_mb = serializers.FloatField(read_only=True)
+    is_expired = serializers.BooleanField(read_only=True)
+    needs_review = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Document
@@ -458,7 +459,7 @@ class SectionListSerializer(BaseModelSerializer):
         ]
 
 
-class SectionDetailSerializer(BaseModelSerializer):
+class SectionSerializer(BaseModelSerializer):
     """Serializer détaillé pour une section"""
     topic = TopicMinimalSerializer(read_only=True)
 
@@ -494,7 +495,7 @@ class ParagraphListSerializer(BaseModelSerializer):
         ]
 
 
-class ParagraphDetailSerializer(BaseModelSerializer):
+class ParagraphSerializer(BaseModelSerializer):
     """Serializer détaillé pour un paragraphe"""
     section = SectionMinimalSerializer(read_only=True)
 
@@ -530,7 +531,7 @@ class TableListSerializer(BaseModelSerializer):
         ]
 
 
-class TableDetailSerializer(BaseModelSerializer):
+class TableSerializer(BaseModelSerializer):
     """Serializer détaillé pour un tableau"""
 
     class Meta:

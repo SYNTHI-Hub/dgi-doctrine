@@ -1,17 +1,14 @@
-from rest_framework import viewsets, status, permissions
-from rest_framework.decorators import action, api_view, permission_classes
+from django.db.models import Count, Avg
+from rest_framework import viewsets, status, permissions, generics
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
-from django.shortcuts import get_object_or_404
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
 from django.utils import timezone
-from django.db import transaction
-from django.http import Http404, HttpResponse
-from django.core.exceptions import ValidationError
+from django.db import transaction, models
+from django.http import HttpResponse
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
 import os
@@ -25,23 +22,21 @@ from .models import (
 from .serializers import (
     DocumentListSerializer, DocumentDetailSerializer,
     DocumentContentSerializer, TopicDetailSerializer,
-    SectionDetailSerializer, ParagraphDetailSerializer,
-    TableDetailSerializer
+    SectionSerializer, ParagraphSerializer,
+    TableSerializer
 )
-from .services.document_processor import document_processor, process_document_async
+from .services.document_processor import document_processor
 from .storage import DocumentStorage
 from .permissions import CanViewDocument, CanManageDocument
 from .tasks import process_document_content
 
 logger = logging.getLogger(__name__)
 
-
 class DocumentProcessingPagination(PageNumberPagination):
     """Pagination spécialisée pour le traitement de documents"""
     page_size = 15
     page_size_query_param = 'page_size'
     max_page_size = 50
-
 
 class DocumentProcessingViewSet(viewsets.ModelViewSet):
     """ViewSet spécialisé pour le traitement et l'extraction de documents"""
@@ -97,7 +92,8 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
                 },
                 'required': ['file', 'title', 'theme_id', 'category_id']
             }
-        }
+        },
+        responses={201: DocumentDetailSerializer}
     )
     @action(detail=False, methods=['post'])
     def upload_and_process(self, request):
@@ -206,10 +202,8 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
                 document.file_checksum = DocumentStorage.calculate_file_hash(uploaded_file)
                 document.save(update_fields=['file_checksum'])
 
-                # Lancement du traitement automatique si demandé
                 if auto_process:
                     try:
-                        # Traitement asynchrone avec Celery si disponible
                         if hasattr(process_document_content, 'delay'):
                             process_document_content.delay(str(document.id))
                         else:
@@ -240,7 +234,8 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
 
     @extend_schema(
         summary="Lance le traitement d'extraction pour un document",
-        description="Démarre l'extraction du contenu pour un document spécifique"
+        description="Démarre l'extraction du contenu pour un document spécifique",
+        responses={200: DocumentDetailSerializer}
     )
     @action(detail=True, methods=['post'])
     def process_content(self, request, pk=None):
@@ -295,7 +290,29 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
 
     @extend_schema(
         summary="Statut du traitement d'un document",
-        description="Récupère le statut et les détails du traitement d'un document"
+        description="Récupère le statut et les détails du traitement d'un document",
+        responses={
+            200: OpenApiTypes.OBJECT,
+            'example': {
+                'document_id': 'uuid',
+                'status': 'string',
+                'created_at': 'datetime',
+                'updated_at': 'datetime',
+                'processing_log': 'array',
+                'has_content': 'boolean',
+                'extraction_metadata': 'object',
+                'content_stats': {
+                    'word_count': 'integer',
+                    'page_count': 'integer',
+                    'topics_count': 'integer',
+                    'sections_count': 'integer',
+                    'paragraphs_count': 'integer',
+                    'tables_count': 'integer',
+                    'extraction_confidence': 'float',
+                    'processing_duration': 'string'
+                }
+            }
+        }
     )
     @action(detail=True, methods=['get'])
     def processing_status(self, request, pk=None):
@@ -304,7 +321,7 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
 
         # Construction de la réponse avec détails
         response_data = {
-            'document_id': document.id,
+            'document_id': str(document.id),
             'status': document.status,
             'created_at': document.created_at,
             'updated_at': document.updated_at,
@@ -323,7 +340,7 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
                     'topics_count': document.topics.count(),
                     'sections_count': Section.objects.filter(topic__document=document).count(),
                     'paragraphs_count': Paragraph.objects.filter(section__topic__document=document).count(),
-                    'tables_count': Table.objects.count(),  # Ajuster selon votre modèle
+                    'tables_count': Table.objects.filter(section__topic__document=document).count(),
                     'extraction_confidence': float(content.extraction_confidence),
                     'processing_duration': str(content.processing_duration) if content.processing_duration else None
                 }
@@ -333,7 +350,8 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
 
     @extend_schema(
         summary="Contenu extrait d'un document",
-        description="Récupère le contenu structuré extrait d'un document"
+        description="Récupère le contenu structuré extrait d'un document",
+        responses={200: DocumentContentSerializer}
     )
     @action(detail=True, methods=['get'])
     def extracted_content(self, request, pk=None):
@@ -352,7 +370,31 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
 
     @extend_schema(
         summary="Structure hiérarchique du document",
-        description="Récupère la structure complète (topics, sections, paragraphes) du document"
+        description="Récupère la structure complète (topics, sections, paragraphes) du document",
+        responses={
+            200: OpenApiTypes.OBJECT,
+            'example': {
+                'document_id': 'uuid',
+                'document_title': 'string',
+                'structure': [{
+                    'id': 'uuid',
+                    'title': 'string',
+                    'sections': [{
+                        'id': 'uuid',
+                        'title': 'string',
+                        'paragraphs': [{
+                            'id': 'uuid',
+                            'content': 'string'
+                        }]
+                    }]
+                }],
+                'stats': {
+                    'topics_count': 'integer',
+                    'sections_count': 'integer',
+                    'paragraphs_count': 'integer'
+                }
+            }
+        }
     )
     @action(detail=True, methods=['get'])
     def structure(self, request, pk=None):
@@ -371,12 +413,12 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
 
             sections = topic.sections.filter(is_deleted=False).order_by('order_index')
             for section in sections:
-                section_data = SectionDetailSerializer(section).data
+                section_data = SectionSerializer(section).data
                 section_data['paragraphs'] = []
 
                 paragraphs = section.paragraphs.all().order_by('order_index')
                 for paragraph in paragraphs:
-                    paragraph_data = ParagraphDetailSerializer(paragraph).data
+                    paragraph_data = ParagraphSerializer(paragraph).data
                     section_data['paragraphs'].append(paragraph_data)
 
                 topic_data['sections'].append(section_data)
@@ -384,7 +426,7 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
             structure_data.append(topic_data)
 
         return Response({
-            'document_id': document.id,
+            'document_id': str(document.id),
             'document_title': document.title,
             'structure': structure_data,
             'stats': {
@@ -400,29 +442,41 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
 
     @extend_schema(
         summary="Tableaux extraits du document",
-        description="Récupère tous les tableaux extraits du document"
+        description="Récupère tous les tableaux extraits du document",
+        responses={200: TableSerializer(many=True)}
     )
     @action(detail=True, methods=['get'])
     def tables(self, request, pk=None):
         """Récupère les tableaux extraits du document"""
         document = self.get_object()
 
-        # Note: Ajustez selon votre modèle de relation entre Document et Table
         tables = Table.objects.filter(
-            # Ajoutez ici la relation appropriée, par exemple:
-            # section__topic__document=document
+            section__topic__document=document
         ).order_by('order_index')
 
-        serializer = TableDetailSerializer(tables, many=True)
+        serializer = TableSerializer(tables, many=True)
         return Response({
-            'document_id': document.id,
+            'document_id': str(document.id),
             'tables': serializer.data,
             'count': tables.count()
         })
 
     @extend_schema(
         summary="Exporter le contenu en différents formats",
-        description="Exporte le contenu extrait en JSON, Markdown ou texte brut"
+        description="Exporte le contenu extrait en JSON, Markdown ou texte brut",
+        parameters=[
+            OpenApiParameter(
+                name='format',
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
+                enum=['json', 'markdown', 'txt'],
+                default='json'
+            )
+        ],
+        responses={
+            200: OpenApiTypes.BINARY,
+            400: OpenApiTypes.OBJECT
+        }
     )
     @action(detail=True, methods=['get'])
     def export(self, request, pk=None):
@@ -545,156 +599,199 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
 
         return structure
 
+class ProcessingStatisticsView(generics.GenericAPIView):
+    """APIView pour les statistiques de traitement des documents"""
+    serializer_class = DocumentContentSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-@extend_schema(
-    summary="Statistiques de traitement des documents",
-    description="Récupère les statistiques globales de traitement des documents"
-)
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def processing_statistics(request):
-    """Statistiques globales de traitement"""
-    from django.db.models import Count, Avg, Q
-
-    # Statistiques par statut
-    status_stats = Document.objects.values('status').annotate(
-        count=Count('id')
-    ).order_by('status')
-
-    # Statistiques par type de fichier
-    file_type_stats = Document.objects.values('file_type').annotate(
-        count=Count('id')
-    ).order_by('file_type')
-
-    # Statistiques de contenu
-    content_stats = DocumentContent.objects.aggregate(
-        avg_word_count=Avg('word_count'),
-        avg_page_count=Avg('page_count'),
-        avg_extraction_confidence=Avg('extraction_confidence'),
-        total_processed=Count('id')
+    @extend_schema(
+        summary="Statistiques de traitement des documents",
+        description="Récupère les statistiques globales de traitement des documents",
+        responses={
+            200: OpenApiTypes.OBJECT,
+            'example': {
+                'summary': {
+                    'total_documents': 'integer',
+                    'processed_documents': 'integer',
+                    'processing_documents': 'integer',
+                    'error_documents': 'integer'
+                },
+                'status_distribution': [{'status': 'string', 'count': 'integer'}],
+                'file_type_distribution': [{'file_type': 'string', 'count': 'integer'}],
+                'content_statistics': {
+                    'avg_word_count': 'float',
+                    'avg_page_count': 'float',
+                    'avg_extraction_confidence': 'float',
+                    'total_processed': 'integer'
+                },
+                'extraction_methods': [{'extraction_method': 'string', 'count': 'integer'}],
+                'recent_processed': []  # example list of documents
+            }
+        }
     )
+    def get(self, request):
+        """Statistiques globales de traitement"""
+        # Statistiques par statut
+        status_stats = Document.objects.values('status').annotate(
+            count=Count('id')
+        ).order_by('status')
 
-    # Statistiques par méthode d'extraction
-    extraction_stats = DocumentContent.objects.values('extraction_method').annotate(
-        count=Count('id')
-    ).order_by('extraction_method')
+        # Statistiques par type de fichier
+        file_type_stats = Document.objects.values('file_type').annotate(
+            count=Count('id')
+        ).order_by('file_type')
 
-    # Documents récemment traités
-    recent_processed = Document.objects.filter(
-        status=Document.StatusChoices.PROCESSED
-    ).order_by('-updated_at')[:5]
-
-    return Response({
-        'summary': {
-            'total_documents': Document.objects.count(),
-            'processed_documents': Document.objects.filter(status=Document.StatusChoices.PROCESSED).count(),
-            'processing_documents': Document.objects.filter(status=Document.StatusChoices.PROCESSING).count(),
-            'error_documents': Document.objects.filter(status=Document.StatusChoices.ERROR).count(),
-        },
-        'status_distribution': list(status_stats),
-        'file_type_distribution': list(file_type_stats),
-        'content_statistics': content_stats,
-        'extraction_methods': list(extraction_stats),
-        'recent_processed': DocumentListSerializer(recent_processed, many=True).data
-    })
-
-
-@extend_schema(
-    summary="Recherche dans le contenu extrait",
-    description="Recherche full-text dans le contenu extrait des documents"
-)
-@api_view(['GET'])
-@permission_classes([permissions.IsAuthenticated])
-def search_content(request):
-    """Recherche dans le contenu extrait"""
-    query = request.query_params.get('q', '').strip()
-
-    if not query:
-        return Response(
-            {'error': 'Paramètre de recherche "q" requis'},
-            status=status.HTTP_400_BAD_REQUEST
+        # Statistiques de contenu
+        content_stats = DocumentContent.objects.aggregate(
+            avg_word_count=Avg('word_count'),
+            avg_page_count=Avg('page_count'),
+            avg_extraction_confidence=Avg('extraction_confidence'),
+            total_processed=Count('id')
         )
 
-    if len(query) < 3:
-        return Response(
-            {'error': 'La recherche doit contenir au moins 3 caractères'},
-            status=status.HTTP_400_BAD_REQUEST
-        )
+        extraction_stats = DocumentContent.objects.values('extraction_method').annotate(
+            count=Count('id')
+        ).order_by('extraction_method')
 
-    # Recherche dans le contenu
-    from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+        # Documents récemment traités
+        recent_processed = Document.objects.filter(
+            status=Document.StatusChoices.PROCESSED
+        ).order_by('-updated_at')[:5]
 
-    search_vector = SearchVector('clean_content', weight='A') + \
-                    SearchVector('keywords_extracted', weight='B')
-
-    search_query = SearchQuery(query, search_type='websearch')
-
-    results = DocumentContent.objects.annotate(
-        search=search_vector,
-        rank=SearchRank(search_vector, search_query)
-    ).filter(
-        search=search_query
-    ).filter(
-        document__is_deleted=False,
-        document__status=Document.StatusChoices.PROCESSED
-    ).select_related('document').order_by('-rank')
-
-    # Pagination
-    paginator = DocumentProcessingPagination()
-    page = paginator.paginate_queryset(results, request)
-
-    if page is not None:
-        # Construction des résultats avec extraits
-        search_results = []
-        for content in page:
-            # Extraction d'un extrait pertinent
-            excerpt = _extract_search_excerpt(content.clean_content, query)
-
-            search_results.append({
-                'document': DocumentListSerializer(content.document).data,
-                'content_id': content.id,
-                'excerpt': excerpt,
-                'rank': float(content.rank),
-                'word_count': content.word_count,
-                'extraction_confidence': float(content.extraction_confidence)
-            })
-
-        return paginator.get_paginated_response({
-            'query': query,
-            'results': search_results
+        return Response({
+            'summary': {
+                'total_documents': Document.objects.count(),
+                'processed_documents': Document.objects.filter(status=Document.StatusChoices.PROCESSED).count(),
+                'processing_documents': Document.objects.filter(status=Document.StatusChoices.PROCESSING).count(),
+                'error_documents': Document.objects.filter(status=Document.StatusChoices.ERROR).count(),
+            },
+            'status_distribution': list(status_stats),
+            'file_type_distribution': list(file_type_stats),
+            'content_statistics': content_stats,
+            'extraction_methods': list(extraction_stats),
+            'recent_processed': DocumentListSerializer(recent_processed, many=True).data
         })
 
-    return Response({
-        'query': query,
-        'results': [],
-        'count': 0
-    })
+class SearchContentView(generics.GenericAPIView):
+    """APIView pour rechercher du contenu dans les documents"""
+    serializer_class = DocumentContentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = DocumentProcessingPagination
 
+    @extend_schema(
+        summary="Recherche dans le contenu extrait",
+        description="Recherche full-text dans le contenu extrait des documents",
+        parameters=[
+            OpenApiParameter(
+                name='q',
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
+                required=True,
+                description='Terme de recherche'
+            )
+        ],
+        responses={
+            200: OpenApiTypes.OBJECT,
+            'example': {
+                'query': 'string',
+                'results': [{
+                    'document': {},
+                    'content_id': 'uuid',
+                    'excerpt': 'string',
+                    'rank': 'float',
+                    'word_count': 'integer',
+                    'extraction_confidence': 'float'
+                }],
+                'count': 'integer'
+            }
+        }
+    )
+    def get(self, request):
+        """Recherche dans le contenu extrait"""
+        query = request.query_params.get('q', '').strip()
 
-def _extract_search_excerpt(content: str, query: str, max_length: int = 200) -> str:
-    """Extrait un passage pertinent du contenu pour la recherche"""
-    import re
+        if not query:
+            return Response(
+                {'error': 'Paramètre de recherche "q" requis'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-    # Recherche de la première occurrence du terme
-    pattern = re.compile(re.escape(query), re.IGNORECASE)
-    match = pattern.search(content)
+        if len(query) < 3:
+            return Response(
+                {'error': 'La recherche doit contenir au moins 3 caractères'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-    if match:
-        start = max(0, match.start() - max_length // 2)
-        end = min(len(content), match.end() + max_length // 2)
+        # Recherche dans le contenu
+        from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
-        excerpt = content[start:end].strip()
+        search_vector = SearchVector('clean_content', weight='A') + \
+                        SearchVector('keywords_extracted', weight='B')
 
-        # Ajout d'ellipses si nécessaire
-        if start > 0:
-            excerpt = '...' + excerpt
-        if end < len(content):
-            excerpt = excerpt + '...'
+        search_query = SearchQuery(query, search_type='websearch')
 
-        # Mise en évidence du terme recherché
-        excerpt = pattern.sub(f'**{match.group()}**', excerpt)
+        results = DocumentContent.objects.annotate(
+            search=search_vector,
+            rank=SearchRank(search_vector, search_query)
+        ).filter(
+            search=search_query
+        ).filter(
+            document__is_deleted=False,
+            document__status=Document.StatusChoices.PROCESSED
+        ).select_related('document').order_by('-rank')
 
-        return excerpt
+        # Pagination
+        paginator = self.pagination_class()
+        page = paginator.paginate_queryset(results, request)
 
-    # Si pas de correspondance exacte, retourne le début
-    return content[:max_length] + ('...' if len(content) > max_length else '')
+        if page is not None:
+            # Construction des résultats avec extraits
+            search_results = []
+            for content in page:
+                # Extraction d'un extrait pertinent
+                excerpt = self._extract_search_excerpt(content.clean_content, query)
+
+                search_results.append({
+                    'document': DocumentListSerializer(content.document).data,
+                    'content_id': str(content.id),
+                    'excerpt': excerpt,
+                    'rank': float(content.rank),
+                    'word_count': content.word_count,
+                    'extraction_confidence': float(content.extraction_confidence)
+                })
+
+            return paginator.get_paginated_response({
+                'query': query,
+                'results': search_results
+            })
+
+        return Response({
+            'query': query,
+            'results': [],
+            'count': 0
+        })
+
+    def _extract_search_excerpt(self, content: str, query: str, max_length: int = 200) -> str:
+        """Extrait un passage pertinent du contenu pour la recherche"""
+        import re
+
+        # Recherche de la première occurrence du terme
+        pattern = re.compile(re.escape(query), re.IGNORECASE)
+        match = pattern.search(content)
+
+        if match:
+            start = max(0, match.start() - max_length // 2)
+            end = min(len(content), match.end() + max_length // 2)
+
+            excerpt = content[start:end].strip()
+
+            if start > 0:
+                excerpt = '...' + excerpt
+            if end < len(content):
+                excerpt = excerpt + '...'
+
+            excerpt = pattern.sub(f'**{match.group()}**', excerpt)
+
+            return excerpt
+
+        return content[:max_length] + ('...' if len(content) > max_length else '')
