@@ -30,6 +30,8 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lamb
 
 AUTH_USER_MODEL = 'doctrine.User'
 
+LOGIN_URL = '/admin/login/'
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -119,9 +121,6 @@ SPECTACULAR_SETTINGS = {
 
     'COMPONENT_SPLIT_REQUEST': True,
     'COMPONENT_NO_READ_ONLY_REQUIRED': True,
-    'ENUM_NAME_OVERRIDES': {
-        'ValidationErrorEnum': 'doctrine.serializers.ValidationErrorEnum',
-    },
     'POSTPROCESSING_HOOKS': [
         'drf_spectacular.hooks.postprocess_schema_enums',
     ],
@@ -156,7 +155,7 @@ OAUTH2_PROVIDER = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # OAuth2 for APIs
-        'rest_framework.authentication.SessionAuthentication',  # For admin/browsable API
+       # 'rest_framework.authentication.SessionAuthentication',  # For admin/browsable API
         'rest_framework.authentication.TokenAuthentication',  # DRF token auth (optional)
     ],
     'DEFAULT_PERMISSION_CLASSES': [
@@ -186,17 +185,6 @@ REST_FRAMEWORK = {
     # 'EXCEPTION_HANDLER': 'doctrine.exceptions.custom_exception_handler',  # Uncomment if needed
 }
 
-# API Documentation with drf-spectacular
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'Document Management API',
-    'DESCRIPTION': 'API for managing documents with OAuth2 authentication',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': True,
-    'OAUTH2_FLOWS': ['authorizationCode', 'clientCredentials'],
-    'OAUTH2_AUTHORIZATION_URL': '/o/authorize/',
-    'OAUTH2_TOKEN_URL': '/o/token/',
-    'OAUTH2_REFRESH_URL': '/o/token/',
-}
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'

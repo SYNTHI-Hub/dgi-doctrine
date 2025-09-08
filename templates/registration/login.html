@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Connexion</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background: #f7f7fb; margin: 0; }
+    .container { max-width: 420px; margin: 6vh auto; background: #fff; padding: 28px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+    h1 { font-size: 1.4rem; margin: 0 0 16px; color: #111827; }
+    .help { color: #6b7280; font-size: 0.9rem; margin-bottom: 18px; }
+    .messages { margin: 0 0 12px; padding: 0; list-style: none; }
+    .messages li { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 0.9rem; }
+    form p { margin: 0 0 12px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; color: #374151; }
+    input[type="text"], input[type="password"] { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
+    .row { display: flex; align-items: center; justify-content: space-between; margin: 6px 0 14px; }
+    .actions { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+    button, .btn { background: #2563eb; color: white; border: 0; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    button:hover, .btn:hover { background: #1d4ed8; }
+    .link { color: #2563eb; text-decoration: none; font-size: 0.9rem; }
+    .link:hover { text-decoration: underline; }
+    .footer { margin-top: 14px; text-align: center; font-size: 0.9rem; color: #6b7280; }
+    small.errorlist { display: block; color: #b91c1c; margin-top: 6px; }
+    .non-field-errors { background: #fee2e2; border: 1px solid #ef4444; color: #7f1d1d; padding: 10px; border-radius: 8px; margin-bottom: 12px; font-size: 0.92rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Connexion</h1>
+    <p class="help">Veuillez vous authentifier pour continuer.</p>
+
+    {% if form.non_field_errors %}
+      <div class="non-field-errors">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}" />
+
+      <p>
+        <label for="id_username">Nom d'utilisateur ou email</label>
+        <input id="id_username" type="text" name="username" autofocus required />
+      </p>
+      <p>
+        <label for="id_password">Mot de passe</label>
+        <input id="id_password" type="password" name="password" required />
+      </p>
+
+      <div class="row">
+        <div>
+          {% if password_reset_url %}
+            <a class="link" href="{{ password_reset_url }}">Mot de passe oublié ?</a>
+          {% else %}
+            <a class="link" href="{% url 'password_reset' %}">Mot de passe oublié ?</a>
+          {% endif %}
+        </div>
+        <div class="actions">
+          <button type="submit">Se connecter</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="footer">
+      <small>Retour à <a class="link" href="/admin/">l'administration</a></small>
+    </div>
+  </div>
+</body>
+</html>

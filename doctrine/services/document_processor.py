@@ -75,7 +75,6 @@ class PDFContentExtractor(ContentExtractorInterface):
         try:
             doc = fitz.open(file_path)
 
-            # Extraction du texte et métadonnées
             full_text = ""
             page_contents = []
 
@@ -85,11 +84,10 @@ class PDFContentExtractor(ContentExtractorInterface):
                 page_contents.append({
                     'page_number': page_num + 1,
                     'content': page_text,
-                    'bbox': page.rect
+                    'bbox': [page.rect.x0, page.rect.y0, page.rect.x1, page.rect.y1]
                 })
                 full_text += f"\n--- Page {page_num + 1} ---\n{page_text}"
 
-            # Extraction des métadonnées du document
             metadata = {
                 'page_count': doc.page_count,
                 'title': doc.metadata.get('title', ''),
@@ -164,7 +162,7 @@ class PDFContentExtractor(ContentExtractorInterface):
                         }
                         break
                 else:
-                    # Ajouter le contenu au topic actuel
+
                     if current_topic:
                         current_topic['content'] += line + '\n'
 
@@ -245,9 +243,18 @@ class PDFContentExtractor(ContentExtractorInterface):
             page = doc[page_num]
 
             # Recherche de tableaux via les structures
-            table_candidates = page.find_tables()
+            # Recherche de tableaux via les structures (selon version PyMuPDF)
+            try:
+                table_candidates_obj = page.find_tables()
+            except Exception:
+                table_candidates_obj = None
 
-            for i, table in enumerate(table_candidates):
+            if not table_candidates_obj:
+                continue
+
+            table_iterable = getattr(table_candidates_obj, 'tables', table_candidates_obj)
+
+            for i, table in enumerate(table_iterable):
                 try:
                     # Extraction des données du tableau
                     table_data = table.extract()
@@ -269,10 +276,10 @@ class PDFContentExtractor(ContentExtractorInterface):
                             'start_page': page_num + 1,
                             'order_index': len(tables),
                             'bbox_coordinates': {
-                                'x0': table.bbox[0],
-                                'y0': table.bbox[1],
-                                'x1': table.bbox[2],
-                                'y1': table.bbox[3]
+                                'x0': float(getattr(table.bbox, 'x0', table.bbox[0] if hasattr(table.bbox, '__getitem__') else 0.0)),
+                                'y0': float(getattr(table.bbox, 'y0', table.bbox[1] if hasattr(table.bbox, '__getitem__') else 0.0)),
+                                'x1': float(getattr(table.bbox, 'x1', table.bbox[2] if hasattr(table.bbox, '__getitem__') else 0.0)),
+                                'y1': float(getattr(table.bbox, 'y1', table.bbox[3] if hasattr(table.bbox, '__getitem__') else 0.0))
                             },
                             'extraction_confidence': 0.8,
                             'extraction_method': 'pymupdf_auto'
@@ -341,19 +348,22 @@ class WordContentExtractor(ContentExtractorInterface):
         return file_extension.lower() in self.supported_formats
 
     def extract(self, file_path: str) -> ExtractionResult:
-        """Extraction du contenu Word (utilise PyMuPDF via conversion)"""
+        """Extraction du contenu Word: tentative via PyMuPDF sinon échec gracieux.
+        Par défaut, privilégier PDF; DOC/DOCX supportés si MuPDF le permet.
+        """
         start_time = timezone.now()
         result = ExtractionResult(success=False)
 
         try:
-            # PyMuPDF peut ouvrir les fichiers Word directement
-            doc = fitz.open(file_path)
+            # Utiliser la même logique que PDF si MuPDF peut ouvrir le fichier
+            try:
+                _doc = fitz.open(file_path)
+                _doc.close()
+            except Exception:
+                raise RuntimeError("Format Word non supporté par PyMuPDF sur cette plateforme.")
 
-            # Utiliser la même logique que PDF
             pdf_extractor = PDFContentExtractor()
             result = pdf_extractor.extract(file_path)
-
-            doc.close()
 
         except Exception as e:
             logger.error(f"Erreur lors de l'extraction Word: {str(e)}")
@@ -503,12 +513,29 @@ class DocumentProcessorService:
     def _save_sections(self, document: Document, sections_data: List[Dict]):
         """Sauvegarde les sections"""
         topics = list(document.topics.all().order_by('order_index'))
-        current_topic_index = 0
+        # Créer un topic par défaut si aucun n'existe mais que des sections sont détectées
+        if not topics and sections_data:
+            default_topic = Topic.objects.create(
+                document=document,
+                title='Contenu',
+                content='Sections détectées',
+                topic_type=Topic.TopicType.SECTION,
+                order_index=0,
+                level=1,
+                start_page=sections_data[0].get('start_page') if sections_data else None
+            )
+            topics = [default_topic]
+
+        def find_topic_for_page(start_page: Optional[int]) -> Optional[Topic]:
+            if not topics:
+                return None
+            if not start_page:
+                return topics[0]
+            candidates = [t for t in topics if t.start_page and t.start_page <= start_page]
+            return candidates[-1] if candidates else topics[0]
 
         for section_data in sections_data:
-            # Assigner à un topic approprié
-            topic = topics[current_topic_index] if current_topic_index < len(topics) else topics[-1] if topics else None
-
+            topic = find_topic_for_page(section_data.get('start_page'))
             if topic:
                 Section.objects.create(
                     topic=topic,
@@ -522,14 +549,40 @@ class DocumentProcessorService:
 
     def _save_paragraphs(self, document: Document, paragraphs_data: List[Dict]):
         """Sauvegarde les paragraphes"""
-        sections = list(Section.objects.filter(topic__document=document).order_by('order_index'))
-        current_section_index = 0
+        sections = list(Section.objects.filter(topic__document=document).order_by('start_page', 'order_index'))
+        # Créer une section par défaut si aucune n'existe mais que des paragraphes sont détectés
+        if not sections and paragraphs_data:
+            topic = Topic.objects.create(
+                document=document,
+                title='Contenu',
+                content='Paragraphes détectés',
+                topic_type=Topic.TopicType.SECTION,
+                order_index=0,
+                level=1,
+                start_page=paragraphs_data[0].get('start_page') if paragraphs_data else None
+            )
+            section = Section.objects.create(
+                topic=topic,
+                title='Paragraphe',
+                content='',
+                section_type=Section.SectionType.PARAGRAPH,
+                order_index=0,
+                start_page=paragraphs_data[0].get('start_page') or 1,
+                word_count=0
+            )
+            sections = [section]
+
+        def find_section_for_page(start_page: Optional[int]) -> Optional[Section]:
+            if not sections:
+                return None
+            if not start_page:
+                return sections[0]
+            # Find the last section with start_page <= paragraph start_page
+            candidates = [s for s in sections if s.start_page and s.start_page <= start_page]
+            return candidates[-1] if candidates else sections[0]
 
         for para_data in paragraphs_data:
-            # Assigner à une section appropriée
-            section = sections[current_section_index] if current_section_index < len(sections) else sections[
-                -1] if sections else None
-
+            section = find_section_for_page(para_data.get('start_page'))
             if section:
                 Paragraph.objects.create(
                     section=section,
@@ -541,9 +594,42 @@ class DocumentProcessorService:
                 )
 
     def _save_tables(self, document: Document, tables_data: List[Dict]):
-        """Sauvegarde les tableaux"""
+        """Sauvegarde les tableaux et les associe à une section la plus proche"""
+        sections = list(Section.objects.filter(topic__document=document).order_by('start_page', 'order_index'))
+
+        def ensure_tables_section(start_page: Optional[int]) -> Section:
+            # Retourne une section correspondant à la page ou crée une section par défaut
+            if sections:
+                if start_page:
+                    candidates = [s for s in sections if s.start_page and s.start_page <= start_page]
+                    return candidates[-1] if candidates else sections[0]
+                return sections[0]
+            # Créer un topic et une section par défaut si aucune section n'existe
+            topic = Topic.objects.create(
+                document=document,
+                title='Tables',
+                content='Tables extraites',
+                topic_type=Topic.TopicType.SECTION,
+                order_index=0,
+                level=1,
+                start_page=start_page
+            )
+            section = Section.objects.create(
+                topic=topic,
+                title='Tables',
+                content='',
+                section_type=Section.SectionType.PARAGRAPH,
+                order_index=0,
+                start_page=start_page or 1,
+                word_count=0
+            )
+            sections.append(section)
+            return section
+
         for table_data in tables_data:
+            section = ensure_tables_section(table_data.get('start_page'))
             Table.objects.create(
+                section=section,
                 title=table_data.get('title', ''),
                 caption=table_data.get('caption', ''),
                 table_type=table_data.get('table_type', Table.TableType.DATA),
@@ -560,16 +646,22 @@ class DocumentProcessorService:
             )
 
     def _clean_text(self, text: str) -> str:
-        """Nettoie le texte extrait"""
-        # Supprimer les caractères de contrôle
+        """Nettoie le texte extrait tout en préservant la structure (sauts de ligne)."""
+        if not text:
+            return ''
+        # Normaliser les retours chariot
+        text = text.replace('\r\n', '\n').replace('\r', '\n')
+        # Supprimer les caractères de contrôle non imprimables
         text = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x84\x86-\x9f]', '', text)
+        # Réduire les séquences d'espaces/tabs mais conserver les \n
+        def _normalize_line(line: str) -> str:
+            line = re.sub(r'[ \t]+', ' ', line)
+            return line.strip()
 
-        # Normaliser les espaces
-        text = re.sub(r'\s+', ' ', text)
-
-        # Supprimer les lignes vides multiples
-        text = re.sub(r'\n\s*\n\s*\n', '\n\n', text)
-
+        lines = [_normalize_line(l) for l in text.split('\n')]
+        text = '\n'.join(lines)
+        # Limiter les sauts de ligne consécutifs à 2
+        text = re.sub(r'\n{3,}', '\n\n', text)
         return text.strip()
 
 

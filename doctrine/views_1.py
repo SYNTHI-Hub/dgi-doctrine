@@ -1,4 +1,5 @@
 from django.db.models import Count, Avg
+from oauth2_provider.contrib.rest_framework import TokenHasScope
 from rest_framework import viewsets, status, permissions, generics
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -52,8 +53,11 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
     search_fields = ['title', 'description', 'original_filename']
     ordering_fields = ['created_at', 'title', 'status', 'file_size']
     ordering = ['-created_at']
+    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    required_scopes = ['read', 'write']
 
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAutheticated]
+
 
     def get_serializer_class(self):
         """Sélectionne le bon serializer selon l'action"""
@@ -93,7 +97,7 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
                 'required': ['file', 'title', 'theme_id', 'category_id']
             }
         },
-        responses={201: DocumentDetailSerializer}
+        responses={201: OpenApiTypes.OBJECT}
     )
     @action(detail=False, methods=['post'])
     def upload_and_process(self, request):

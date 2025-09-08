@@ -1,1664 +1,359 @@
-INFO 2025-09-07 00:20:23,545 autoreload 5715 140704657598976 Watching for file changes with StatReloader
-INFO 2025-09-07 00:21:46,767 autoreload 5715 140704657598976 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 00:21:48,589 autoreload 5749 140704657598976 Watching for file changes with StatReloader
-INFO 2025-09-07 00:22:27,322 basehttp 5749 123145512169472 "GET /api/schema/redoc/ HTTP/1.1" 200 739
-ERROR 2025-09-07 00:22:32,063 log 5749 123145512169472 Internal Server Error: /api/schema/
+INFO 2025-09-08 00:08:34,900 autoreload 85670 140704558139904 Watching for file changes with StatReloader
+WARNING 2025-09-08 00:08:53,127 log 85670 123145362796544 Not Found: /
+WARNING 2025-09-08 00:08:53,128 basehttp 85670 123145362796544 "GET / HTTP/1.1" 404 3145
+WARNING 2025-09-08 00:09:06,790 log 85670 123145379586048 Not Found: /
+WARNING 2025-09-08 00:09:06,791 basehttp 85670 123145379586048 "GET / HTTP/1.1" 404 3145
+WARNING 2025-09-08 00:09:18,232 log 85670 123145379586048 Not Found: /o/application
+WARNING 2025-09-08 00:09:18,233 basehttp 85670 123145379586048 "GET /o/application HTTP/1.1" 404 7200
+INFO 2025-09-08 00:09:29,918 basehttp 85670 123145379586048 "GET /o/applications HTTP/1.1" 301 0
+INFO 2025-09-08 00:09:32,238 basehttp 85670 123145379586048 "GET /o/applications/ HTTP/1.1" 302 0
+INFO 2025-09-08 00:09:32,290 basehttp 85670 123145379586048 "GET /admin/login/?next=/o/applications/ HTTP/1.1" 200 4188
+INFO 2025-09-08 00:09:32,316 basehttp 85670 123145413165056 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2025-09-08 00:09:32,319 basehttp 85670 123145429954560 "GET /static/admin/css/login.css HTTP/1.1" 200 951
+INFO 2025-09-08 00:09:32,319 basehttp 85670 123145396375552 "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2025-09-08 00:09:32,320 basehttp 85670 123145379586048 "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2025-09-08 00:09:32,321 basehttp 85670 123145463533568 "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2025-09-08 00:09:32,321 basehttp 85670 123145446744064 "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2025-09-08 00:09:32,323 basehttp 85670 123145446744064 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2025-09-08 00:09:50,892 basehttp 85670 123145446744064 "POST /admin/login/?next=/o/applications/ HTTP/1.1" 302 0
+INFO 2025-09-08 00:09:52,554 basehttp 85670 123145446744064 "GET /o/applications/ HTTP/1.1" 200 1433
+INFO 2025-09-08 00:09:58,659 basehttp 85670 123145446744064 "GET /o/applications/register/ HTTP/1.1" 200 7170
+INFO 2025-09-08 00:10:37,442 basehttp 85670 123145446744064 "POST /o/applications/register/ HTTP/1.1" 302 0
+INFO 2025-09-08 00:10:39,053 basehttp 85670 123145446744064 "GET /o/applications/1/ HTTP/1.1" 200 2899
+INFO 2025-09-08 00:11:40,449 basehttp 85670 123145362796544 "GET /o/authorize/?response_type=code&code_challenge=OV_5n-Zt-6EyZ0n9k1ghS9v8CoMM5e5izb-2--a77Dc&code_challenge_method=S256&client_id=EkYfPqfwaAtHaCwxyitfZ2vatDHMpZIp8TMoYgnJ&redirect_uri=http://localhost:8000/admin/ HTTP/1.1" 302 0
+INFO 2025-09-08 00:11:40,465 basehttp 85670 123145362796544 "GET /admin/login/?next=/o/authorize/%3Fresponse_type%3Dcode%26code_challenge%3DOV_5n-Zt-6EyZ0n9k1ghS9v8CoMM5e5izb-2--a77Dc%26code_challenge_method%3DS256%26client_id%3DEkYfPqfwaAtHaCwxyitfZ2vatDHMpZIp8TMoYgnJ%26redirect_uri%3Dhttp%3A//localhost%3A8000/admin/ HTTP/1.1" 200 4618
+INFO 2025-09-08 00:11:40,499 basehttp 85670 123145480323072 "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2025-09-08 00:11:40,502 basehttp 85670 123145362796544 "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2025-09-08 00:11:40,503 basehttp 85670 123145497112576 "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2025-09-08 00:11:40,504 basehttp 85670 123145547481088 "GET /static/admin/css/login.css HTTP/1.1" 200 951
+INFO 2025-09-08 00:11:40,506 basehttp 85670 123145513902080 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2025-09-08 00:11:40,507 basehttp 85670 123145480323072 "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2025-09-08 00:11:40,508 basehttp 85670 123145530691584 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+WARNING 2025-09-08 00:11:44,320 log 85670 123145446744064 Bad Request: /o/authorize/
+WARNING 2025-09-08 00:11:44,321 basehttp 85670 123145446744064 "GET /o/authorize/?response_type=code&code_challenge=OV_5n-Zt-6EyZ0n9k1ghS9v8CoMM5e5izb-2--a77Dc&code_challenge_method=S256&client_id=EkYfPqfwaAtHaCwxyitfZ2vatDHMpZIp8TMoYgnJ&redirect_uri=http://localhost:8000/admin/ HTTP/1.1" 400 1328
+WARNING 2025-09-08 00:11:51,480 log 85670 123145446744064 Bad Request: /o/authorize/
+WARNING 2025-09-08 00:11:51,480 basehttp 85670 123145446744064 "GET /o/authorize/?response_type=code&code_challenge=OV_5n-Zt-6EyZ0n9k1ghS9v8CoMM5e5izb-2--a77Dc&code_challenge_method=S256&client_id=EkYfPqfwaAtHaCwxyitfZ2vatDHMpZIp8TMoYgnJ&redirect_uri=http://localhost:8000/admin HTTP/1.1" 400 1328
+WARNING 2025-09-08 00:11:58,854 log 85670 123145446744064 Bad Request: /o/authorize/
+WARNING 2025-09-08 00:11:58,855 basehttp 85670 123145446744064 "GET /o/authorize/?response_type=code&code_challenge=OV_5n-Zt-6EyZ0n9k1ghS9v8CoMM5e5izb-2--a77Dc&code_challenge_method=S256&client_id=EkYfPqfwaAtHaCwxyitfZ2vatDHMpZIp8TMoYgnJ&redirect_uri=http://localhost:8000/admin HTTP/1.1" 400 1328
+INFO 2025-09-08 00:12:06,028 basehttp 85670 123145446744064 "GET /o/applications/1/update/ HTTP/1.1" 200 7172
+INFO 2025-09-08 00:12:12,574 basehttp 85670 123145446744064 "POST /o/applications/1/update/ HTTP/1.1" 302 0
+INFO 2025-09-08 00:12:14,624 basehttp 85670 123145446744064 "GET /o/applications/1/ HTTP/1.1" 200 2900
+INFO 2025-09-08 00:12:35,368 basehttp 85670 123145362796544 "GET /o/authorize/?response_type=code&code_challenge=NZjvu5SRdX2vgv2Z63eVrQA1K7Gwo2Fv4d0pCtHLoGE&code_challenge_method=S256&client_id=EkYfPqfwaAtHaCwxyitfZ2vatDHMpZIp8TMoYgnJ&redirect_uri=http://localhost:8000/admin/ HTTP/1.1" 302 0
+INFO 2025-09-08 00:12:35,400 basehttp 85670 123145362796544 "GET /admin/login/?next=/o/authorize/%3Fresponse_type%3Dcode%26code_challenge%3DNZjvu5SRdX2vgv2Z63eVrQA1K7Gwo2Fv4d0pCtHLoGE%26code_challenge_method%3DS256%26client_id%3DEkYfPqfwaAtHaCwxyitfZ2vatDHMpZIp8TMoYgnJ%26redirect_uri%3Dhttp%3A//localhost%3A8000/admin/ HTTP/1.1" 200 4618
+INFO 2025-09-08 00:12:57,630 basehttp 85670 123145362796544 "POST /admin/login/?next=/o/authorize/%3Fresponse_type%3Dcode%26code_challenge%3DNZjvu5SRdX2vgv2Z63eVrQA1K7Gwo2Fv4d0pCtHLoGE%26code_challenge_method%3DS256%26client_id%3DEkYfPqfwaAtHaCwxyitfZ2vatDHMpZIp8TMoYgnJ%26redirect_uri%3Dhttp%3A//localhost%3A8000/admin/ HTTP/1.1" 302 0
+WARNING 2025-09-08 00:12:59,472 log 85670 123145362796544 Bad Request: /o/authorize/
+WARNING 2025-09-08 00:12:59,472 basehttp 85670 123145362796544 "GET /o/authorize/?response_type=code&code_challenge=NZjvu5SRdX2vgv2Z63eVrQA1K7Gwo2Fv4d0pCtHLoGE&code_challenge_method=S256&client_id=EkYfPqfwaAtHaCwxyitfZ2vatDHMpZIp8TMoYgnJ&redirect_uri=http://localhost:8000/admin/ HTTP/1.1" 400 1328
+WARNING 2025-09-08 00:13:06,845 log 85670 123145362796544 Bad Request: /o/authorize/
+WARNING 2025-09-08 00:13:06,852 basehttp 85670 123145362796544 "GET /o/authorize/?response_type=code&code_challenge=OV_5n-Zt-6EyZ0n9k1ghS9v8CoMM5e5izb-2--a77Dc&code_challenge_method=S256&client_id=EkYfPqfwaAtHaCwxyitfZ2vatDHMpZIp8TMoYgnJ&redirect_uri=http://localhost:8000/admin HTTP/1.1" 400 1328
+INFO 2025-09-08 00:13:22,007 basehttp 85670 123145446744064 "GET /o/applications/1/update/ HTTP/1.1" 200 7173
+WARNING 2025-09-08 00:13:53,948 log 85670 123145362796544 Bad Request: /o/authorize/
+WARNING 2025-09-08 00:13:53,949 basehttp 85670 123145362796544 "GET /o/authorize/?response_type=code&code_challenge=NZjvu5SRdX2vgv2Z63eVrQA1K7Gwo2Fv4d0pCtHLoGE&code_challenge_method=S256&client_id=EkYfPqfwaAtHaCwxyitfZ2vatDHMpZIp8TMoYgnJ&redirect_uri=http://localhost:8000/admin/ HTTP/1.1" 400 1328
+INFO 2025-09-08 00:14:07,080 basehttp 85670 123145362796544 "GET /o/authorize/?response_type=code&code_challenge=NZjvu5SRdX2vgv2Z63eVrQA1K7Gwo2Fv4d0pCtHLoGE&code_challenge_method=S256&client_id=EkYfPqfwaAtHaCwxyitfZ2vatDHMpZIp8TMoYgnJ&redirect_uri=http://127.0.0.1:8000/admin/ HTTP/1.1" 200 3802
+INFO 2025-09-08 00:14:11,569 basehttp 85670 123145362796544 "POST /o/authorize/?response_type=code&code_challenge=NZjvu5SRdX2vgv2Z63eVrQA1K7Gwo2Fv4d0pCtHLoGE&code_challenge_method=S256&client_id=EkYfPqfwaAtHaCwxyitfZ2vatDHMpZIp8TMoYgnJ&redirect_uri=http://127.0.0.1:8000/admin/ HTTP/1.1" 302 0
+INFO 2025-09-08 00:14:13,814 basehttp 85670 123145362796544 "GET /admin/?code=3AAhkhyMao9bvKTaXNIm3734AnF5Hd HTTP/1.1" 200 15448
+INFO 2025-09-08 00:14:13,826 basehttp 85670 123145362796544 "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-09-08 00:14:13,857 basehttp 85670 123145362796544 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-09-08 00:14:13,857 basehttp 85670 123145480323072 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2025-09-08 00:14:22,895 basehttp 85670 123145446744064 "GET /admin/?code=3AAhkhyMao9bvKTaXNIm3734AnF5Hd HTTP/1.1" 200 15448
+INFO 2025-09-08 00:14:22,906 basehttp 85670 123145446744064 "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-09-08 00:14:22,920 basehttp 85670 123145446744064 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-09-08 00:14:22,921 basehttp 85670 123145463533568 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+WARNING 2025-09-08 00:15:02,770 log 85670 123145362796544 Bad Request: /o/token/
+WARNING 2025-09-08 00:15:02,777 basehttp 85670 123145362796544 "POST /o/token/ HTTP/1.1" 400 32
+WARNING 2025-09-08 00:17:18,760 log 85670 123145362796544 Unauthorized: /o/token/
+WARNING 2025-09-08 00:17:18,766 basehttp 85670 123145362796544 "POST /o/token/ HTTP/1.1" 401 27
+INFO 2025-09-08 00:17:48,319 basehttp 85670 123145362796544 "POST /o/applications/1/update/ HTTP/1.1" 302 0
+INFO 2025-09-08 00:17:50,284 basehttp 85670 123145362796544 "GET /o/applications/1/ HTTP/1.1" 200 2900
+WARNING 2025-09-08 00:17:58,883 log 85670 123145379586048 Unauthorized: /o/token/
+WARNING 2025-09-08 00:17:58,884 basehttp 85670 123145379586048 "POST /o/token/ HTTP/1.1" 401 27
+WARNING 2025-09-08 00:18:04,990 log 85670 123145379586048 Unauthorized: /o/token/
+WARNING 2025-09-08 00:18:04,993 basehttp 85670 123145379586048 "POST /o/token/ HTTP/1.1" 401 27
+INFO 2025-09-08 00:18:08,217 basehttp 85670 123145362796544 "GET /o/applications/1/update/ HTTP/1.1" 200 7173
+INFO 2025-09-08 00:18:17,725 basehttp 85670 123145362796544 "POST /o/applications/1/update/ HTTP/1.1" 302 0
+INFO 2025-09-08 00:18:20,389 basehttp 85670 123145362796544 "GET /o/applications/1/ HTTP/1.1" 200 2890
+WARNING 2025-09-08 00:18:38,410 log 85670 123145379586048 Unauthorized: /o/token/
+WARNING 2025-09-08 00:18:38,410 basehttp 85670 123145379586048 "POST /o/token/ HTTP/1.1" 401 27
+INFO 2025-09-08 00:18:50,288 basehttp 85670 123145379586048 "POST /o/token/ HTTP/1.1" 200 169
+WARNING 2025-09-08 00:19:30,477 log 85670 123145379586048 Not Found: /
+WARNING 2025-09-08 00:19:30,478 basehttp 85670 123145379586048 "GET / HTTP/1.1" 404 3145
+WARNING 2025-09-08 00:19:39,221 log 85670 123145379586048 Not Found: /
+WARNING 2025-09-08 00:19:39,222 basehttp 85670 123145379586048 "GET / HTTP/1.1" 404 3145
+INFO 2025-09-08 00:19:47,020 basehttp 85670 123145379586048 "GET /api/schema/swagger-ui/ HTTP/1.1" 200 4656
+INFO 2025-09-08 00:19:51,614 basehttp 85670 123145379586048 "GET /api/schema/ HTTP/1.1" 200 126704
+INFO 2025-09-08 00:25:23,850 basehttp 85670 123145362796544 "GET /admin/doctrine/documentcategory/add/ HTTP/1.1" 200 22841
+INFO 2025-09-08 00:25:23,871 basehttp 85670 123145362796544 "GET /static/admin/css/forms.css HTTP/1.1" 200 8525
+INFO 2025-09-08 00:25:23,873 basehttp 85670 123145413165056 "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2025-09-08 00:25:23,874 basehttp 85670 123145429954560 "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2025-09-08 00:25:23,876 basehttp 85670 123145446744064 "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9777
+INFO 2025-09-08 00:25:23,880 basehttp 85670 123145362796544 "GET /static/admin/js/actions.js HTTP/1.1" 200 8076
+INFO 2025-09-08 00:25:23,883 basehttp 85670 123145446744064 "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2025-09-08 00:25:23,885 basehttp 85670 123145413165056 "GET /static/admin/css/widgets.css HTTP/1.1" 200 11991
+INFO 2025-09-08 00:25:23,887 basehttp 85670 123145429954560 "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2025-09-08 00:25:23,889 basehttp 85670 123145446744064 "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2025-09-08 00:25:23,892 basehttp 85670 123145396375552 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2025-09-08 00:25:23,895 basehttp 85670 123145362796544 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2025-09-08 00:25:23,900 basehttp 85670 123145362796544 "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2025-09-08 00:25:27,810 basehttp 85670 123145379586048 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-09-08 00:27:19,836 basehttp 85670 123145379586048 "POST /admin/doctrine/documentcategory/add/ HTTP/1.1" 302 0
+INFO 2025-09-08 00:27:21,696 basehttp 85670 123145379586048 "GET /admin/doctrine/documentcategory/add/ HTTP/1.1" 200 23159
+INFO 2025-09-08 00:27:23,316 basehttp 85670 123145379586048 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-09-08 00:27:23,343 basehttp 85670 123145379586048 "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+INFO 2025-09-08 00:27:39,905 basehttp 85670 123145379586048 "POST /admin/doctrine/documentcategory/add/ HTTP/1.1" 302 0
+INFO 2025-09-08 00:27:41,568 basehttp 85670 123145379586048 "GET /admin/doctrine/documentcategory/add/ HTTP/1.1" 200 23155
+INFO 2025-09-08 00:27:45,931 basehttp 85670 123145379586048 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-09-08 00:28:00,833 basehttp 85670 123145379586048 "GET /admin/doctrine/theme/add/ HTTP/1.1" 200 35649
+INFO 2025-09-08 00:28:00,833 basehttp 85670 123145379586048 - Broken pipe from ('127.0.0.1', 56383)
+INFO 2025-09-08 00:28:08,681 basehttp 85670 123145362796544 "GET /admin/doctrine/theme/add/ HTTP/1.1" 200 35649
+INFO 2025-09-08 00:28:08,694 basehttp 85670 123145362796544 "GET /static/admin/js/calendar.js HTTP/1.1" 200 9141
+INFO 2025-09-08 00:28:08,695 basehttp 85670 123145446744064 "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2025-09-08 00:28:08,706 basehttp 85670 123145446744064 "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
+INFO 2025-09-08 00:28:08,709 basehttp 85670 123145446744064 "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2025-09-08 00:28:12,949 basehttp 85670 123145396375552 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-09-08 00:28:12,996 basehttp 85670 123145396375552 "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2025-09-08 00:28:12,998 basehttp 85670 123145446744064 "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2025-09-08 00:29:42,347 basehttp 85670 123145446744064 "GET /static/admin/img/calendar-icons.svg HTTP/1.1" 200 2455
+INFO 2025-09-08 00:30:56,104 basehttp 85670 123145446744064 "POST /admin/doctrine/theme/add/ HTTP/1.1" 200 35911
+INFO 2025-09-08 00:30:56,807 basehttp 85670 123145379586048 "GET /admin/doctrine/theme/add/ HTTP/1.1" 302 0
+INFO 2025-09-08 00:30:56,824 basehttp 85670 123145379586048 "GET /admin/login/?next=/admin/doctrine/theme/add/ HTTP/1.1" 200 4208
+INFO 2025-09-08 00:30:56,843 basehttp 85670 123145379586048 "GET /static/admin/css/login.css HTTP/1.1" 200 951
+INFO 2025-09-08 00:30:57,679 basehttp 85670 123145446744064 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-09-08 00:31:15,555 basehttp 85670 123145446744064 "POST /admin/doctrine/theme/add/ HTTP/1.1" 302 0
+INFO 2025-09-08 00:31:22,938 basehttp 85670 123145446744064 "GET /admin/doctrine/theme/add/ HTTP/1.1" 200 36003
+INFO 2025-09-08 00:31:24,566 basehttp 85670 123145446744064 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-09-08 00:31:41,154 basehttp 85670 123145379586048 "POST /admin/login/?next=/admin/doctrine/theme/add/ HTTP/1.1" 302 0
+INFO 2025-09-08 00:31:48,939 basehttp 85670 123145379586048 "GET /admin/doctrine/theme/add/ HTTP/1.1" 200 35728
+INFO 2025-09-08 00:31:48,956 basehttp 85670 123145379586048 "GET /static/admin/css/forms.css HTTP/1.1" 200 8525
+INFO 2025-09-08 00:31:48,962 basehttp 85670 123145379586048 "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 304 0
+INFO 2025-09-08 00:31:48,966 basehttp 85670 123145429954560 "GET /static/admin/js/calendar.js HTTP/1.1" 200 9141
+INFO 2025-09-08 00:31:48,968 basehttp 85670 123145497112576 "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2025-09-08 00:31:48,968 basehttp 85670 123145480323072 "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2025-09-08 00:31:48,968 basehttp 85670 123145463533568 "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2025-09-08 00:31:48,970 basehttp 85670 123145379586048 "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2025-09-08 00:31:53,033 basehttp 85670 123145413165056 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-09-08 00:31:54,507 basehttp 85670 123145379586048 "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2025-09-08 00:31:54,507 basehttp 85670 123145413165056 "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2025-09-08 00:32:07,812 basehttp 85670 123145446744064 "POST /admin/doctrine/theme/add/ HTTP/1.1" 302 0
+INFO 2025-09-08 00:32:10,622 basehttp 85670 123145446744064 "GET /admin/doctrine/theme/ HTTP/1.1" 200 20194
+INFO 2025-09-08 00:32:10,640 basehttp 85670 123145396375552 "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2025-09-08 00:32:10,642 basehttp 85670 123145446744064 "GET /static/admin/css/changelists.css HTTP/1.1" 200 6878
+INFO 2025-09-08 00:32:10,645 basehttp 85670 123145446744064 "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+ERROR 2025-09-08 00:35:02,409 log 85670 123145362796544 Internal Server Error: /admin/jsi18n/
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/contrib/sessions/backends/base.py", line 244, in _get_session
+    return self._session_cache
+           ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SessionStore' object has no attribute '_session_cache'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: could not receive data from server: Operation timed out
+
+
+The above exception was the direct cause of the following exception:
+
 Traceback (most recent call last):
   File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
                ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 220, in _get_response
-    response = response.render()
-               ^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/template/response.py", line 114, in render
-    self.content = self.rendered_content
-                   ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/response.py", line 74, in rendered_content
-    ret = renderer.render(self.data, accepted_media_type, context)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/drf_spectacular/renderers.py", line 61, in render
-    return yaml.dump(
-           ^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 253, in dump
-    return dump_all([data], stream, Dumper=Dumper, **kwds)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 241, in dump_all
-    dumper.represent(data)
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 27, in represent
-    node = self.represent_data(data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/.pyenv/versions/3.11.9/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 265, in wrapper
+    return self.admin_view(view, cacheable)(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 199, in represent_list
-    return self.represent_sequence('tag:yaml.org,2002:seq', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 92, in represent_sequence
-    node_item = self.represent_data(item)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 58, in represent_data
-    node = self.yaml_representers[None](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 231, in represent_undefined
-    raise RepresenterError("cannot represent an object", data)
-yaml.representer.RepresenterError: ('cannot represent an object', DocumentListSerializer():
-    id = UUIDField(read_only=True)
-    title = CharField(label='Titre', max_length=500)
-    slug = SlugField(allow_unicode=False, read_only=True)
-    status = ChoiceField(choices=[('draft', 'Brouillon'), ('pending', 'En attente'), ('processing', 'En traitement'), ('processed', 'Traité'), ('published', 'Publié'), ('archived', 'Archivé'), ('error', 'Erreur'), ('rejected', 'Rejeté')], label='Statut', required=False)
-    visibility = ChoiceField(choices=[('public', 'Public'), ('private', 'Privé'), ('restricted', 'Restreint'), ('confidential', 'Confidentiel'), ('secret', 'Secret')], label='Visibilité', required=False)
-    file_size_mb = SerializerMethodField()
-    created_at = DateTimeField(read_only=True)
-    theme = ThemeMinimalSerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        name = CharField(label='Nom', max_length=200)
-        slug = SlugField(allow_unicode=False, read_only=True)
-        color = CharField(label='Couleur', max_length=7, required=False)
-        icon = CharField(allow_blank=True, label='Icône', max_length=50, required=False)
-    category = DocumentCategorySerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        created_at = DateTimeField(read_only=True)
-        updated_at = DateTimeField(read_only=True)
-        documents_count = SerializerMethodField()
-        name = CharField(label='Nom', max_length=100, validators=[<UniqueValidator(queryset=DocumentCategory.objects.all())>])
-        slug = SlugField(allow_unicode=False, read_only=True)
-        description = CharField(allow_blank=True, required=False, style={'base_template': 'textarea.html'})
-        category_type = ChoiceField(choices=[('legal', 'Juridique'), ('administrative', 'Administratif'), ('technical', 'Technique'), ('regulatory', 'Réglementaire'), ('policy', 'Politique'), ('guidance', 'Guide'), ('case_study', 'Étude de cas'), ('template', 'Modèle')], label='Type de catégorie', required=False)
-        color = CharField(label='Couleur', max_length=7, required=False)
-        icon = CharField(allow_blank=True, label='Icône', max_length=50, required=False)
-        requires_approval = BooleanField(label='Nécessite approbation', required=False)
-        default_visibility = ChoiceField(choices=[('public', 'Public'), ('private', 'Privé'), ('restricted', 'Restreint')], label='Visibilité par défaut', required=False)
-        retention_days = IntegerField(allow_null=True, label='Jours de rétention', max_value=2147483647, min_value=0, required=False)
-        metadata_schema = JSONField(decoder=None, encoder=None, label='Schéma de métadonnées', required=False, style={'base_template': 'textarea.html'})
-        allowed_file_types = ListField(allow_empty=False, child=CharField(label='Allowed file types', max_length=10), label='Types de fichiers autorisés', required=False)
-        max_file_size_mb = IntegerField(label='Taille max fichier (MB)', max_value=2147483647, min_value=0, required=False)
-    uploaded_by = UserMinimalSerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        email = EmailField(max_length=254, validators=[<UniqueValidator(queryset=User.objects.all())>])
-        first_name = CharField(label='Prénom', max_length=150)
-        last_name = CharField(label='Nom', max_length=150)
-        full_name = SerializerMethodField())
-ERROR 2025-09-07 00:22:32,070 basehttp 5749 123145512169472 "GET /api/schema/ HTTP/1.1" 500 545400
-INFO 2025-09-07 00:23:38,473 autoreload 5749 140704657598976 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/views_1.py changed, reloading.
-INFO 2025-09-07 00:23:41,609 autoreload 5787 140704657598976 Watching for file changes with StatReloader
-INFO 2025-09-07 00:24:00,290 basehttp 5787 123145486061568 "GET /api/schema/redoc/ HTTP/1.1" 200 739
-ERROR 2025-09-07 00:24:02,913 log 5787 123145486061568 Internal Server Error: /api/schema/
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 234, in inner
+    if not self.has_permission(request):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 207, in has_permission
+    return request.user.is_active and request.user.is_staff
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/utils/functional.py", line 251, in inner
+    self._setup()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/utils/functional.py", line 404, in _setup
+    self._wrapped = self._setupfunc()
+                    ^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/contrib/auth/middleware.py", line 40, in <lambda>
+    request.user = SimpleLazyObject(lambda: get_user(request))
+                                            ^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/contrib/auth/middleware.py", line 20, in get_user
+    request._cached_user = auth.get_user(request)
+                           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/contrib/auth/__init__.py", line 304, in get_user
+    user_id = _get_user_session_key(request)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/contrib/auth/__init__.py", line 95, in _get_user_session_key
+    return get_user_model()._meta.pk.to_python(request.session[SESSION_KEY])
+                                               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/contrib/sessions/backends/base.py", line 55, in __getitem__
+    return self._session[key]
+           ^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/contrib/sessions/backends/base.py", line 249, in _get_session
+    self._session_cache = self.load()
+                          ^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/contrib/sessions/backends/db.py", line 55, in load
+    s = self._get_session_from_db()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/contrib/sessions/backends/db.py", line 34, in _get_session_from_db
+    return self.model.objects.get(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 629, in get
+    num = len(clone)
+          ^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 366, in __len__
+    self._fetch_all()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: could not receive data from server: Operation timed out
+
+ERROR 2025-09-08 00:35:02,428 basehttp 85670 123145362796544 "GET /admin/jsi18n/ HTTP/1.1" 500 203177
+INFO 2025-09-08 00:35:02,504 basehttp 85670 123145362796544 "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2025-09-08 00:35:02,505 basehttp 85670 123145446744064 "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+INFO 2025-09-08 00:35:29,310 basehttp 85670 123145446744064 "GET /admin/doctrine/documentcategory/ HTTP/1.1" 200 19112
+INFO 2025-09-08 00:35:29,343 basehttp 85670 123145362796544 "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+INFO 2025-09-08 00:35:30,821 basehttp 85670 123145446744064 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-09-08 00:35:35,024 basehttp 85670 123145446744064 "GET /admin/doctrine/documentcategory/6a30a756-ccff-4b64-a55b-f046e2c4b584/change/ HTTP/1.1" 200 23169
+INFO 2025-09-08 00:35:36,465 basehttp 85670 123145446744064 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-09-08 00:36:12,359 basehttp 85670 123145446744064 "GET /admin/doctrine/theme/ HTTP/1.1" 200 19957
+INFO 2025-09-08 00:36:13,702 basehttp 85670 123145446744064 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-09-08 00:36:24,113 basehttp 85670 123145446744064 "GET /admin/doctrine/theme/34816e9a-cf80-4f52-afb0-9e399b97e690/change/ HTTP/1.1" 200 36242
+INFO 2025-09-08 00:36:25,749 basehttp 85670 123145446744064 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-09-08 00:36:25,764 basehttp 85670 123145446744064 "GET /static/admin/img/tooltag-arrowright.svg HTTP/1.1" 200 280
+WARNING 2025-09-08 00:36:37,635 log 85670 123145379586048 Unauthorized: /doctrine/api/v1/processing/documents/upload_and_process/
+WARNING 2025-09-08 00:36:37,635 basehttp 85670 123145379586048 "POST /doctrine/api/v1/processing/documents/upload_and_process/ HTTP/1.1" 401 58
+INFO 2025-09-08 00:45:10,913 basehttp 85670 123145379586048 "POST /doctrine/api/v1/processing/documents/upload_and_process/ HTTP/1.1" 201 2860
+WARNING 2025-09-08 00:58:23,027 log 85670 123145362796544 Unauthorized: /doctrine/api/v1/processing/documents/9cda9d5b-cb4c-4d87-b337-af6bc45a097a/
+WARNING 2025-09-08 00:58:23,028 basehttp 85670 123145362796544 "PATCH /doctrine/api/v1/processing/documents/9cda9d5b-cb4c-4d87-b337-af6bc45a097a/ HTTP/1.1" 401 58
+WARNING 2025-09-08 01:04:32,606 log 85670 123145362796544 Unauthorized: /doctrine/api/v1/processing/documents/9cda9d5b-cb4c-4d87-b337-af6bc45a097a/processing_status/
+WARNING 2025-09-08 01:04:32,607 basehttp 85670 123145362796544 "GET /doctrine/api/v1/processing/documents/9cda9d5b-cb4c-4d87-b337-af6bc45a097a/processing_status/ HTTP/1.1" 401 58
+ERROR 2025-09-08 01:05:42,744 log 85670 123145362796544 Internal Server Error: /doctrine/api/v1/processing/documents/9cda9d5b-cb4c-4d87-b337-af6bc45a097a/processing_status/
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/oauth2_provider/contrib/rest_framework/permissions.py", line 56, in get_scopes
+    return getattr(view, "required_scopes")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'DocumentProcessingViewSet' object has no attribute 'required_scopes'
+
+During handling of the above exception, another exception occurred:
+
 Traceback (most recent call last):
   File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
                ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 220, in _get_response
-    response = response.render()
-               ^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/template/response.py", line 114, in render
-    self.content = self.rendered_content
-                   ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/response.py", line 74, in rendered_content
-    ret = renderer.render(self.data, accepted_media_type, context)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/drf_spectacular/renderers.py", line 61, in render
-    return yaml.dump(
-           ^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 253, in dump
-    return dump_all([data], stream, Dumper=Dumper, **kwds)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 241, in dump_all
-    dumper.represent(data)
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 27, in represent
-    node = self.represent_data(data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 199, in represent_list
-    return self.represent_sequence('tag:yaml.org,2002:seq', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 92, in represent_sequence
-    node_item = self.represent_data(item)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 58, in represent_data
-    node = self.yaml_representers[None](self, data)
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/.pyenv/versions/3.11.9/lib/python3.11/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/viewsets.py", line 125, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/views.py", line 503, in dispatch
+    self.initial(request, *args, **kwargs)
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/views.py", line 421, in initial
+    self.check_permissions(request)
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/views.py", line 338, in check_permissions
+    if not permission.has_permission(request, self):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 231, in represent_undefined
-    raise RepresenterError("cannot represent an object", data)
-yaml.representer.RepresenterError: ('cannot represent an object', DocumentListSerializer():
-    id = UUIDField(read_only=True)
-    title = CharField(label='Titre', max_length=500)
-    slug = SlugField(allow_unicode=False, read_only=True)
-    status = ChoiceField(choices=[('draft', 'Brouillon'), ('pending', 'En attente'), ('processing', 'En traitement'), ('processed', 'Traité'), ('published', 'Publié'), ('archived', 'Archivé'), ('error', 'Erreur'), ('rejected', 'Rejeté')], label='Statut', required=False)
-    visibility = ChoiceField(choices=[('public', 'Public'), ('private', 'Privé'), ('restricted', 'Restreint'), ('confidential', 'Confidentiel'), ('secret', 'Secret')], label='Visibilité', required=False)
-    file_size_mb = SerializerMethodField()
-    created_at = DateTimeField(read_only=True)
-    theme = ThemeMinimalSerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        name = CharField(label='Nom', max_length=200)
-        slug = SlugField(allow_unicode=False, read_only=True)
-        color = CharField(label='Couleur', max_length=7, required=False)
-        icon = CharField(allow_blank=True, label='Icône', max_length=50, required=False)
-    category = DocumentCategorySerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        created_at = DateTimeField(read_only=True)
-        updated_at = DateTimeField(read_only=True)
-        documents_count = SerializerMethodField()
-        name = CharField(label='Nom', max_length=100, validators=[<UniqueValidator(queryset=DocumentCategory.objects.all())>])
-        slug = SlugField(allow_unicode=False, read_only=True)
-        description = CharField(allow_blank=True, required=False, style={'base_template': 'textarea.html'})
-        category_type = ChoiceField(choices=[('legal', 'Juridique'), ('administrative', 'Administratif'), ('technical', 'Technique'), ('regulatory', 'Réglementaire'), ('policy', 'Politique'), ('guidance', 'Guide'), ('case_study', 'Étude de cas'), ('template', 'Modèle')], label='Type de catégorie', required=False)
-        color = CharField(label='Couleur', max_length=7, required=False)
-        icon = CharField(allow_blank=True, label='Icône', max_length=50, required=False)
-        requires_approval = BooleanField(label='Nécessite approbation', required=False)
-        default_visibility = ChoiceField(choices=[('public', 'Public'), ('private', 'Privé'), ('restricted', 'Restreint')], label='Visibilité par défaut', required=False)
-        retention_days = IntegerField(allow_null=True, label='Jours de rétention', max_value=2147483647, min_value=0, required=False)
-        metadata_schema = JSONField(decoder=None, encoder=None, label='Schéma de métadonnées', required=False, style={'base_template': 'textarea.html'})
-        allowed_file_types = ListField(allow_empty=False, child=CharField(label='Allowed file types', max_length=10), label='Types de fichiers autorisés', required=False)
-        max_file_size_mb = IntegerField(label='Taille max fichier (MB)', max_value=2147483647, min_value=0, required=False)
-    uploaded_by = UserMinimalSerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        email = EmailField(max_length=254, validators=[<UniqueValidator(queryset=User.objects.all())>])
-        first_name = CharField(label='Prénom', max_length=150)
-        last_name = CharField(label='Nom', max_length=150)
-        full_name = SerializerMethodField())
-ERROR 2025-09-07 00:24:02,922 basehttp 5787 123145486061568 "GET /api/schema/ HTTP/1.1" 500 545400
-INFO 2025-09-07 00:24:25,423 autoreload 5787 140704657598976 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/views_1.py changed, reloading.
-INFO 2025-09-07 00:24:27,740 autoreload 5817 140704657598976 Watching for file changes with StatReloader
-INFO 2025-09-07 00:27:36,854 autoreload 5817 140704657598976 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/core/settings.py changed, reloading.
-INFO 2025-09-07 02:27:38,440 autoreload 5888 140704657598976 Watching for file changes with StatReloader
-INFO 2025-09-07 02:27:47,331 autoreload 5888 140704657598976 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/core/settings.py changed, reloading.
-INFO 2025-09-07 02:27:48,485 autoreload 5903 140704657598976 Watching for file changes with StatReloader
-INFO 2025-09-07 02:27:55,041 autoreload 5903 140704657598976 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/core/settings.py changed, reloading.
-INFO 2025-09-07 02:27:55,907 autoreload 5911 140704657598976 Watching for file changes with StatReloader
-INFO 2025-09-07 02:28:21,162 autoreload 5911 140704657598976 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/core/settings.py changed, reloading.
-INFO 2025-09-07 00:28:22,387 autoreload 5923 140704657598976 Watching for file changes with StatReloader
-INFO 2025-09-07 20:55:44,343 autoreload 55255 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 20:58:17,912 autoreload 55552 140704558139904 Watching for file changes with StatReloader
-WARNING 2025-09-07 20:59:05,697 log 55552 123145454727168 Not Found: /
-WARNING 2025-09-07 20:59:05,698 basehttp 55552 123145454727168 "GET / HTTP/1.1" 404 2993
-WARNING 2025-09-07 20:59:05,785 log 55552 123145454727168 Not Found: /favicon.ico
-WARNING 2025-09-07 20:59:05,786 basehttp 55552 123145454727168 "GET /favicon.ico HTTP/1.1" 404 3044
-INFO 2025-09-07 20:59:34,072 basehttp 55552 123145454727168 "GET /api/schema/redoc/ HTTP/1.1" 200 739
-ERROR 2025-09-07 20:59:37,326 log 55552 123145454727168 Internal Server Error: /api/schema/
-Traceback (most recent call last):
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 220, in _get_response
-    response = response.render()
-               ^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/template/response.py", line 114, in render
-    self.content = self.rendered_content
-                   ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/response.py", line 74, in rendered_content
-    ret = renderer.render(self.data, accepted_media_type, context)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/drf_spectacular/renderers.py", line 61, in render
-    return yaml.dump(
-           ^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 253, in dump
-    return dump_all([data], stream, Dumper=Dumper, **kwds)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 241, in dump_all
-    dumper.represent(data)
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 27, in represent
-    node = self.represent_data(data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 199, in represent_list
-    return self.represent_sequence('tag:yaml.org,2002:seq', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 92, in represent_sequence
-    node_item = self.represent_data(item)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 58, in represent_data
-    node = self.yaml_representers[None](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 231, in represent_undefined
-    raise RepresenterError("cannot represent an object", data)
-yaml.representer.RepresenterError: ('cannot represent an object', DocumentListSerializer():
-    id = UUIDField(read_only=True)
-    title = CharField(label='Titre', max_length=500)
-    slug = SlugField(allow_unicode=False, read_only=True)
-    status = ChoiceField(choices=[('draft', 'Brouillon'), ('pending', 'En attente'), ('processing', 'En traitement'), ('processed', 'Traité'), ('published', 'Publié'), ('archived', 'Archivé'), ('error', 'Erreur'), ('rejected', 'Rejeté')], label='Statut', required=False)
-    visibility = ChoiceField(choices=[('public', 'Public'), ('private', 'Privé'), ('restricted', 'Restreint'), ('confidential', 'Confidentiel'), ('secret', 'Secret')], label='Visibilité', required=False)
-    file_size_mb = SerializerMethodField()
-    created_at = DateTimeField(read_only=True)
-    theme = ThemeMinimalSerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        name = CharField(label='Nom', max_length=200)
-        slug = SlugField(allow_unicode=False, read_only=True)
-        color = CharField(label='Couleur', max_length=7, required=False)
-        icon = CharField(allow_blank=True, label='Icône', max_length=50, required=False)
-    category = DocumentCategorySerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        created_at = DateTimeField(read_only=True)
-        updated_at = DateTimeField(read_only=True)
-        documents_count = SerializerMethodField()
-        name = CharField(label='Nom', max_length=100, validators=[<UniqueValidator(queryset=DocumentCategory.objects.all())>])
-        slug = SlugField(allow_unicode=False, read_only=True)
-        description = CharField(allow_blank=True, required=False, style={'base_template': 'textarea.html'})
-        category_type = ChoiceField(choices=[('legal', 'Juridique'), ('administrative', 'Administratif'), ('technical', 'Technique'), ('regulatory', 'Réglementaire'), ('policy', 'Politique'), ('guidance', 'Guide'), ('case_study', 'Étude de cas'), ('template', 'Modèle')], label='Type de catégorie', required=False)
-        color = CharField(label='Couleur', max_length=7, required=False)
-        icon = CharField(allow_blank=True, label='Icône', max_length=50, required=False)
-        requires_approval = BooleanField(label='Nécessite approbation', required=False)
-        default_visibility = ChoiceField(choices=[('public', 'Public'), ('private', 'Privé'), ('restricted', 'Restreint')], label='Visibilité par défaut', required=False)
-        retention_days = IntegerField(allow_null=True, label='Jours de rétention', max_value=2147483647, min_value=0, required=False)
-        metadata_schema = JSONField(decoder=None, encoder=None, label='Schéma de métadonnées', required=False, style={'base_template': 'textarea.html'})
-        allowed_file_types = ListField(allow_empty=False, child=CharField(label='Allowed file types', max_length=10), label='Types de fichiers autorisés', required=False)
-        max_file_size_mb = IntegerField(label='Taille max fichier (MB)', max_value=2147483647, min_value=0, required=False)
-    uploaded_by = UserMinimalSerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        email = EmailField(max_length=254, validators=[<UniqueValidator(queryset=User.objects.all())>])
-        first_name = CharField(label='Prénom', max_length=150)
-        last_name = CharField(label='Nom', max_length=150)
-        full_name = SerializerMethodField())
-ERROR 2025-09-07 20:59:37,333 basehttp 55552 123145454727168 "GET /api/schema/ HTTP/1.1" 500 548458
-INFO 2025-09-07 21:03:51,674 autoreload 55552 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/core/settings.py changed, reloading.
-INFO 2025-09-07 21:03:53,731 autoreload 56315 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:05:38,669 autoreload 56315 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/core/settings.py changed, reloading.
-INFO 2025-09-07 21:05:40,478 autoreload 56587 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:05:45,447 basehttp 56587 123145580736512 "GET /api/schema/redoc/ HTTP/1.1" 200 739
-ERROR 2025-09-07 21:05:47,643 log 56587 123145580736512 Internal Server Error: /api/schema/
-Traceback (most recent call last):
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 220, in _get_response
-    response = response.render()
-               ^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/template/response.py", line 114, in render
-    self.content = self.rendered_content
-                   ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/response.py", line 74, in rendered_content
-    ret = renderer.render(self.data, accepted_media_type, context)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/drf_spectacular/renderers.py", line 61, in render
-    return yaml.dump(
-           ^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 253, in dump
-    return dump_all([data], stream, Dumper=Dumper, **kwds)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 241, in dump_all
-    dumper.represent(data)
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 27, in represent
-    node = self.represent_data(data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 199, in represent_list
-    return self.represent_sequence('tag:yaml.org,2002:seq', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 92, in represent_sequence
-    node_item = self.represent_data(item)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 58, in represent_data
-    node = self.yaml_representers[None](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 231, in represent_undefined
-    raise RepresenterError("cannot represent an object", data)
-yaml.representer.RepresenterError: ('cannot represent an object', DocumentListSerializer():
-    id = UUIDField(read_only=True)
-    title = CharField(label='Titre', max_length=500)
-    slug = SlugField(allow_unicode=False, read_only=True)
-    status = ChoiceField(choices=[('draft', 'Brouillon'), ('pending', 'En attente'), ('processing', 'En traitement'), ('processed', 'Traité'), ('published', 'Publié'), ('archived', 'Archivé'), ('error', 'Erreur'), ('rejected', 'Rejeté')], label='Statut', required=False)
-    visibility = ChoiceField(choices=[('public', 'Public'), ('private', 'Privé'), ('restricted', 'Restreint'), ('confidential', 'Confidentiel'), ('secret', 'Secret')], label='Visibilité', required=False)
-    file_size_mb = SerializerMethodField()
-    created_at = DateTimeField(read_only=True)
-    theme = ThemeMinimalSerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        name = CharField(label='Nom', max_length=200)
-        slug = SlugField(allow_unicode=False, read_only=True)
-        color = CharField(label='Couleur', max_length=7, required=False)
-        icon = CharField(allow_blank=True, label='Icône', max_length=50, required=False)
-    category = DocumentCategorySerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        created_at = DateTimeField(read_only=True)
-        updated_at = DateTimeField(read_only=True)
-        documents_count = SerializerMethodField()
-        name = CharField(label='Nom', max_length=100, validators=[<UniqueValidator(queryset=DocumentCategory.objects.all())>])
-        slug = SlugField(allow_unicode=False, read_only=True)
-        description = CharField(allow_blank=True, required=False, style={'base_template': 'textarea.html'})
-        category_type = ChoiceField(choices=[('legal', 'Juridique'), ('administrative', 'Administratif'), ('technical', 'Technique'), ('regulatory', 'Réglementaire'), ('policy', 'Politique'), ('guidance', 'Guide'), ('case_study', 'Étude de cas'), ('template', 'Modèle')], label='Type de catégorie', required=False)
-        color = CharField(label='Couleur', max_length=7, required=False)
-        icon = CharField(allow_blank=True, label='Icône', max_length=50, required=False)
-        requires_approval = BooleanField(label='Nécessite approbation', required=False)
-        default_visibility = ChoiceField(choices=[('public', 'Public'), ('private', 'Privé'), ('restricted', 'Restreint')], label='Visibilité par défaut', required=False)
-        retention_days = IntegerField(allow_null=True, label='Jours de rétention', max_value=2147483647, min_value=0, required=False)
-        metadata_schema = JSONField(decoder=None, encoder=None, label='Schéma de métadonnées', required=False, style={'base_template': 'textarea.html'})
-        allowed_file_types = ListField(allow_empty=False, child=CharField(label='Allowed file types', max_length=10), label='Types de fichiers autorisés', required=False)
-        max_file_size_mb = IntegerField(label='Taille max fichier (MB)', max_value=2147483647, min_value=0, required=False)
-    uploaded_by = UserMinimalSerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        email = EmailField(max_length=254, validators=[<UniqueValidator(queryset=User.objects.all())>])
-        first_name = CharField(label='Prénom', max_length=150)
-        last_name = CharField(label='Nom', max_length=150)
-        full_name = SerializerMethodField())
-ERROR 2025-09-07 21:05:47,649 basehttp 56587 123145580736512 "GET /api/schema/ HTTP/1.1" 500 548458
-INFO 2025-09-07 21:06:02,272 autoreload 56587 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:06:03,869 autoreload 56647 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:06:13,582 basehttp 56647 123145499500544 "GET /api/schema/redoc/ HTTP/1.1" 200 739
-ERROR 2025-09-07 21:06:15,408 log 56647 123145499500544 Internal Server Error: /api/schema/
-Traceback (most recent call last):
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 220, in _get_response
-    response = response.render()
-               ^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/template/response.py", line 114, in render
-    self.content = self.rendered_content
-                   ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/response.py", line 74, in rendered_content
-    ret = renderer.render(self.data, accepted_media_type, context)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/drf_spectacular/renderers.py", line 61, in render
-    return yaml.dump(
-           ^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 253, in dump
-    return dump_all([data], stream, Dumper=Dumper, **kwds)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 241, in dump_all
-    dumper.represent(data)
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 27, in represent
-    node = self.represent_data(data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 199, in represent_list
-    return self.represent_sequence('tag:yaml.org,2002:seq', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 92, in represent_sequence
-    node_item = self.represent_data(item)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 58, in represent_data
-    node = self.yaml_representers[None](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 231, in represent_undefined
-    raise RepresenterError("cannot represent an object", data)
-yaml.representer.RepresenterError: ('cannot represent an object', DocumentListSerializer():
-    id = UUIDField(read_only=True)
-    title = CharField(label='Titre', max_length=500)
-    slug = SlugField(allow_unicode=False, read_only=True)
-    status = ChoiceField(choices=[('draft', 'Brouillon'), ('pending', 'En attente'), ('processing', 'En traitement'), ('processed', 'Traité'), ('published', 'Publié'), ('archived', 'Archivé'), ('error', 'Erreur'), ('rejected', 'Rejeté')], label='Statut', required=False)
-    visibility = ChoiceField(choices=[('public', 'Public'), ('private', 'Privé'), ('restricted', 'Restreint'), ('confidential', 'Confidentiel'), ('secret', 'Secret')], label='Visibilité', required=False)
-    file_size_mb = SerializerMethodField()
-    created_at = DateTimeField(read_only=True)
-    theme = ThemeMinimalSerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        name = CharField(label='Nom', max_length=200)
-        slug = SlugField(allow_unicode=False, read_only=True)
-        color = CharField(label='Couleur', max_length=7, required=False)
-        icon = CharField(allow_blank=True, label='Icône', max_length=50, required=False)
-    category = DocumentCategoryMinimalSerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        name = CharField(label='Nom', max_length=100, validators=[<UniqueValidator(queryset=DocumentCategory.objects.all())>])
-        slug = SlugField(allow_unicode=False, read_only=True)
-        category_type = ChoiceField(choices=[('legal', 'Juridique'), ('administrative', 'Administratif'), ('technical', 'Technique'), ('regulatory', 'Réglementaire'), ('policy', 'Politique'), ('guidance', 'Guide'), ('case_study', 'Étude de cas'), ('template', 'Modèle')], label='Type de catégorie', required=False)
-        color = CharField(label='Couleur', max_length=7, required=False)
-        icon = CharField(allow_blank=True, label='Icône', max_length=50, required=False)
-    uploaded_by = UserMinimalSerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        email = EmailField(max_length=254, validators=[<UniqueValidator(queryset=User.objects.all())>])
-        first_name = CharField(label='Prénom', max_length=150)
-        last_name = CharField(label='Nom', max_length=150)
-        full_name = SerializerMethodField())
-ERROR 2025-09-07 21:06:15,415 basehttp 56647 123145499500544 "GET /api/schema/ HTTP/1.1" 500 502482
-INFO 2025-09-07 21:08:21,936 autoreload 56647 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:08:24,025 autoreload 56938 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:08:29,831 basehttp 56938 123145393233920 "GET /api/schema/redoc/ HTTP/1.1" 200 739
-ERROR 2025-09-07 21:08:31,976 log 56938 123145393233920 Internal Server Error: /api/schema/
-Traceback (most recent call last):
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 220, in _get_response
-    response = response.render()
-               ^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/template/response.py", line 114, in render
-    self.content = self.rendered_content
-                   ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/response.py", line 74, in rendered_content
-    ret = renderer.render(self.data, accepted_media_type, context)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/drf_spectacular/renderers.py", line 61, in render
-    return yaml.dump(
-           ^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 253, in dump
-    return dump_all([data], stream, Dumper=Dumper, **kwds)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 241, in dump_all
-    dumper.represent(data)
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 27, in represent
-    node = self.represent_data(data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 199, in represent_list
-    return self.represent_sequence('tag:yaml.org,2002:seq', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 92, in represent_sequence
-    node_item = self.represent_data(item)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 58, in represent_data
-    node = self.yaml_representers[None](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 231, in represent_undefined
-    raise RepresenterError("cannot represent an object", data)
-yaml.representer.RepresenterError: ('cannot represent an object', DocumentListSerializer():
-    id = UUIDField(read_only=True)
-    title = CharField(label='Titre', max_length=500)
-    slug = SlugField(allow_unicode=False, read_only=True)
-    status = ChoiceField(choices=[('draft', 'Brouillon'), ('pending', 'En attente'), ('processing', 'En traitement'), ('processed', 'Traité'), ('published', 'Publié'), ('archived', 'Archivé'), ('error', 'Erreur'), ('rejected', 'Rejeté')], label='Statut', required=False)
-    visibility = ChoiceField(choices=[('public', 'Public'), ('private', 'Privé'), ('restricted', 'Restreint'), ('confidential', 'Confidentiel'), ('secret', 'Secret')], label='Visibilité', required=False)
-    file_size_mb = SerializerMethodField()
-    created_at = DateTimeField(label='Date de création', read_only=True)
-    theme_name = CharField(read_only=True, source='theme.name')
-    theme_color = CharField(read_only=True, source='theme.color')
-    category_name = CharField(read_only=True, source='category.name')
-    category_type = CharField(read_only=True, source='category.category_type')
-    uploaded_by_name = CharField(read_only=True, source='uploaded_by.full_name'))
-ERROR 2025-09-07 21:08:31,983 basehttp 56938 123145393233920 "GET /api/schema/ HTTP/1.1" 500 445315
-INFO 2025-09-07 21:09:00,079 autoreload 56938 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:09:01,865 autoreload 57033 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:09:07,274 autoreload 57033 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:09:09,355 autoreload 57054 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:12:10,801 autoreload 57054 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:12:13,024 autoreload 57455 140704558139904 Watching for file changes with StatReloader
-WARNING 2025-09-07 21:12:23,359 log 57455 123145385992192 Not Found: /
-WARNING 2025-09-07 21:12:23,360 basehttp 57455 123145385992192 "GET / HTTP/1.1" 404 2993
-WARNING 2025-09-07 21:12:23,434 log 57455 123145402781696 Not Found: /apple-touch-icon-precomposed.png
-WARNING 2025-09-07 21:12:23,434 basehttp 57455 123145402781696 "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 3107
-WARNING 2025-09-07 21:12:23,652 log 57455 123145402781696 Not Found: /apple-touch-icon.png
-WARNING 2025-09-07 21:12:23,655 basehttp 57455 123145402781696 "GET /apple-touch-icon.png HTTP/1.1" 404 3071
-WARNING 2025-09-07 21:12:30,030 log 57455 123145385992192 Not Found: /
-WARNING 2025-09-07 21:12:30,030 basehttp 57455 123145385992192 "GET / HTTP/1.1" 404 2993
-INFO 2025-09-07 21:12:34,276 basehttp 57455 123145385992192 "GET /api/schema/redoc/ HTTP/1.1" 200 739
-ERROR 2025-09-07 21:12:39,030 log 57455 123145385992192 Internal Server Error: /api/schema/
-Traceback (most recent call last):
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 220, in _get_response
-    response = response.render()
-               ^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/template/response.py", line 114, in render
-    self.content = self.rendered_content
-                   ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/response.py", line 74, in rendered_content
-    ret = renderer.render(self.data, accepted_media_type, context)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/drf_spectacular/renderers.py", line 61, in render
-    return yaml.dump(
-           ^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 253, in dump
-    return dump_all([data], stream, Dumper=Dumper, **kwds)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 241, in dump_all
-    dumper.represent(data)
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 27, in represent
-    node = self.represent_data(data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 199, in represent_list
-    return self.represent_sequence('tag:yaml.org,2002:seq', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 92, in represent_sequence
-    node_item = self.represent_data(item)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 58, in represent_data
-    node = self.yaml_representers[None](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 231, in represent_undefined
-    raise RepresenterError("cannot represent an object", data)
-yaml.representer.RepresenterError: ('cannot represent an object', DocumentListSerializer():
-    id = UUIDField(read_only=True)
-    title = CharField(label='Titre', max_length=500)
-    slug = SlugField(allow_unicode=False, read_only=True)
-    status = ChoiceField(choices=[('draft', 'Brouillon'), ('pending', 'En attente'), ('processing', 'En traitement'), ('processed', 'Traité'), ('published', 'Publié'), ('archived', 'Archivé'), ('error', 'Erreur'), ('rejected', 'Rejeté')], label='Statut', required=False)
-    visibility = ChoiceField(choices=[('public', 'Public'), ('private', 'Privé'), ('restricted', 'Restreint'), ('confidential', 'Confidentiel'), ('secret', 'Secret')], label='Visibilité', required=False)
-    file_size_mb = SerializerMethodField()
-    created_at = DateTimeField(label='Date de création', read_only=True)
-    theme_name = CharField(read_only=True, source='theme.name')
-    theme_color = CharField(read_only=True, source='theme.color')
-    category_name = CharField(read_only=True, source='category.name')
-    category_type = CharField(read_only=True, source='category.category_type')
-    uploaded_by_name = CharField(read_only=True, source='uploaded_by.full_name'))
-ERROR 2025-09-07 21:12:39,035 basehttp 57455 123145385992192 "GET /api/schema/ HTTP/1.1" 500 445243
-INFO 2025-09-07 21:13:57,940 autoreload 57455 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:13:59,507 autoreload 57694 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:14:07,807 basehttp 57694 123145348210688 "GET /api/schema/redoc/ HTTP/1.1" 200 739
-ERROR 2025-09-07 21:14:10,085 log 57694 123145348210688 Internal Server Error: /api/schema/
-Traceback (most recent call last):
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 220, in _get_response
-    response = response.render()
-               ^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/template/response.py", line 114, in render
-    self.content = self.rendered_content
-                   ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/response.py", line 74, in rendered_content
-    ret = renderer.render(self.data, accepted_media_type, context)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/drf_spectacular/renderers.py", line 61, in render
-    return yaml.dump(
-           ^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 253, in dump
-    return dump_all([data], stream, Dumper=Dumper, **kwds)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 241, in dump_all
-    dumper.represent(data)
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 27, in represent
-    node = self.represent_data(data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 199, in represent_list
-    return self.represent_sequence('tag:yaml.org,2002:seq', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 92, in represent_sequence
-    node_item = self.represent_data(item)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 58, in represent_data
-    node = self.yaml_representers[None](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 231, in represent_undefined
-    raise RepresenterError("cannot represent an object", data)
-yaml.representer.RepresenterError: ('cannot represent an object', DocumentListSerializer():
-    id = UUIDField(read_only=True)
-    title = CharField(label='Titre', max_length=500)
-    slug = SlugField(allow_unicode=False, read_only=True)
-    status = ChoiceField(choices=[('draft', 'Brouillon'), ('pending', 'En attente'), ('processing', 'En traitement'), ('processed', 'Traité'), ('published', 'Publié'), ('archived', 'Archivé'), ('error', 'Erreur'), ('rejected', 'Rejeté')], label='Statut', required=False)
-    visibility = ChoiceField(choices=[('public', 'Public'), ('private', 'Privé'), ('restricted', 'Restreint'), ('confidential', 'Confidentiel'), ('secret', 'Secret')], label='Visibilité', required=False)
-    file_size_mb = SerializerMethodField()
-    created_at = DateTimeField(label='Date de création', read_only=True)
-    theme_name = CharField(read_only=True, source='theme.name')
-    theme_color = CharField(read_only=True, source='theme.color')
-    category_name = CharField(read_only=True, source='category.name')
-    category_type = CharField(read_only=True, source='category.category_type')
-    uploaded_by = UserMinimalSerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        email = EmailField(max_length=254, validators=[<UniqueValidator(queryset=User.objects.all())>])
-        first_name = CharField(label='Prénom', max_length=150)
-        last_name = CharField(label='Nom', max_length=150)
-        full_name = SerializerMethodField())
-ERROR 2025-09-07 21:14:10,091 basehttp 57694 123145348210688 "GET /api/schema/ HTTP/1.1" 500 458229
-INFO 2025-09-07 21:14:26,499 autoreload 57694 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:14:28,293 autoreload 57759 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:14:38,487 basehttp 57759 123145505353728 "GET /api/schema/redoc/ HTTP/1.1" 200 739
-ERROR 2025-09-07 21:14:40,938 log 57759 123145505353728 Internal Server Error: /api/schema/
-Traceback (most recent call last):
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 220, in _get_response
-    response = response.render()
-               ^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/template/response.py", line 114, in render
-    self.content = self.rendered_content
-                   ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/response.py", line 74, in rendered_content
-    ret = renderer.render(self.data, accepted_media_type, context)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/drf_spectacular/renderers.py", line 61, in render
-    return yaml.dump(
-           ^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 253, in dump
-    return dump_all([data], stream, Dumper=Dumper, **kwds)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 241, in dump_all
-    dumper.represent(data)
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 27, in represent
-    node = self.represent_data(data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 199, in represent_list
-    return self.represent_sequence('tag:yaml.org,2002:seq', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 92, in represent_sequence
-    node_item = self.represent_data(item)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 58, in represent_data
-    node = self.yaml_representers[None](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 231, in represent_undefined
-    raise RepresenterError("cannot represent an object", data)
-yaml.representer.RepresenterError: ('cannot represent an object', DocumentListSerializer():
-    id = UUIDField(read_only=True)
-    title = CharField(label='Titre', max_length=500)
-    slug = SlugField(allow_unicode=False, read_only=True)
-    status = ChoiceField(choices=[('draft', 'Brouillon'), ('pending', 'En attente'), ('processing', 'En traitement'), ('processed', 'Traité'), ('published', 'Publié'), ('archived', 'Archivé'), ('error', 'Erreur'), ('rejected', 'Rejeté')], label='Statut', required=False)
-    visibility = ChoiceField(choices=[('public', 'Public'), ('private', 'Privé'), ('restricted', 'Restreint'), ('confidential', 'Confidentiel'), ('secret', 'Secret')], label='Visibilité', required=False)
-    file_size_mb = SerializerMethodField()
-    created_at = DateTimeField(label='Date de création', read_only=True)
-    theme_name = CharField(read_only=True, source='theme.name')
-    theme_color = CharField(read_only=True, source='theme.color')
-    category_name = CharField(read_only=True, source='category.name')
-    category_type = CharField(read_only=True, source='category.category_type')
-    uploaded_by = PrimaryKeyRelatedField(label='Téléchargé par', read_only=True))
-ERROR 2025-09-07 21:14:40,944 basehttp 57759 123145505353728 "GET /api/schema/ HTTP/1.1" 500 445372
-INFO 2025-09-07 21:17:03,659 autoreload 57759 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:17:05,364 autoreload 58155 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:17:37,757 autoreload 58155 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:17:39,137 autoreload 58247 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:17:58,060 autoreload 58247 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:17:59,753 autoreload 58309 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:18:22,633 autoreload 58309 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:18:24,071 autoreload 58374 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:18:38,087 basehttp 58374 123145477603328 "GET /api/schema/redoc/ HTTP/1.1" 200 739
-ERROR 2025-09-07 21:18:41,302 log 58374 123145477603328 Internal Server Error: /api/schema/
-Traceback (most recent call last):
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 220, in _get_response
-    response = response.render()
-               ^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/django/template/response.py", line 114, in render
-    self.content = self.rendered_content
-                   ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/rest_framework/response.py", line 74, in rendered_content
-    ret = renderer.render(self.data, accepted_media_type, context)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/drf_spectacular/renderers.py", line 61, in render
-    return yaml.dump(
-           ^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 253, in dump
-    return dump_all([data], stream, Dumper=Dumper, **kwds)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/__init__.py", line 241, in dump_all
-    dumper.represent(data)
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 27, in represent
-    node = self.represent_data(data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 199, in represent_list
-    return self.represent_sequence('tag:yaml.org,2002:seq', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 92, in represent_sequence
-    node_item = self.represent_data(item)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 48, in represent_data
-    node = self.yaml_representers[data_types[0]](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 207, in represent_dict
-    return self.represent_mapping('tag:yaml.org,2002:map', data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 118, in represent_mapping
-    node_value = self.represent_data(item_value)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 58, in represent_data
-    node = self.yaml_representers[None](self, data)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/yaml/representer.py", line 231, in represent_undefined
-    raise RepresenterError("cannot represent an object", data)
-yaml.representer.RepresenterError: ('cannot represent an object', DocumentListSerializer():
-    id = UUIDField(read_only=True)
-    title = CharField(label='Titre', max_length=500)
-    slug = SlugField(allow_unicode=False, read_only=True)
-    description = CharField(allow_blank=True, required=False, style={'base_template': 'textarea.html'})
-    original_filename = CharField(label='Nom de fichier original', max_length=255)
-    file_type = CharField(label='Type de fichier', max_length=10)
-    file_size_mb = ReadOnlyField()
-    theme = ThemeMinimalSerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        name = CharField(label='Nom', max_length=200)
-        slug = SlugField(allow_unicode=False, max_length=220, validators=[<UniqueValidator(queryset=Theme.objects.all())>])
-        color = CharField(label='Couleur', max_length=7, required=False)
-        icon = CharField(allow_blank=True, label='Icône', max_length=50, required=False)
-    category = StringRelatedField(read_only=True)
-    uploaded_by = UserMinimalSerializer(read_only=True):
-        id = UUIDField(read_only=True)
-        email = EmailField(max_length=254, validators=[<UniqueValidator(queryset=User.objects.all())>])
-        first_name = CharField(label='Prénom', max_length=150)
-        last_name = CharField(label='Nom', max_length=150)
-        full_name = ReadOnlyField()
-    status = ChoiceField(choices=[('draft', 'Brouillon'), ('pending', 'En attente'), ('processing', 'En traitement'), ('processed', 'Traité'), ('published', 'Publié'), ('archived', 'Archivé'), ('error', 'Erreur'), ('rejected', 'Rejeté')], label='Statut', required=False)
-    visibility = ChoiceField(choices=[('public', 'Public'), ('private', 'Privé'), ('restricted', 'Restreint'), ('confidential', 'Confidentiel'), ('secret', 'Secret')], label='Visibilité', required=False)
-    language = ChoiceField(choices=[('fr', 'Français'), ('en', 'Anglais'), ('es', 'Espagnol'), ('de', 'Allemand'), ('it', 'Italien'), ('pt', 'Portugais')], label='Langue', required=False)
-    priority = ChoiceField(choices=[('low', 'Faible'), ('normal', 'Normal'), ('high', 'Élevée'), ('urgent', 'Urgente'), ('critical', 'Critique')], label='Priorité', required=False)
-    publication_date = DateField(allow_null=True, label='Date de publication', required=False)
-    effective_date = DateField(allow_null=True, label="Date d'effet", required=False)
-    expiration_date = DateField(allow_null=True, label="Date d'expiration", required=False)
-    is_expired = ReadOnlyField()
-    needs_review = ReadOnlyField()
-    view_count = IntegerField(label='Nombre de vues', read_only=True)
-    download_count = IntegerField(label='Nombre de téléchargements', read_only=True)
-    rating_score = DecimalField(decimal_places=2, label='Score de notation', max_digits=3, read_only=True)
-    rating_count = IntegerField(label='Nombre de notations', read_only=True)
-    is_featured = BooleanField(label='Document vedette', required=False)
-    version = CharField(max_length=20, required=False)
-    is_latest_version = BooleanField(label='Dernière version', required=False)
-    created_at = DateTimeField(read_only=True)
-    updated_at = DateTimeField(read_only=True))
-ERROR 2025-09-07 21:18:41,309 basehttp 58374 123145477603328 "GET /api/schema/ HTTP/1.1" 500 541905
-INFO 2025-09-07 21:20:38,460 autoreload 58374 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/views_1.py changed, reloading.
-INFO 2025-09-07 21:20:41,017 autoreload 59084 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:20:44,435 autoreload 59084 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/views_1.py changed, reloading.
-INFO 2025-09-07 21:20:46,427 autoreload 59104 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:25:56,400 autoreload 60559 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:26:13,614 basehttp 60559 123145523695616 "GET /api/schema/redoc/ HTTP/1.1" 200 739
-INFO 2025-09-07 21:26:15,407 basehttp 60559 123145523695616 "GET /api/schema/ HTTP/1.1" 200 57015
-INFO 2025-09-07 21:27:37,870 autoreload 60559 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:27:39,524 autoreload 61209 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:27:49,263 autoreload 61209 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:27:51,382 autoreload 61240 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:28:01,083 autoreload 61240 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:28:02,687 autoreload 61274 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:28:23,636 autoreload 61274 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:28:26,188 autoreload 61911 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:28:35,040 autoreload 61911 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:28:37,348 autoreload 61945 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:28:45,528 autoreload 61945 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:28:48,485 autoreload 61969 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:29:01,028 autoreload 61969 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:29:02,713 autoreload 62009 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:29:17,139 autoreload 62009 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:29:19,520 autoreload 62059 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:29:41,414 autoreload 62059 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/serializers.py changed, reloading.
-INFO 2025-09-07 21:29:43,609 autoreload 62125 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:31:11,230 autoreload 62360 140704558139904 Watching for file changes with StatReloader
-INFO 2025-09-07 21:31:24,995 basehttp 62360 123145496850432 "GET /api/schema/redoc/ HTTP/1.1" 200 739
-INFO 2025-09-07 21:31:28,193 basehttp 62360 123145496850432 "GET /api/schema/ HTTP/1.1" 200 57191
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/permissions.py", line 94, in has_permission
+    and TokenHasScope().has_permission(request, view)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/oauth2_provider/contrib/rest_framework/permissions.py", line 26, in has_permission
+    required_scopes = self.get_scopes(request, view)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.11/site-packages/oauth2_provider/contrib/rest_framework/permissions.py", line 58, in get_scopes
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: TokenHasScope requires the view to define the required_scopes attribute
+ERROR 2025-09-08 01:05:42,754 basehttp 85670 123145362796544 "GET /doctrine/api/v1/processing/documents/9cda9d5b-cb4c-4d87-b337-af6bc45a097a/processing_status/ HTTP/1.1" 500 128311
+INFO 2025-09-08 01:09:13,444 autoreload 85670 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/views_1.py changed, reloading.
+INFO 2025-09-08 01:09:16,209 autoreload 94003 140704558139904 Watching for file changes with StatReloader
+INFO 2025-09-08 01:09:22,649 autoreload 94003 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/views_1.py changed, reloading.
+INFO 2025-09-08 01:09:24,329 autoreload 94028 140704558139904 Watching for file changes with StatReloader
+INFO 2025-09-08 01:11:21,911 autoreload 94028 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/views_1.py changed, reloading.
+INFO 2025-09-08 01:11:23,642 autoreload 94277 140704558139904 Watching for file changes with StatReloader
+INFO 2025-09-08 01:11:40,565 basehttp 94277 123145569660928 "GET /doctrine/api/v1/processing/documents/9cda9d5b-cb4c-4d87-b337-af6bc45a097a/processing_status/ HTTP/1.1" 200 224
+WARNING 2025-09-08 01:12:45,874 log 94277 123145586450432 Unauthorized: /doctrine/api/v1/processing/statistics/
+WARNING 2025-09-08 01:12:45,874 basehttp 94277 123145586450432 "GET /doctrine/api/v1/processing/statistics/ HTTP/1.1" 401 58
+INFO 2025-09-08 01:13:43,735 basehttp 94277 123145569660928 "GET /doctrine/api/v1/processing/statistics/ HTTP/1.1" 200 380
+WARNING 2025-09-08 01:15:27,673 log 94277 123145586450432 Unauthorized: /doctrine/api/v1/processing/documents/3fa85f64-5717-4562-b3fc-2c963f66afa6/tables/
+WARNING 2025-09-08 01:15:27,676 basehttp 94277 123145586450432 "GET /doctrine/api/v1/processing/documents/3fa85f64-5717-4562-b3fc-2c963f66afa6/tables/ HTTP/1.1" 401 58
+INFO 2025-09-08 01:17:18,433 basehttp 94277 123145569660928 "GET /doctrine/api/v1/processing/documents/9cda9d5b-cb4c-4d87-b337-af6bc45a097a/tables/ HTTP/1.1" 200 76
+INFO 2025-09-08 01:42:36,649 autoreload 94277 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/document_processor.py changed, reloading.
+INFO 2025-09-08 01:42:39,353 autoreload 98612 140704558139904 Watching for file changes with StatReloader
+INFO 2025-09-08 01:42:48,574 autoreload 98612 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/document_processor.py changed, reloading.
+INFO 2025-09-08 01:42:50,779 autoreload 98653 140704558139904 Watching for file changes with StatReloader
+INFO 2025-09-08 01:43:01,780 autoreload 98653 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/document_processor.py changed, reloading.
+INFO 2025-09-08 01:43:03,917 autoreload 98686 140704558139904 Watching for file changes with StatReloader
+INFO 2025-09-08 01:43:17,079 autoreload 98686 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/document_processor.py changed, reloading.
+INFO 2025-09-08 01:43:19,754 autoreload 98717 140704558139904 Watching for file changes with StatReloader
+INFO 2025-09-08 01:43:33,350 autoreload 98717 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/document_processor.py changed, reloading.
+INFO 2025-09-08 01:43:36,950 autoreload 98756 140704558139904 Watching for file changes with StatReloader
+INFO 2025-09-08 01:43:55,392 autoreload 98756 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/document_processor.py changed, reloading.
+INFO 2025-09-08 01:43:57,098 autoreload 98808 140704558139904 Watching for file changes with StatReloader
+INFO 2025-09-08 01:44:13,012 autoreload 98808 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/document_processor.py changed, reloading.
+INFO 2025-09-08 01:44:16,654 autoreload 98853 140704558139904 Watching for file changes with StatReloader
+INFO 2025-09-08 01:44:31,887 autoreload 98853 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/document_processor.py changed, reloading.
+INFO 2025-09-08 01:44:34,124 autoreload 98913 140704558139904 Watching for file changes with StatReloader
+INFO 2025-09-08 01:44:51,115 autoreload 98913 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/document_processor.py changed, reloading.
+INFO 2025-09-08 01:44:53,104 autoreload 98955 140704558139904 Watching for file changes with StatReloader
+INFO 2025-09-08 01:45:05,684 autoreload 98955 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/document_processor.py changed, reloading.
+INFO 2025-09-08 01:45:08,101 autoreload 98988 140704558139904 Watching for file changes with StatReloader
+INFO 2025-09-08 01:47:07,172 autoreload 98988 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/document_processor.py changed, reloading.
+INFO 2025-09-08 01:47:11,031 autoreload 99374 140704558139904 Watching for file changes with StatReloader
+INFO 2025-09-08 01:48:14,016 autoreload 99374 140704558139904 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/document_processor.py changed, reloading.
+INFO 2025-09-08 01:48:15,626 autoreload 99573 140704558139904 Watching for file changes with StatReloader
+ERROR 2025-09-08 01:48:36,753 log 99573 123145410490368 Internal Server Error: /doctrine/api/v1/processing/documents/upload_and_process/
+ERROR 2025-09-08 01:48:36,754 basehttp 99573 123145410490368 "POST /doctrine/api/v1/processing/documents/upload_and_process/ HTTP/1.1" 500 37
+INFO 2025-09-08 01:48:46,890 autoreload 99657 140704558139904 Watching for file changes with StatReloader
+ERROR 2025-09-08 01:49:13,955 log 99657 123145541328896 Internal Server Error: /doctrine/api/v1/processing/documents/upload_and_process/
+ERROR 2025-09-08 01:49:13,956 basehttp 99657 123145541328896 "POST /doctrine/api/v1/processing/documents/upload_and_process/ HTTP/1.1" 500 37
+INFO 2025-09-08 01:50:33,509 autoreload 99901 140704558139904 Watching for file changes with StatReloader
+INFO 2025-09-08 01:50:44,478 basehttp 99901 123145537703936 "GET /api/schema/swagger-ui/ HTTP/1.1" 200 4656
+INFO 2025-09-08 01:50:46,105 basehttp 99901 123145537703936 "GET /api/schema/ HTTP/1.1" 200 126704
