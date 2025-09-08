@@ -547,7 +547,14 @@ class Document(TimeStampedModel, SoftDeleteModel):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            base_slug = slugify(self.title) or 'document'
+            slug_candidate = base_slug
+            counter = 2
+            # Ensure uniqueness of slug
+            while Document.objects.filter(slug=slug_candidate).exclude(pk=self.pk).exists():
+                slug_candidate = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug_candidate
 
         # Calcul du checksum si nouveau fichier
         if self.file_path and not self.file_checksum:

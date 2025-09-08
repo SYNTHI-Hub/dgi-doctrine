@@ -130,7 +130,8 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
                 category_id = request.data.get('category_id')
                 visibility = request.data.get('visibility', 'public')
                 language = request.data.get('language', 'fr')
-                auto_process = request.data.get('auto_process', 'true').lower() == 'true'
+                auto_process_raw = request.data.get('auto_process', True)
+                auto_process = str(auto_process_raw).lower() in ('true', '1', 'yes', 'on')
 
                 # Validation des champs requis
                 if not all([title, theme_id, category_id]):
@@ -167,18 +168,22 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
 
                 # Sauvegarde du fichier avec vérification de duplicata
                 try:
-                    saved_path, is_duplicate = DocumentStorage.save_document_file(
+                    saved_or_doc, is_duplicate = DocumentStorage.save_document_file(
                         uploaded_file, uploaded_file.name, user
                     )
 
                     if is_duplicate:
+                        # When duplicate, the first return value is the existing Document instance
+                        existing_doc = saved_or_doc
                         return Response(
                             {
                                 'error': 'Ce fichier existe déjà dans le système',
-                                'duplicate_document_id': is_duplicate.id
+                                'duplicate_document_id': str(existing_doc.id)
                             },
                             status=status.HTTP_409_CONFLICT
                         )
+                    else:
+                        saved_path = saved_or_doc
 
                 except ValueError as e:
                     return Response(
@@ -208,23 +213,32 @@ class DocumentProcessingViewSet(viewsets.ModelViewSet):
 
                 if auto_process:
                     try:
-                        if hasattr(process_document_content, 'delay'):
-                            process_document_content.delay(str(document.id))
-                        else:
-                            # Traitement synchrone en fallback
-                            success = document_processor.process_document(document)
-                            if not success:
-                                logger.warning(f"Échec du traitement automatique pour le document {document.id}")
+                        # Traitement synchrone pour retourner le contenu extrait immédiatement
+                        success = document_processor.process_document(document)
+                        if not success:
+                            logger.warning(f"Échec du traitement automatique pour le document {document.id}")
                     except Exception as e:
                         logger.error(f"Erreur lors du lancement du traitement: {str(e)}")
 
-                # Réponse avec le document créé
-                serializer = DocumentDetailSerializer(document)
+                document_data = DocumentDetailSerializer(document).data
+
+                content_data = None
+                if hasattr(document, 'content'):
+                    content_data = DocumentContentSerializer(document.content).data
+
+                structure_data = self._get_structure_data(document)
+
+                tables_qs = Table.objects.filter(section__topic__document=document).order_by('order_index')
+                tables_data = TableSerializer(tables_qs, many=True).data
+
                 return Response(
                     {
                         'message': 'Document uploadé avec succès',
-                        'document': serializer.data,
-                        'processing_started': auto_process
+                        'document': document_data,
+                        'content': content_data,
+                        'structure': structure_data,
+                        'tables': tables_data,
+                        'processing_started': bool(auto_process)
                     },
                     status=status.HTTP_201_CREATED
                 )
