@@ -110,25 +110,52 @@ class HuggingFaceRAGService:
                     use_dummy_dataset=self.use_dummy_dataset,
                 )
 
-            # Chargement du modèle avec optimisations
-            model_kwargs = {
-                "retriever": self.retriever,
-                "low_cpu_mem_usage": True,
-            }
+            # Chargement du modèle avec optimisations et gestion d'erreurs
+            try:
+                model_kwargs = {
+                    "retriever": self.retriever,
+                    "low_cpu_mem_usage": True,
+                }
 
-            if self.use_gpu and torch.cuda.is_available():
-                model_kwargs.update({
-                    "torch_dtype": torch.bfloat16,
-                    "device_map": "auto",
-                })
+                # Configuration plus conservatrice pour éviter les erreurs de meta tensor
+                if self.use_gpu and torch.cuda.is_available():
+                    model_kwargs.update({
+                        "torch_dtype": torch.float16,  # Utiliser float16 au lieu de bfloat16
+                        "device_map": "auto",
+                    })
+                else:
+                    # Pour CPU, éviter device_map qui peut causer des problèmes
+                    model_kwargs.update({
+                        "torch_dtype": torch.float32,
+                    })
 
-            self.model = RagSequenceForGeneration.from_pretrained(
-                self.model_name,
-                **model_kwargs
-            )
+                logger.info(f"Chargement du modèle avec kwargs: {model_kwargs}")
+                self.model = RagSequenceForGeneration.from_pretrained(
+                    self.model_name,
+                    **model_kwargs
+                )
 
-            if not self.use_gpu or not torch.cuda.is_available():
-                self.model = self.model.to(self.device)
+                if not self.use_gpu or not torch.cuda.is_available():
+                    self.model = self.model.to(self.device)
+
+            except Exception as model_error:
+                logger.error(f"Erreur lors du chargement du modèle principal: {model_error}")
+                logger.info("Tentative de chargement en mode dégradé...")
+
+                # Mode fallback avec configuration minimale
+                try:
+                    self.model = RagSequenceForGeneration.from_pretrained(
+                        self.model_name,
+                        retriever=self.retriever,
+                        torch_dtype=torch.float32,
+                        low_cpu_mem_usage=True
+                    )
+                    self.model = self.model.to(self.device)
+                    logger.info("Modèle chargé en mode dégradé avec succès")
+
+                except Exception as fallback_error:
+                    logger.error(f"Échec du chargement en mode dégradé: {fallback_error}")
+                    raise Exception(f"Impossible de charger le modèle RAG. Erreur principale: {model_error}, Erreur fallback: {fallback_error}")
 
             end_time = timezone.now()
             loading_time = (end_time - start_time).total_seconds()
@@ -194,11 +221,14 @@ class HuggingFaceRAGService:
         except Exception as e:
             logger.error(f"Impossible d'initialiser le service RAG: {e}")
             return {
+                'response': 'Service RAG temporairement indisponible. Veuillez réessayer plus tard.',
                 'generated_text': 'Service RAG temporairement indisponible. Veuillez réessayer plus tard.',
                 'error': str(e),
                 'success': False,
                 'query': query,
-                'generation_time': 0,
+                'took_ms': 0,
+                'generation_method': 'huggingface_rag_error',
+                'context_documents': [],
                 'model_info': {
                     'model_name': 'N/A',
                     'error': 'Service indisponible'
@@ -272,6 +302,7 @@ class HuggingFaceRAGService:
             logger.error(f"Erreur lors de la génération RAG: {str(e)}")
             response_data['error'] = f"Erreur de génération: {str(e)}"
             response_data['response'] = "Désolé, je n'ai pas pu générer une réponse pour cette question."
+            response_data['success'] = False
 
         finally:
             end_time = timezone.now()
@@ -346,25 +377,34 @@ class HuggingFaceRAGService:
 
         response_data = self.generate_response(last_question, **kwargs)
 
+        # Extraire le contenu de la réponse de manière sûre
+        response_content = response_data.get('response') or response_data.get('generated_text', 'Désolé, aucune réponse générée.')
+
+        # Vérifier s'il y a une erreur
+        if response_data.get('error') or not response_data.get('success', True):
+            response_content = response_data.get('error', 'Service temporairement indisponible.')
+
         # Formater au style OpenAI
         return {
             'choices': [{
                 'message': {
                     'role': 'assistant',
-                    'content': response_data['response']
+                    'content': response_content
                 },
                 'finish_reason': 'stop'
             }],
             'usage': {
-                'total_tokens': len(last_question.split()) + len(response_data['response'].split()),
-                'completion_tokens': len(response_data['response'].split()),
+                'total_tokens': len(last_question.split()) + len(response_content.split()),
+                'completion_tokens': len(response_content.split()),
                 'prompt_tokens': len(last_question.split())
             },
             'model': self.model_name,
             'metadata': {
-                'took_ms': response_data['took_ms'],
+                'took_ms': response_data.get('took_ms', 0),
                 'context_documents_count': len(response_data.get('context_documents', [])),
-                'generation_method': response_data['generation_method']
+                'generation_method': response_data.get('generation_method', 'huggingface_rag'),
+                'error': response_data.get('error'),
+                'success': response_data.get('success', True)
             }
         }
 

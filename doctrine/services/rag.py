@@ -15,8 +15,9 @@ logger = logging.getLogger(__name__)
 class RAGMode(Enum):
     """Modes de fonctionnement du service RAG"""
     SIMILARITY_ONLY = "similarity_only"  # Similarité simple avec embeddings
-    HUGGINGFACE_RAG = "huggingface_rag"  # RAG complet avec génération Hugging Face
+    HUGGINGFACE_RAG = "huggingface_rag"  # RAG complet avec génération (maintenant LangChain+Gemini)
     HYBRID = "hybrid"
+    LANGCHAIN_RAG = "langchain_rag"  # RAG avec LangChain + Gemini
 
 try:
     import numpy as np
@@ -149,7 +150,7 @@ class RAGRetriever:
             scope = 'all'
 
         # Route vers la méthode appropriée selon le mode
-        if mode == RAGMode.HUGGINGFACE_RAG:
+        if mode == RAGMode.HUGGINGFACE_RAG or mode == RAGMode.LANGCHAIN_RAG:
             return self._retrieve_with_generation(query, k, scope, document, started_at)
         elif mode == RAGMode.HYBRID:
             return self._retrieve_hybrid(query, k, scope, document, started_at)
@@ -264,17 +265,88 @@ class RAGRetriever:
 
     def _retrieve_with_generation(self, query: str, k: int, scope: str,
                                   document: Optional[Document], started_at) -> Dict[str, Any]:
-        """Mode RAG avec génération Gemini en priorité et fallback vers Hugging Face"""
-        # Essayer d'abord Gemini
-        logger.info('Tentative de génération avec Gemini en priorité')
+        """Mode RAG avec génération LangChain+Gemini en priorité et fallback vers Hugging Face"""
+        # Essayer d'abord LangChain + Gemini
+        logger.info('Tentative de génération avec LangChain + Gemini en priorité')
 
+        try:
+            from .langchain_rag import langchain_rag_service
+
+            # Utiliser le service LangChain RAG
+            result = langchain_rag_service.query(query, k=k)
+
+            # Adapter le format de retour pour la compatibilité
+            took_ms = int((timezone.now() - started_at).total_seconds() * 1000)
+
+            return {
+                'query': query,
+                'scope': scope,
+                'k': k,
+                'count': result.get('count', 0),
+                'took_ms': took_ms,
+                'mode': 'langchain_gemini',
+                'results': self._format_langchain_results(result.get('context_documents', [])),
+                'generated_response': result.get('answer', ''),
+                'generation_metadata': {
+                    'generation_took_ms': result.get('took_ms', 0),
+                    'generation_method': 'langchain_gemini',
+                    'error': None
+                }
+            }
+
+        except ImportError:
+            logger.warning('Service LangChain RAG non disponible, tentative avec Gemini direct')
+            return self._try_direct_gemini_fallback(query, k, scope, document, started_at)
+        except Exception as e:
+            logger.warning('Erreur LangChain RAG: %s, tentative avec Gemini direct', e)
+            return self._try_direct_gemini_fallback(query, k, scope, document, started_at)
+
+    def _format_langchain_results(self, context_documents: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """
+        Formate les résultats LangChain pour la compatibilité avec l'API existante
+        """
+        results = []
+        for doc_data in context_documents:
+            content = doc_data.get('content', '')
+            metadata = doc_data.get('metadata', {})
+
+            result_item = {
+                'text': content,
+                'score': doc_data.get('score', 1.0),
+                'source': 'langchain_db',
+                'document': {
+                    'id': metadata.get('document_id', ''),
+                    'title': metadata.get('document_title', ''),
+                    'file_name': metadata.get('document_filename', ''),
+                    'upload_date': metadata.get('upload_date'),
+                    'file_size': metadata.get('file_size', 0),
+                    'page_count': 0  # Non disponible dans DocumentContent
+                },
+                'content_metadata': {
+                    'word_count': metadata.get('word_count', 0),
+                    'extraction_method': metadata.get('extraction_method', ''),
+                    'processing_status': metadata.get('processing_status', ''),
+                    'category': metadata.get('document_category'),
+                    'theme': metadata.get('document_theme'),
+                    'is_chunk': metadata.get('is_chunk', False),
+                    'chunk_index': metadata.get('chunk_index'),
+                    'source': metadata.get('source', 'langchain')
+                }
+            }
+            results.append(result_item)
+
+        return results
+
+    def _try_direct_gemini_fallback(self, query: str, k: int, scope: str,
+                                   document: Optional[Document], started_at) -> Dict[str, Any]:
+        """Fallback vers Gemini direct puis Hugging Face"""
         if GEMINI_AVAILABLE:
             api_key = getattr(settings, 'GOOGLE_AI_API_KEY', os.getenv('GOOGLE_AI_API_KEY'))
             if api_key:
                 try:
                     return self._generate_with_gemini_primary(query, k, scope, document, started_at)
                 except Exception as e:
-                    logger.warning('Erreur Gemini: %s, fallback vers Hugging Face', e)
+                    logger.warning('Erreur Gemini direct: %s, fallback vers Hugging Face', e)
                     return self._fallback_to_huggingface(query, k, scope, document, started_at)
             else:
                 logger.warning('Clé API Google manquante, fallback vers Hugging Face')
@@ -570,8 +642,40 @@ Réponse:"""
 
         # Ensuite, générer une réponse si on a des résultats
         if similarity_results.get('count', 0) > 0:
-            # Essayer d'abord Gemini
+            # Essayer d'abord LangChain + Gemini
             try:
+                from .langchain_rag import langchain_rag_service
+
+                # Utiliser les résultats de similarité comme contexte pour LangChain
+                context_texts = [r.get('text', '') for r in similarity_results.get('results', [])]
+                context = "\n\n".join(context_texts[:3])
+
+                # Générer directement avec Gemini via LangChain
+                langchain_rag_service.ensure_ready()
+                messages = langchain_rag_service.prompt.invoke({
+                    "question": query,
+                    "context": context
+                })
+                response = langchain_rag_service.llm.invoke(messages)
+
+                took_ms = int((timezone.now() - started_at).total_seconds() * 1000)
+
+                return {
+                    **similarity_results,
+                    'mode': RAGMode.HYBRID.value,
+                    'took_ms': took_ms,
+                    'generated_response': response.content,
+                    'generation_metadata': {
+                        'generation_method': 'langchain_gemini',
+                        'generation_took_ms': took_ms,
+                        'hybrid_approach': 'similarity + langchain_generation',
+                        'error': None
+                    }
+                }
+
+            except ImportError:
+                logger.warning('LangChain non disponible, tentative avec Gemini direct en mode hybride')
+                # Fallback vers Gemini direct
                 if GEMINI_AVAILABLE:
                     api_key = getattr(settings, 'GOOGLE_AI_API_KEY', os.getenv('GOOGLE_AI_API_KEY'))
                     if api_key:
@@ -588,7 +692,7 @@ Réponse:"""
                             'took_ms': took_ms,
                             'generated_response': gemini_response,
                             'generation_metadata': {
-                                'generation_method': 'gemini_primary',
+                                'generation_method': 'gemini_direct',
                                 'generation_took_ms': took_ms,
                                 'error': None
                             }
