@@ -265,15 +265,16 @@ class RAGRetriever:
 
     def _retrieve_with_generation(self, query: str, k: int, scope: str,
                                   document: Optional[Document], started_at) -> Dict[str, Any]:
-        """Mode RAG avec génération LangChain+Gemini en priorité et fallback vers Hugging Face"""
-        # Essayer d'abord LangChain + Gemini
-        logger.info('Tentative de génération avec LangChain + Gemini en priorité')
+        """Mode RAG avec génération Gemini + Database en priorité"""
+        # Priorité 1: Gemini + Database direct
+        logger.info('Tentative avec Gemini + Database direct en priorité')
 
         try:
-            from .langchain_rag import langchain_rag_service
+            from .gemini_database_rag import gemini_database_rag_service
 
-            # Utiliser le service LangChain RAG
-            result = langchain_rag_service.query(query, k=k)
+            # Utiliser le service Gemini Database RAG
+            document_id = str(document.id) if document else None
+            result = gemini_database_rag_service.query(query, k=k, document_id=document_id, scope=scope)
 
             # Adapter le format de retour pour la compatibilité
             took_ms = int((timezone.now() - started_at).total_seconds() * 1000)
@@ -284,21 +285,49 @@ class RAGRetriever:
                 'k': k,
                 'count': result.get('count', 0),
                 'took_ms': took_ms,
-                'mode': 'langchain_gemini',
-                'results': self._format_langchain_results(result.get('context_documents', [])),
+                'mode': 'gemini_database_primary',
+                'results': result.get('context_documents', []),
                 'generated_response': result.get('answer', ''),
                 'generation_metadata': {
                     'generation_took_ms': result.get('took_ms', 0),
-                    'generation_method': 'langchain_gemini',
+                    'generation_method': 'gemini_database_direct',
+                    'knowledge_source': 'django_database_tables',
+                    'tables_used': ['Topic', 'Section', 'Document'],
                     'error': None
                 }
             }
 
-        except ImportError:
-            logger.warning('Service LangChain RAG non disponible, tentative avec Gemini direct')
-            return self._try_direct_gemini_fallback(query, k, scope, document, started_at)
         except Exception as e:
-            logger.warning('Erreur LangChain RAG: %s, tentative avec Gemini direct', e)
+            logger.warning('Erreur Gemini Database: %s, tentative avec LangChain fallback', e)
+            return self._try_langchain_fallback(query, k, scope, document, started_at, str(e))
+
+    def _try_langchain_fallback(self, query: str, k: int, scope: str,
+                               document: Optional[Document], started_at, error: str = None) -> Dict[str, Any]:
+        """Fallback vers LangChain si Gemini Database échoue"""
+        try:
+            from .langchain_rag import langchain_rag_service
+
+            result = langchain_rag_service.query(query, k=k)
+            took_ms = int((timezone.now() - started_at).total_seconds() * 1000)
+
+            return {
+                'query': query,
+                'scope': scope,
+                'k': k,
+                'count': result.get('count', 0),
+                'took_ms': took_ms,
+                'mode': 'langchain_fallback',
+                'results': self._format_langchain_results(result.get('context_documents', [])),
+                'generated_response': result.get('answer', ''),
+                'generation_metadata': {
+                    'generation_took_ms': result.get('took_ms', 0),
+                    'generation_method': 'langchain_fallback',
+                    'fallback_reason': error,
+                    'error': None
+                }
+            }
+        except Exception as langchain_error:
+            logger.warning('LangChain fallback échoué: %s, tentative avec Gemini direct legacy', langchain_error)
             return self._try_direct_gemini_fallback(query, k, scope, document, started_at)
 
     def _format_langchain_results(self, context_documents: List[Dict[str, Any]]) -> List[Dict[str, Any]]:

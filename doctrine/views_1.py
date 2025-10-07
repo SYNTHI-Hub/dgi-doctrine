@@ -1,6 +1,7 @@
 from django.db.models import Count, Avg
 from oauth2_provider.contrib.rest_framework import TokenHasScope
 from rest_framework import viewsets, status, permissions, generics
+from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -1454,11 +1455,10 @@ class SearchContentView(generics.GenericAPIView):
 
         return content[:max_length] + ('...' if len(content) > max_length else '')
 
-class RAGQueryView(generics.GenericAPIView):
+class RAGQueryView(APIView):
     """APIView RAG multimode: recherche sémantique avec possibilité de génération"""
     permission_classes = []  # Accès public
     authentication_classes = []
-    serializer_class = RAGQuerySerializer
 
     @extend_schema(
         summary="RAG - Recherche sémantique multimode",
@@ -1474,7 +1474,7 @@ class RAGQueryView(generics.GenericAPIView):
     )
     def post(self, request):
         """Recherche RAG avec différents modes de traitement"""
-        serializer = self.get_serializer(data=request.data)
+        serializer = RAGQuerySerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

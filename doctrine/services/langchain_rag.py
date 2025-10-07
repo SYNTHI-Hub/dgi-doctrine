@@ -16,17 +16,64 @@ logger = logging.getLogger(__name__)
 
 # Imports LangChain
 try:
-    from langchain.chat_models import init_chat_model
+    import google.generativeai as genai
     from langchain_core.documents import Document as LangChainDocument
     from langchain_core.vectorstores import InMemoryVectorStore
     from langchain_core.prompts import PromptTemplate
     from langchain_text_splitters import RecursiveCharacterTextSplitter
     from langgraph.graph import START, StateGraph
-    from langchain import hub
     LANGCHAIN_AVAILABLE = True
+    logger.info("LangChain imports reussis")
 except ImportError as e:
-    logger.warning(f"LangChain non disponible: {e}")
+    logger.error(f"LangChain non disponible: {e}")
     LANGCHAIN_AVAILABLE = False
+    # Definir des classes factices pour eviter les erreurs
+    class LangChainDocument:
+        def __init__(self, page_content="", metadata=None):
+            self.page_content = page_content
+            self.metadata = metadata or {}
+
+    class InMemoryVectorStore:
+        def __init__(self, embeddings):
+            self.embeddings = embeddings
+            self._docs = []
+
+        def add_documents(self, documents):
+            self._docs.extend(documents)
+
+        def similarity_search(self, query, k=5):
+            return self._docs[:k]
+
+    class PromptTemplate:
+        @staticmethod
+        def from_template(template):
+            return template
+
+        def invoke(self, data):
+            return data
+
+    class RecursiveCharacterTextSplitter:
+        def __init__(self, **kwargs):
+            pass
+
+        def split_documents(self, docs):
+            return docs
+
+    class StateGraph:
+        def __init__(self, state_type):
+            pass
+
+        def add_sequence(self, nodes):
+            return self
+
+        def add_edge(self, start, end):
+            return self
+
+        def compile(self):
+            return self
+
+    START = None
+    genai = None
 
 # Imports Django models
 from doctrine.models import Document, DocumentContent
@@ -54,10 +101,16 @@ class LangChainRAGService:
     def ensure_ready(self):
         """Initialise le service si nécessaire"""
         if not LANGCHAIN_AVAILABLE:
-            raise Exception("LangChain n'est pas disponible. Installez: pip install langchain langchain-google-genai langgraph")
+            logger.warning("LangChain non disponible, utilisation du mode fallback")
+            self._initialize_fallback_mode()
+            return
 
         if not self._initialized:
-            self._initialize_components()
+            try:
+                self._initialize_components()
+            except Exception as e:
+                logger.warning(f"Echec initialisation LangChain, utilisation du mode fallback: {e}")
+                self._initialize_fallback_mode()
 
     def _initialize_components(self):
         """Initialise les composants LangChain"""
@@ -89,20 +142,62 @@ class LangChainRAGService:
             logger.exception(f"Erreur lors de l'initialisation LangChain RAG: {e}")
             raise
 
+    def _initialize_fallback_mode(self):
+        """Initialise le service en mode fallback sans LangChain"""
+        try:
+            logger.info("Initialisation du mode fallback sans LangChain...")
+
+            # Utiliser le service RAG existant comme backend
+            from .rag import rag_retriever
+
+            # Configuration minimale
+            self.llm = None
+            self.embeddings = None
+            self.vector_store = None
+            self.rag_graph = None
+            self.prompt = None
+            self.rag_retriever = rag_retriever
+
+            self._initialized = True
+            logger.info("Mode fallback initialise avec succes")
+
+        except Exception as e:
+            logger.exception(f"Erreur lors de l'initialisation du mode fallback: {e}")
+            self._initialized = False
+
     def _initialize_llm(self):
-        """Initialise le modèle Gemini via LangChain"""
+        """Initialise le modèle Gemini directement"""
         api_key = getattr(settings, 'GOOGLE_AI_API_KEY', os.getenv('GOOGLE_AI_API_KEY'))
         if not api_key:
             raise Exception("GOOGLE_AI_API_KEY manquante")
 
-        # Définir la clé API
-        os.environ["GOOGLE_API_KEY"] = api_key
+        if not genai:
+            raise Exception("google.generativeai non disponible")
 
-        # Initialiser le modèle Gemini
-        model_name = getattr(settings, 'GEMINI_MODEL', 'gemini-2.5-flash')
-        self.llm = init_chat_model(model_name, model_provider="google_genai")
+        # Configurer Gemini directement
+        genai.configure(api_key=api_key)
+        model_name = getattr(settings, 'GEMINI_MODEL', 'gemini-1.5-flash')
 
-        logger.info(f"Modèle Gemini initialisé: {model_name}")
+        # Creer un wrapper simple pour Gemini
+        class GeminiWrapper:
+            def __init__(self, model_name):
+                self.model = genai.GenerativeModel(model_name)
+
+            def invoke(self, messages):
+                if isinstance(messages, dict):
+                    prompt = messages.get('context', '') + "\n\nQuestion: " + messages.get('question', '')
+                else:
+                    prompt = str(messages)
+
+                try:
+                    response = self.model.generate_content(prompt)
+                    return type('Response', (), {'content': response.text if response.text else "Aucune reponse generee"})()
+                except Exception as e:
+                    logger.error(f"Erreur generation Gemini: {e}")
+                    return type('Response', (), {'content': f"Erreur: {str(e)}"})()
+
+        self.llm = GeminiWrapper(model_name)
+        logger.info(f"Modele Gemini initialise: {model_name}")
 
     def _initialize_embeddings(self):
         """Initialise les embeddings (utilise sentence-transformers local)"""
@@ -285,175 +380,116 @@ class LangChainRAGService:
 
     def _initialize_prompt(self):
         """Initialise le prompt RAG"""
-        try:
-            # Essayer de charger depuis LangChain Hub
-            self.prompt = hub.pull("rlm/rag-prompt")
-            logger.info("Prompt chargé depuis LangChain Hub")
-        except Exception as e:
-            logger.warning(f"Impossible de charger depuis Hub: {e}, utilisation d'un prompt local")
-
-            # Prompt local en fallback
-            template = """Tu es un assistant pour répondre aux questions. Utilise les informations du contexte fourni pour répondre à la question.
-Si tu ne connais pas la réponse, dis simplement que tu ne sais pas. Utilise maximum trois phrases et garde la réponse concise.
+        # Utiliser un prompt local simple
+        template = """Tu es un assistant pour repondre aux questions. Utilise les informations du contexte fourni pour repondre a la question.
+Si tu ne connais pas la reponse, dis simplement que tu ne sais pas. Utilise maximum trois phrases et garde la reponse concise.
 
 Question: {question}
 Contexte: {context}
 
-Réponse:"""
+Reponse:"""
 
+        if LANGCHAIN_AVAILABLE:
             self.prompt = PromptTemplate.from_template(template)
+        else:
+            # Fallback simple pour le prompt
+            class SimplePrompt:
+                def __init__(self, template):
+                    self.template = template
+
+                def invoke(self, data):
+                    return self.template.format(**data)
+
+            self.prompt = SimplePrompt(template)
+
+        logger.info("Prompt RAG initialise")
 
     def _build_rag_graph(self):
-        """Construit le graphe RAG sophistiqué avec LangGraph"""
+        """Construit le workflow RAG simplifie"""
+        if LANGCHAIN_AVAILABLE:
+            try:
+                # Workflow LangGraph complet si disponible
+                self._build_langgraph_workflow()
+            except Exception as e:
+                logger.warning(f"Echec workflow LangGraph: {e}, utilisation workflow simple")
+                self._build_simple_workflow()
+        else:
+            # Workflow simplifie en fallback
+            self._build_simple_workflow()
 
+    def _build_langgraph_workflow(self):
+        """Construit le workflow avec LangGraph"""
         def retrieve(state: RAGState):
-            """Étape de récupération avec logique conditionnelle"""
             metadata = state.get("metadata", {})
             question = state["question"]
             k = metadata.get("k", 5)
             scope = metadata.get("scope", "all")
             document_id = metadata.get("document_id")
 
-            logger.info(f"Récupération: question='{question}', scope='{scope}', k={k}")
-
-            # Logique de récupération selon le scope
             if scope == 'document' and document_id:
-                # Recherche dans un document spécifique
                 retrieved_docs = self._search_specific_document(question, document_id, k)
-                logger.info(f"Recherche document spécifique {document_id}: {len(retrieved_docs)} docs trouvés")
             else:
-                # Recherche globale dans le vector store
                 retrieved_docs = self.vector_store.similarity_search(question, k=k)
-                logger.info(f"Recherche globale: {len(retrieved_docs)} docs trouvés")
 
-            # Enrichir les métadonnées avec des infos de récupération
-            retrieval_metadata = {
-                "retrieval_method": "specific_document" if scope == 'document' else "global_similarity",
-                "docs_found": len(retrieved_docs),
-                "search_scope": scope,
-                "target_document": document_id
-            }
-
-            return {
-                "context": retrieved_docs,
-                "metadata": {**metadata, "retrieval": retrieval_metadata}
-            }
-
-        def validate_context(state: RAGState):
-            """Étape de validation du contexte récupéré"""
-            context = state.get("context", [])
-            question = state["question"]
-
-            if not context:
-                logger.warning(f"Aucun contexte trouvé pour: {question}")
-                return {
-                    "context": [],
-                    "metadata": {
-                        **state.get("metadata", {}),
-                        "validation": {
-                            "status": "no_context",
-                            "action": "generate_empty_response"
-                        }
-                    }
-                }
-
-            # Filtrer les documents très courts ou non pertinents
-            filtered_context = []
-            for doc in context:
-                if len(doc.page_content.strip()) > 50:  # Minimum 50 caractères
-                    filtered_context.append(doc)
-
-            logger.info(f"Contexte validé: {len(filtered_context)}/{len(context)} documents conservés")
-
-            return {
-                "context": filtered_context,
-                "metadata": {
-                    **state.get("metadata", {}),
-                    "validation": {
-                        "status": "valid" if filtered_context else "no_valid_context",
-                        "original_count": len(context),
-                        "filtered_count": len(filtered_context)
-                    }
-                }
-            }
+            return {"context": retrieved_docs}
 
         def generate(state: RAGState):
-            """Étape de génération avec gestion des cas d'échec"""
             context = state.get("context", [])
             question = state["question"]
-            metadata = state.get("metadata", {})
 
             if not context:
-                logger.warning("Génération sans contexte")
-                return {
-                    "answer": "Je n'ai pas trouvé d'informations pertinentes dans la base de connaissances pour répondre à votre question.",
-                    "metadata": {
-                        **metadata,
-                        "generation": {
-                            "status": "no_context",
-                            "context_used": False
-                        }
-                    }
-                }
+                return {"answer": "Je n'ai pas trouve d'informations pertinentes dans la base de connaissances."}
 
-            # Construire le contexte textuel
-            docs_content = "\n\n".join([
-                f"Document {i+1}: {doc.page_content}"
-                for i, doc in enumerate(context[:5])  # Limiter à 5 documents
-            ])
+            docs_content = "\n\n".join([doc.page_content for doc in context[:5]])
+            messages = self.prompt.invoke({"question": question, "context": docs_content})
+            response = self.llm.invoke(messages)
+            return {"answer": response.content}
 
-            logger.info(f"Génération avec {len(context)} documents de contexte")
-
-            try:
-                # Générer la réponse
-                messages = self.prompt.invoke({
-                    "question": question,
-                    "context": docs_content
-                })
-                response = self.llm.invoke(messages)
-
-                return {
-                    "answer": response.content,
-                    "metadata": {
-                        **metadata,
-                        "generation": {
-                            "status": "success",
-                            "context_docs_used": len(context),
-                            "context_length": len(docs_content)
-                        }
-                    }
-                }
-
-            except Exception as e:
-                logger.error(f"Erreur lors de la génération: {e}")
-                return {
-                    "answer": f"Désolé, une erreur s'est produite lors de la génération de la réponse: {str(e)}",
-                    "metadata": {
-                        **metadata,
-                        "generation": {
-                            "status": "error",
-                            "error": str(e)
-                        }
-                    }
-                }
-
-        # Construire le graphe avec étapes séquentielles
         graph_builder = StateGraph(RAGState)
-
-        # Ajouter les nœuds
         graph_builder.add_node("retrieve", retrieve)
-        graph_builder.add_node("validate_context", validate_context)
         graph_builder.add_node("generate", generate)
-
-        # Définir les connexions
         graph_builder.add_edge(START, "retrieve")
-        graph_builder.add_edge("retrieve", "validate_context")
-        graph_builder.add_edge("validate_context", "generate")
-
-        # Compiler le graphe
+        graph_builder.add_edge("retrieve", "generate")
         self.rag_graph = graph_builder.compile()
+        logger.info("Workflow LangGraph construit avec succes")
 
-        logger.info("Graphe RAG sophistiqué construit avec succès (retrieve -> validate -> generate)")
+    def _build_simple_workflow(self):
+        """Construit un workflow simplifie sans LangGraph"""
+        class SimpleWorkflow:
+            def __init__(self, service):
+                self.service = service
+
+            def invoke(self, state):
+                question = state["question"]
+                metadata = state.get("metadata", {})
+                k = metadata.get("k", 5)
+                scope = metadata.get("scope", "all")
+                document_id = metadata.get("document_id")
+
+                # Etape 1: Recuperation
+                if scope == 'document' and document_id:
+                    context = self.service._search_specific_document(question, document_id, k)
+                else:
+                    context = self.service.vector_store.similarity_search(question, k=k)
+
+                # Etape 2: Generation
+                if not context:
+                    answer = "Je n'ai pas trouve d'informations pertinentes dans la base de connaissances."
+                else:
+                    docs_content = "\n\n".join([doc.page_content for doc in context[:5]])
+                    prompt_text = self.service.prompt.invoke({"question": question, "context": docs_content})
+                    response = self.service.llm.invoke(prompt_text)
+                    answer = response.content
+
+                return {
+                    "question": question,
+                    "context": context,
+                    "answer": answer,
+                    "metadata": metadata
+                }
+
+        self.rag_graph = SimpleWorkflow(self)
+        logger.info("Workflow simplifie construit avec succes")
 
     def query(self, question: str, k: int = 5, document_id: str = None, scope: str = 'all', **kwargs) -> Dict[str, Any]:
         """
@@ -474,7 +510,11 @@ Réponse:"""
         try:
             self.ensure_ready()
 
-            # Préparer l'état initial pour LangGraph
+            # Mode fallback : utiliser le service RAG existant
+            if not self._initialized or hasattr(self, 'rag_retriever'):
+                return self._query_fallback_mode(question, k, document_id, scope, start_time, **kwargs)
+
+            # Mode LangChain complet
             initial_state = {
                 "question": question,
                 "context": [],
@@ -482,8 +522,7 @@ Réponse:"""
                 "metadata": {"k": k, "document_id": document_id, "scope": scope, **kwargs}
             }
 
-            # Exécuter le workflow LangGraph
-            logger.info(f"Exécution du workflow LangGraph pour: {question}")
+            logger.info(f"Execution du workflow LangGraph pour: {question}")
             final_state = self.rag_graph.invoke(initial_state)
 
             # Calculer le temps de traitement
@@ -517,23 +556,8 @@ Réponse:"""
             }
 
         except Exception as e:
-            logger.exception(f"Erreur lors de la requête RAG avec LangGraph: {e}")
-
-            end_time = timezone.now()
-            took_ms = int((end_time - start_time).total_seconds() * 1000)
-
-            return {
-                "query": question,
-                "answer": f"Désolé, une erreur s'est produite lors de la recherche dans la base de connaissances: {str(e)}",
-                "context_documents": [],
-                "count": 0,
-                "took_ms": took_ms,
-                "mode": "langchain_langgraph",
-                "generation_metadata": {
-                    "generation_method": "langchain_langgraph",
-                    "error": str(e)
-                }
-            }
+            logger.exception(f"Erreur lors de la requete RAG: {e}")
+            return self._query_fallback_mode(question, k, document_id, scope, start_time, error=str(e), **kwargs)
 
     def _search_specific_document(self, query: str, document_id: str, k: int) -> List[LangChainDocument]:
         """
@@ -722,6 +746,79 @@ Réponse:"""
             "vector_store_initialized": self.vector_store is not None,
             "llm_initialized": self.llm is not None,
             "documents_in_store": len(self.vector_store._docs) if self.vector_store else 0
+        }
+
+    def _query_fallback_mode(self, question: str, k: int, document_id: str, scope: str, start_time, error: str = None, **kwargs) -> Dict[str, Any]:
+        """Mode fallback utilisant le service RAG existant"""
+        try:
+            logger.info(f"Utilisation du mode fallback pour: {question}")
+
+            # Utiliser le service RAG existant
+            if hasattr(self, 'rag_retriever'):
+                document = None
+                if scope == 'document' and document_id:
+                    from doctrine.models import Document
+                    try:
+                        document = Document.objects.get(id=document_id)
+                    except Document.DoesNotExist:
+                        pass
+
+                # Utiliser le mode Gemini du service RAG existant
+                from doctrine.services.rag import RAGMode
+                result = self.rag_retriever.retrieve(
+                    question,
+                    k=k,
+                    scope=scope,
+                    document=document,
+                    mode=RAGMode.HUGGINGFACE_RAG  # Mode avec generation Gemini
+                )
+
+                end_time = timezone.now()
+                took_ms = int((end_time - start_time).total_seconds() * 1000)
+
+                # Extraire la reponse generee si disponible
+                generated_response = result.get('generated_response', '')
+                if not generated_response and result.get('results'):
+                    # Fallback sur le premier resultat si pas de generation
+                    generated_response = f"Basé sur la recherche: {result.get('results', [{}])[0].get('text', 'Aucun resultat trouve')}"
+                elif not generated_response:
+                    generated_response = "Aucune information trouvee dans la base de connaissances pour cette question."
+
+                return {
+                    "query": question,
+                    "answer": generated_response,
+                    "context_documents": result.get('results', []),
+                    "count": result.get('count', 0),
+                    "took_ms": took_ms,
+                    "mode": "langchain_fallback_with_generation",
+                    "scope": scope,
+                    "generation_metadata": {
+                        "generation_method": "langchain_fallback_gemini",
+                        "fallback_reason": error or "LangChain non disponible",
+                        "original_mode": result.get('mode', 'unknown'),
+                        "backend_took_ms": result.get('took_ms', 0),
+                        "error": error
+                    }
+                }
+
+        except Exception as fallback_error:
+            logger.error(f"Echec du mode fallback: {fallback_error}")
+
+        # Dernier recours
+        end_time = timezone.now()
+        took_ms = int((end_time - start_time).total_seconds() * 1000)
+
+        return {
+            "query": question,
+            "answer": "Service temporairement indisponible. Veuillez reessayer plus tard.",
+            "context_documents": [],
+            "count": 0,
+            "took_ms": took_ms,
+            "mode": "langchain_error",
+            "generation_metadata": {
+                "generation_method": "error",
+                "error": error or "Service indisponible"
+            }
         }
 
 

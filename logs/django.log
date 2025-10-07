@@ -772,3 +772,141 @@ Traceback (most recent call last):
     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 django.db.utils.InterfaceError: connection already closed
 ERROR 2025-10-07 06:42:12,589 basehttp 4352 123145531015168 "POST /api/v1/processing/rag/query/ HTTP/1.1" 500 131246
+INFO 2025-10-07 07:10:25,467 autoreload 10998 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 07:11:13,226 basehttp 10998 123145475391488 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 420
+INFO 2025-10-07 07:12:31,255 basehttp 10998 123145475391488 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 419
+INFO 2025-10-07 07:15:45,122 autoreload 10998 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/langchain_rag.py changed, reloading.
+INFO 2025-10-07 07:15:46,428 autoreload 12494 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 07:18:26,106 autoreload 12494 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/langchain_rag.py changed, reloading.
+INFO 2025-10-07 07:18:28,333 autoreload 12988 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 07:21:07,368 basehttp 12988 123145456967680 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 309
+ERROR 2025-10-07 07:21:13,440 log 12988 123145473757184 Internal Server Error: /api/v1/processing/rag/query/
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 303, in _commit
+    return self.connection.commit()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.InterfaceError: connection already closed
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/transaction.py", line 263, in __exit__
+    connection.commit()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 327, in commit
+    self._commit()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 302, in _commit
+    with debug_transaction(self, "COMMIT"), self.wrap_database_errors:
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 303, in _commit
+    return self.connection.commit()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.InterfaceError: connection already closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 474, in _set_autocommit
+    self.connection.autocommit = autocommit
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.InterfaceError: connection already closed
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 80, in inner
+    with self._recreate_cm():
+         ^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/transaction.py", line 307, in __exit__
+    connection.set_autocommit(True)
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 484, in set_autocommit
+    self._set_autocommit(autocommit)
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 473, in _set_autocommit
+    with self.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 474, in _set_autocommit
+    self.connection.autocommit = autocommit
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.InterfaceError: connection already closed
+ERROR 2025-10-07 07:21:13,443 basehttp 12988 123145473757184 "POST /api/v1/processing/rag/query/ HTTP/1.1" 500 131246
+WARNING 2025-10-07 07:22:09,818 log 12988 123145456967680 Bad Request: /api/v1/processing/rag/query/
+WARNING 2025-10-07 07:22:09,819 basehttp 12988 123145456967680 "GET /api/v1/processing/rag/query/ HTTP/1.1" 400 17143
+INFO 2025-10-07 07:22:09,922 basehttp 12988 123145456967680 "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+INFO 2025-10-07 07:22:09,927 basehttp 12988 123145473757184 "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+INFO 2025-10-07 07:22:09,955 basehttp 12988 123145490546688 "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+INFO 2025-10-07 07:22:09,959 basehttp 12988 123145507336192 "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+INFO 2025-10-07 07:22:09,991 basehttp 12988 123145490546688 "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+INFO 2025-10-07 07:22:09,994 basehttp 12988 123145473757184 "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+INFO 2025-10-07 07:22:10,000 basehttp 12988 123145507336192 "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+INFO 2025-10-07 07:22:10,005 basehttp 12988 123145456967680 "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+INFO 2025-10-07 07:22:10,005 basehttp 12988 123145490546688 "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+INFO 2025-10-07 07:22:10,013 basehttp 12988 123145540915200 "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+INFO 2025-10-07 07:22:10,014 basehttp 12988 123145524125696 "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+INFO 2025-10-07 07:22:10,067 basehttp 12988 123145456967680 "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+WARNING 2025-10-07 07:22:10,507 log 12988 123145456967680 Not Found: /favicon.ico
+WARNING 2025-10-07 07:22:10,507 basehttp 12988 123145456967680 "GET /favicon.ico HTTP/1.1" 404 6188
+ERROR 2025-10-07 07:23:48,519 log 12988 123145456967680 Internal Server Error: /api/v1/processing/rag/query/
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/rest_framework/response.py", line 74, in rendered_content
+    ret = renderer.render(self.data, accepted_media_type, context)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/rest_framework/renderers.py", line 731, in render
+    context = self.get_context(data, accepted_media_type, renderer_context)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/rest_framework/renderers.py", line 709, in get_context
+    'filter_form': self.get_filter_form(data, view, request),
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/rest_framework/renderers.py", line 637, in get_filter_form
+    queryset = view.get_queryset()
+               ^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/rest_framework/generics.py", line 67, in get_queryset
+    assert self.queryset is not None, (
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'RAGQueryView' should either include a `queryset` attribute, or override the `get_queryset()` method.
+ERROR 2025-10-07 07:23:48,522 basehttp 12988 123145456967680 "POST /api/v1/processing/rag/query/ HTTP/1.1" 500 107139
+WARNING 2025-10-07 07:24:25,508 log 12988 123145473757184 Bad Request: /api/v1/processing/rag/query/
+INFO 2025-10-07 07:24:25,509 basehttp 12988 123145473757184 - Broken pipe from ('127.0.0.1', 64757)
+INFO 2025-10-07 07:24:56,535 autoreload 12988 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/views_1.py changed, reloading.
+INFO 2025-10-07 07:24:57,952 autoreload 14309 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 07:25:19,370 autoreload 14309 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/views_1.py changed, reloading.
+INFO 2025-10-07 07:25:20,202 autoreload 14388 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 07:27:29,560 autoreload 14657 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 07:28:39,326 autoreload 14657 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/views_1.py changed, reloading.
+INFO 2025-10-07 07:28:40,506 autoreload 14846 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 07:29:52,278 basehttp 14846 123145522413568 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 309
+WARNING 2025-10-07 07:29:53,070 log 14846 123145539203072 Bad Request: /api/v1/processing/rag/query/
+WARNING 2025-10-07 07:29:53,070 basehttp 14846 123145539203072 "GET /api/v1/processing/rag/query/ HTTP/1.1" 400 11993
+WARNING 2025-10-07 07:30:44,021 log 14846 123145539203072 Bad Request: /api/v1/processing/rag/query/
+WARNING 2025-10-07 07:30:44,022 basehttp 14846 123145539203072 "POST /api/v1/processing/rag/query/ HTTP/1.1" 400 12014
+INFO 2025-10-07 07:32:42,578 basehttp 14846 123145522413568 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 307
+INFO 2025-10-07 07:34:33,167 autoreload 14846 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/langchain_rag.py changed, reloading.
+INFO 2025-10-07 07:34:34,526 autoreload 15528 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 07:35:57,832 basehttp 15528 123145371955200 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 300
+ERROR 2025-10-07 07:37:00,693 log 15528 123145371955200 Service Unavailable: /api/v1/processing/rag/query/
+ERROR 2025-10-07 07:37:00,694 basehttp 15528 123145371955200 "POST /api/v1/processing/rag/query/ HTTP/1.1" 503 184
+INFO 2025-10-07 07:39:38,702 autoreload 15528 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/rag.py changed, reloading.
+INFO 2025-10-07 07:39:40,177 autoreload 16786 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 07:40:21,909 basehttp 16786 123145465876480 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 400
+INFO 2025-10-07 07:41:12,041 basehttp 16786 123145465876480 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 400
+INFO 2025-10-07 07:41:59,598 basehttp 16786 123145465876480 "GET /api/v1/processing/rag/models/info/ HTTP/1.1" 200 221
