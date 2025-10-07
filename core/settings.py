@@ -272,7 +272,7 @@ RAG_GENERATION_TIMEOUT = int(config('RAG_GENERATION_TIMEOUT', default='60'))  # 
 
 GOOGLE_AI_API_KEY = config('GOOGLE_AI_API_KEY', default='')
 
-GEMINI_MODEL = config('GEMINI_MODEL', default='gemini-2.5-flash')
+GEMINI_MODEL = config('GEMINI_MODEL', default='gemini-2.5-flash-lite')
 GEMINI_MAX_TOKENS = int(config('GEMINI_MAX_TOKENS', default='1000'))
 GEMINI_TEMPERATURE = float(config('GEMINI_TEMPERATURE', default='0.7'))
 GEMINI_REQUEST_TIMEOUT = int(config('GEMINI_REQUEST_TIMEOUT', default='30'))  # 30 secondes

@@ -977,3 +977,519 @@ INFO 2025-10-07 10:37:39,962 basehttp 33598 123145553473536 "OPTIONS /api/v1/pub
 INFO 2025-10-07 10:37:40,251 basehttp 33598 123145553473536 "OPTIONS /api/v1/public/all-extracted-content/?page=1&page_size=10 HTTP/1.1" 200 0
 INFO 2025-10-07 10:37:40,268 basehttp 33598 123145570263040 "OPTIONS /api/v1/public/all-extracted-content/?page=1&page_size=10 HTTP/1.1" 200 0
 INFO 2025-10-07 10:37:40,318 basehttp 33598 123145587052544 "OPTIONS /api/v1/public/all-extracted-content/?page=1&page_size=10 HTTP/1.1" 200 0
+INFO 2025-10-07 10:38:56,034 basehttp 33598 123145553473536 "GET /api/v1/public/all-extracted-content/?page=1&page_size=10 HTTP/1.1" 200 20790
+INFO 2025-10-07 10:39:16,814 basehttp 33598 123145587052544 "GET /api/v1/public/all-extracted-content/?page=1&page_size=10 HTTP/1.1" 200 20790
+INFO 2025-10-07 10:39:18,271 basehttp 33598 123145570263040 "GET /api/v1/public/all-extracted-content/?page=1&page_size=10 HTTP/1.1" 200 20790
+INFO 2025-10-07 10:41:02,706 autoreload 33598 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/rag_service.py changed, reloading.
+INFO 2025-10-07 10:41:04,933 autoreload 35260 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 10:41:34,293 autoreload 35260 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/rag_service.py changed, reloading.
+INFO 2025-10-07 10:41:36,046 autoreload 35376 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 10:41:52,881 autoreload 35376 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/rag_service.py changed, reloading.
+INFO 2025-10-07 10:41:54,568 autoreload 35447 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 10:44:20,108 basehttp 35447 123145525866496 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 3688
+INFO 2025-10-07 10:45:46,364 autoreload 35447 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/rag_service.py changed, reloading.
+INFO 2025-10-07 10:45:48,147 autoreload 36032 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 10:46:04,729 autoreload 36032 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/rag_service.py changed, reloading.
+INFO 2025-10-07 10:46:06,396 autoreload 36108 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 10:46:21,938 autoreload 36108 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/rag_service.py changed, reloading.
+INFO 2025-10-07 10:46:23,589 autoreload 36161 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 10:46:38,504 autoreload 36161 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/rag_service.py changed, reloading.
+INFO 2025-10-07 10:46:40,377 autoreload 36214 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 10:47:25,634 autoreload 36214 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/rag_service.py changed, reloading.
+INFO 2025-10-07 10:47:26,887 autoreload 36337 140704670657024 Watching for file changes with StatReloader
+ERROR 2025-10-07 10:50:06,862 log 36337 123145420644352 Service Unavailable: /api/v1/processing/rag/query/
+ERROR 2025-10-07 10:50:06,863 basehttp 36337 123145420644352 "POST /api/v1/processing/rag/query/ HTTP/1.1" 503 310
+INFO 2025-10-07 10:50:42,311 autoreload 36740 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 10:56:17,839 autoreload 36740 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/numpy/dtypes.py changed, reloading.
+INFO 2025-10-07 10:56:19,848 autoreload 39464 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 10:57:14,587 autoreload 39876 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 11:00:08,217 basehttp 39876 123145514237952 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 3932
+INFO 2025-10-07 11:05:12,314 autoreload 39876 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/core/settings.py changed, reloading.
+INFO 2025-10-07 11:05:15,123 autoreload 40520 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 11:06:51,710 basehttp 40520 123145441443840 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 3932
+INFO 2025-10-07 11:08:53,096 autoreload 40520 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/core/settings.py changed, reloading.
+INFO 2025-10-07 11:08:55,446 autoreload 40850 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 11:11:06,447 basehttp 40850 123145361686528 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 3932
+INFO 2025-10-07 11:14:13,966 autoreload 40850 140704670657024 /Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/doctrine/services/rag_service.py changed, reloading.
+INFO 2025-10-07 11:14:16,558 autoreload 41808 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 11:15:33,021 autoreload 42024 140704670657024 Watching for file changes with StatReloader
+INFO 2025-10-07 11:17:50,652 basehttp 42024 123145362857984 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 4017
+INFO 2025-10-07 11:21:00,511 basehttp 42024 123145362857984 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 4238
+WARNING 2025-10-07 11:23:48,426 log 42024 123145362857984 Bad Request: /api/v1/processing/rag/query/
+WARNING 2025-10-07 11:23:48,430 basehttp 42024 123145362857984 "POST /api/v1/processing/rag/query/ HTTP/1.1" 400 37
+INFO 2025-10-07 11:24:37,850 basehttp 42024 123145379647488 - Broken pipe from ('127.0.0.1', 52455)
+INFO 2025-10-07 11:46:16,309 basehttp 42024 123145362857984 "GET /api/v1/public/all-extracted-content/?page=1&page_size=10 HTTP/1.1" 200 20790
+INFO 2025-10-07 11:46:30,163 basehttp 42024 123145379647488 "GET /api/v1/public/all-extracted-content/?page=1&page_size=10 HTTP/1.1" 200 20790
+ERROR 2025-10-07 11:46:41,790 log 42024 123145396436992 Internal Server Error: /api/v1/public/all-extracted-content/
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 303, in _commit
+    return self.connection.commit()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 80, in inner
+    with self._recreate_cm():
+         ^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/transaction.py", line 263, in __exit__
+    connection.commit()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 327, in commit
+    self._commit()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 302, in _commit
+    with debug_transaction(self, "COMMIT"), self.wrap_database_errors:
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 303, in _commit
+    return self.connection.commit()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+ERROR 2025-10-07 11:46:43,011 basehttp 42024 123145396436992 "GET /api/v1/public/all-extracted-content/?page=1&page_size=10 HTTP/1.1" 500 108487
+INFO 2025-10-07 11:54:28,542 basehttp 42024 123145362857984 "OPTIONS /api/v1/public/all-extracted-content?page=1&page_size=10 HTTP/1.1" 200 0
+INFO 2025-10-07 11:54:28,662 basehttp 42024 123145362857984 "GET /api/v1/public/all-extracted-content?page=1&page_size=10 HTTP/1.1" 301 0
+INFO 2025-10-07 11:54:28,787 basehttp 42024 123145362857984 "OPTIONS /api/v1/public/all-extracted-content/?page=1&page_size=10 HTTP/1.1" 200 0
+ERROR 2025-10-07 11:54:29,036 log 42024 123145362857984 Internal Server Error: /api/v1/public/all-extracted-content/
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "37.60.239.221", port 5433 failed: Network is unreachable
+	Is the server running on that host and accepting TCP/IP connections?
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 80, in inner
+    with self._recreate_cm():
+         ^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/transaction.py", line 198, in __enter__
+    if not connection.get_autocommit():
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 454, in get_autocommit
+    self.ensure_connection()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 278, in ensure_connection
+    with self.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: connection to server at "37.60.239.221", port 5433 failed: Network is unreachable
+	Is the server running on that host and accepting TCP/IP connections?
+
+ERROR 2025-10-07 11:54:29,058 basehttp 42024 123145362857984 "GET /api/v1/public/all-extracted-content/?page=1&page_size=10 HTTP/1.1" 500 153582
+INFO 2025-10-07 11:54:37,593 basehttp 42024 123145362857984 "OPTIONS /api/v1/processing/rag/query/ HTTP/1.1" 200 0
+ERROR 2025-10-07 11:54:37,701 log 42024 123145362857984 Internal Server Error: /api/v1/processing/rag/query/
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "37.60.239.221", port 5433 failed: Network is unreachable
+	Is the server running on that host and accepting TCP/IP connections?
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 80, in inner
+    with self._recreate_cm():
+         ^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/transaction.py", line 198, in __enter__
+    if not connection.get_autocommit():
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 454, in get_autocommit
+    self.ensure_connection()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 278, in ensure_connection
+    with self.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: connection to server at "37.60.239.221", port 5433 failed: Network is unreachable
+	Is the server running on that host and accepting TCP/IP connections?
+
+ERROR 2025-10-07 11:54:37,706 basehttp 42024 123145362857984 "POST /api/v1/processing/rag/query/ HTTP/1.1" 500 153060
+ERROR 2025-10-07 11:54:53,461 log 42024 123145362857984 Internal Server Error: /api/v1/processing/rag/query/
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "37.60.239.221", port 5433 failed: Network is unreachable
+	Is the server running on that host and accepting TCP/IP connections?
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 80, in inner
+    with self._recreate_cm():
+         ^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/transaction.py", line 198, in __enter__
+    if not connection.get_autocommit():
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 454, in get_autocommit
+    self.ensure_connection()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 278, in ensure_connection
+    with self.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: connection to server at "37.60.239.221", port 5433 failed: Network is unreachable
+	Is the server running on that host and accepting TCP/IP connections?
+
+ERROR 2025-10-07 11:54:53,484 basehttp 42024 123145362857984 "POST /api/v1/processing/rag/query/ HTTP/1.1" 500 153060
+ERROR 2025-10-07 12:31:07,683 log 42024 123145363394560 Internal Server Error: /api/v1/processing/rag/query/
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "37.60.239.221", port 5433 failed: Network is unreachable
+	Is the server running on that host and accepting TCP/IP connections?
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 80, in inner
+    with self._recreate_cm():
+         ^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/transaction.py", line 198, in __enter__
+    if not connection.get_autocommit():
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 454, in get_autocommit
+    self.ensure_connection()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 278, in ensure_connection
+    with self.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: connection to server at "37.60.239.221", port 5433 failed: Network is unreachable
+	Is the server running on that host and accepting TCP/IP connections?
+
+ERROR 2025-10-07 12:31:09,254 basehttp 42024 123145363394560 "POST /api/v1/processing/rag/query/ HTTP/1.1" 500 153060
+ERROR 2025-10-07 13:34:20,478 log 42024 123145363394560 Internal Server Error: /api/v1/processing/rag/query/
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "37.60.239.221", port 5433 failed: Network is unreachable
+	Is the server running on that host and accepting TCP/IP connections?
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 80, in inner
+    with self._recreate_cm():
+         ^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/transaction.py", line 198, in __enter__
+    if not connection.get_autocommit():
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 454, in get_autocommit
+    self.ensure_connection()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 278, in ensure_connection
+    with self.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: connection to server at "37.60.239.221", port 5433 failed: Network is unreachable
+	Is the server running on that host and accepting TCP/IP connections?
+
+ERROR 2025-10-07 13:34:26,539 basehttp 42024 123145363394560 "POST /api/v1/processing/rag/query/ HTTP/1.1" 500 153060
+ERROR 2025-10-07 13:34:48,332 log 42024 123145380184064 Internal Server Error: /api/v1/processing/rag/query/
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "37.60.239.221", port 5433 failed: Network is unreachable
+	Is the server running on that host and accepting TCP/IP connections?
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 80, in inner
+    with self._recreate_cm():
+         ^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/transaction.py", line 198, in __enter__
+    if not connection.get_autocommit():
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 454, in get_autocommit
+    self.ensure_connection()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 278, in ensure_connection
+    with self.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/krohn/PycharmProjects/DME-AGENTS/dgi-extractor/.venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: connection to server at "37.60.239.221", port 5433 failed: Network is unreachable
+	Is the server running on that host and accepting TCP/IP connections?
+
+ERROR 2025-10-07 13:34:48,338 basehttp 42024 123145380184064 "POST /api/v1/processing/rag/query/ HTTP/1.1" 500 151280
+INFO 2025-10-07 13:35:06,407 autoreload 51195 140704670657024 Watching for file changes with StatReloader
+WARNING 2025-10-07 13:36:08,412 log 51195 123145507454976 Bad Request: /api/v1/processing/rag/query/
+WARNING 2025-10-07 13:36:08,412 basehttp 51195 123145507454976 "POST /api/v1/processing/rag/query/ HTTP/1.1" 400 44
+WARNING 2025-10-07 13:37:03,626 log 51195 123145507454976 Bad Request: /api/v1/processing/rag/query/
+WARNING 2025-10-07 13:37:03,627 basehttp 51195 123145507454976 "POST /api/v1/processing/rag/query/ HTTP/1.1" 400 44
+INFO 2025-10-07 13:38:30,137 basehttp 51195 123145524244480 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 4234
+INFO 2025-10-07 13:42:26,070 basehttp 51195 123145507454976 "GET /api/v1/public/all-extracted-content/?page=1&page_size=10 HTTP/1.1" 200 20790
+INFO 2025-10-07 13:42:46,314 basehttp 51195 123145524244480 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 4365
+INFO 2025-10-07 13:42:46,314 basehttp 51195 123145524244480 - Broken pipe from ('127.0.0.1', 58951)
+INFO 2025-10-07 13:43:37,870 basehttp 51195 123145507454976 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 4484
+INFO 2025-10-07 13:43:37,871 basehttp 51195 123145507454976 - Broken pipe from ('127.0.0.1', 57507)
+INFO 2025-10-07 13:45:32,852 basehttp 51195 123145507454976 "GET /api/v1/public/all-extracted-content/?page=1&page_size=10 HTTP/1.1" 200 20789
+INFO 2025-10-07 13:46:38,807 basehttp 51195 123145507454976 "POST /api/v1/processing/rag/query/ HTTP/1.1" 200 411

@@ -6,11 +6,18 @@ Priorité : Chargement PDFs → Splitting → Recherche textuelle → Générati
 
 import logging
 import os
-import requests
 import glob
 from typing import Dict, Any, List, Optional
 from django.utils import timezone
 from django.conf import settings
+
+# Import google-genai
+try:
+    from google import genai
+    GENAI_AVAILABLE = True
+except ImportError:
+    genai = None
+    GENAI_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +41,7 @@ class PDFRAGService:
     def __init__(self, media_folder: str = None):
         self.media_folder = media_folder or getattr(settings, 'MEDIA_ROOT', 'media')
         self.gemini_api_key = None
+        self.genai_client = None
         self.text_splitter = None
         self.pdf_chunks = []  # Cache des chunks de tous les PDFs
         self._initialized = False
@@ -42,6 +50,10 @@ class PDFRAGService:
         """Initialise le service si nécessaire"""
         if not PDF_LOADERS_AVAILABLE:
             logger.error("PyPDFLoader non disponible. Installez: pip install langchain-community")
+            return False
+
+        if not GENAI_AVAILABLE:
+            logger.error("google-genai non disponible. Installez: pip install google-genai")
             return False
 
         if not self._initialized:
@@ -59,11 +71,14 @@ class PDFRAGService:
         return True
 
     def _initialize_gemini_api(self):
-        """Initialise l'API Gemini directement"""
+        """Initialise l'API Gemini avec google-genai client"""
         self.gemini_api_key = getattr(settings, 'GOOGLE_AI_API_KEY', os.getenv('GOOGLE_AI_API_KEY'))
         if not self.gemini_api_key:
             raise Exception("GOOGLE_AI_API_KEY manquante")
-        logger.info("API Gemini configurée")
+
+        # Initialiser le client google-genai
+        self.genai_client = genai.Client(api_key=self.gemini_api_key)
+        logger.info(f"API Gemini configurée avec clé: {self.gemini_api_key[:10]}***")
 
     def _initialize_text_splitter(self):
         """Initialise le text splitter"""
@@ -248,11 +263,9 @@ class PDFRAGService:
         return min(1.0, normalized_score + bonus)
 
     def _generate_with_gemini_api(self, query: str, context: str) -> str:
-        """Génère une réponse avec l'API Gemini directe"""
+        """Génère une réponse avec le client google-genai"""
         if not context:
             return "Je n'ai pas trouvé d'informations pertinentes dans les documents PDF pour répondre à votre question."
-
-        url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
 
         prompt = f"""En tant qu'assistant AI spécialisé dans l'analyse de documents PDF, réponds à la question suivante en te basant uniquement sur le contexte fourni.
 
@@ -271,42 +284,16 @@ INSTRUCTIONS:
 
 RÉPONSE:"""
 
-        headers = {
-            'Content-Type': 'application/json',
-        }
-
-        data = {
-            "contents": [{
-                "parts": [{
-                    "text": prompt
-                }]
-            }]
-        }
-
         try:
-            response = requests.post(
-                f"{url}?key={self.gemini_api_key}",
-                headers=headers,
-                json=data,
-                timeout=30
+            logger.info("Appel API Gemini avec google-genai client")
+            response = self.genai_client.models.generate_content(
+                model="gemini-2.5-flash-lite",
+                contents=prompt
             )
 
-            if response.status_code == 200:
-                result = response.json()
-                if 'candidates' in result and len(result['candidates']) > 0:
-                    content = result['candidates'][0].get('content', {})
-                    parts = content.get('parts', [])
-                    if parts and 'text' in parts[0]:
-                        return parts[0]['text']
+            logger.info("Réponse reçue de l'API Gemini")
+            return response.text
 
-                return "Désolé, je n'ai pas pu générer une réponse valide."
-            else:
-                logger.error(f"Erreur API Gemini: {response.status_code} - {response.text}")
-                return f"Erreur lors de la génération de la réponse (Code: {response.status_code})"
-
-        except requests.exceptions.Timeout:
-            logger.error("Timeout lors de l'appel à l'API Gemini")
-            return "Délai d'attente dépassé lors de la génération de la réponse."
         except Exception as e:
             logger.error(f"Erreur lors de l'appel API Gemini: {e}")
             return f"Erreur technique lors de la génération: {str(e)}"
