@@ -3,6 +3,7 @@ aiohappyeyeballs
 aiohttp
 aiosignal
 amqp
+google-generativeai
 annotated-types
 asgiref
 attrs

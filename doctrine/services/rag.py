@@ -264,48 +264,31 @@ class RAGRetriever:
 
     def _retrieve_with_generation(self, query: str, k: int, scope: str,
                                   document: Optional[Document], started_at) -> Dict[str, Any]:
-        """Mode RAG avec génération Hugging Face et fallback vers Gemini"""
-        try:
-            from .huggingface_rag import huggingface_rag_service
+        """Mode RAG avec génération Gemini en priorité et fallback vers Hugging Face"""
+        # Essayer d'abord Gemini
+        logger.info('Tentative de génération avec Gemini en priorité')
 
-            # Obtenir la réponse générée avec contexte
-            response_data = huggingface_rag_service.generate_response(
-                query,
-                use_custom_context=True
-            )
+        if GEMINI_AVAILABLE:
+            api_key = getattr(settings, 'GOOGLE_AI_API_KEY', os.getenv('GOOGLE_AI_API_KEY'))
+            if api_key:
+                try:
+                    return self._generate_with_gemini_primary(query, k, scope, document, started_at)
+                except Exception as e:
+                    logger.warning('Erreur Gemini: %s, fallback vers Hugging Face', e)
+                    return self._fallback_to_huggingface(query, k, scope, document, started_at)
+            else:
+                logger.warning('Clé API Google manquante, fallback vers Hugging Face')
+                return self._fallback_to_huggingface(query, k, scope, document, started_at)
+        else:
+            logger.warning('Gemini non disponible, fallback vers Hugging Face')
+            return self._fallback_to_huggingface(query, k, scope, document, started_at)
 
-            # Adapter le format de retour pour la compatibilité
-            took_ms = int((timezone.now() - started_at).total_seconds() * 1000)
-
-            return {
-                'query': query,
-                'scope': scope,
-                'k': k,
-                'count': len(response_data.get('context_documents', [])),
-                'took_ms': took_ms,
-                'mode': RAGMode.HUGGINGFACE_RAG.value,
-                'results': response_data.get('context_documents', []),
-                'generated_response': response_data.get('response', ''),
-                'generation_metadata': {
-                    'generation_took_ms': response_data.get('took_ms', 0),
-                    'generation_method': response_data.get('generation_method', ''),
-                    'error': response_data.get('error')
-                }
-            }
-
-        except ImportError:
-            logger.warning('Service Hugging Face RAG non disponible, utilisation du fallback Gemini')
-            return self._fallback_to_gemini(query, k, scope, document, started_at)
-        except Exception as e:
-            logger.exception('Erreur RAG Hugging Face: %s, utilisation du fallback Gemini', e)
-            return self._fallback_to_gemini(query, k, scope, document, started_at)
-
-    def _fallback_to_gemini(self, query: str, k: int, scope: str,
-                           document: Optional[Document], started_at) -> Dict[str, Any]:
+    def _generate_with_gemini_primary(self, query: str, k: int, scope: str,
+                                     document: Optional[Document], started_at) -> Dict[str, Any]:
         """
-        Fallback vers Gemini en utilisant la base de données document_content
+        Génération primaire avec Gemini en utilisant la base de données document_content
         """
-        logger.info('Activation du fallback Gemini pour la requête: %s', query)
+        logger.info('Génération primaire avec Gemini pour la requête: %s', query)
 
         if not GEMINI_AVAILABLE:
             logger.error('Gemini non disponible. Installation requise: pip install google-generativeai')
@@ -314,7 +297,7 @@ class RAGRetriever:
                 'results': [],
                 'count': 0,
                 'took_ms': int((timezone.now() - started_at).total_seconds() * 1000),
-                'mode': 'gemini_fallback',
+                'mode': 'gemini_primary',
                 'error': 'Gemini non disponible - dépendances manquantes'
             }
 
@@ -327,7 +310,7 @@ class RAGRetriever:
                 'results': [],
                 'count': 0,
                 'took_ms': int((timezone.now() - started_at).total_seconds() * 1000),
-                'mode': 'gemini_fallback',
+                'mode': 'gemini_primary',
                 'error': 'Clé API Google manquante'
             }
 
@@ -351,7 +334,7 @@ class RAGRetriever:
                 'k': k,
                 'count': len(context_documents),
                 'took_ms': took_ms,
-                'mode': 'gemini_fallback',
+                'mode': 'gemini_primary',
                 'results': context_documents,
                 'generated_response': response_text,
                 'generation_metadata': {
@@ -362,14 +345,70 @@ class RAGRetriever:
             }
 
         except Exception as e:
-            logger.exception('Erreur lors du fallback Gemini: %s', e)
+            logger.exception('Erreur lors de la génération Gemini: %s', e)
             return {
                 'query': query,
                 'results': [],
                 'count': 0,
                 'took_ms': int((timezone.now() - started_at).total_seconds() * 1000),
-                'mode': 'gemini_fallback',
+                'mode': 'gemini_primary',
                 'error': f'Erreur Gemini: {str(e)}'
+            }
+
+    def _fallback_to_huggingface(self, query: str, k: int, scope: str,
+                                document: Optional[Document], started_at) -> Dict[str, Any]:
+        """
+        Fallback vers Hugging Face quand Gemini n'est pas disponible
+        """
+        logger.info('Activation du fallback Hugging Face pour la requête: %s', query)
+
+        try:
+            from .huggingface_rag import huggingface_rag_service
+
+            # Obtenir la réponse générée avec contexte
+            response_data = huggingface_rag_service.generate_response(
+                query,
+                use_custom_context=True
+            )
+
+            # Adapter le format de retour pour la compatibilité
+            took_ms = int((timezone.now() - started_at).total_seconds() * 1000)
+
+            return {
+                'query': query,
+                'scope': scope,
+                'k': k,
+                'count': len(response_data.get('context_documents', [])),
+                'took_ms': took_ms,
+                'mode': 'huggingface_fallback',
+                'results': response_data.get('context_documents', []),
+                'generated_response': response_data.get('response', ''),
+                'generation_metadata': {
+                    'generation_took_ms': response_data.get('took_ms', 0),
+                    'generation_method': response_data.get('generation_method', 'huggingface_fallback'),
+                    'error': response_data.get('error')
+                }
+            }
+
+        except ImportError:
+            logger.error('Service Hugging Face RAG non disponible')
+            return {
+                'query': query,
+                'results': [],
+                'count': 0,
+                'took_ms': int((timezone.now() - started_at).total_seconds() * 1000),
+                'mode': 'huggingface_fallback',
+                'error': 'Service Hugging Face RAG non disponible'
+            }
+        except Exception as e:
+            logger.exception('Erreur RAG Hugging Face: %s', e)
+            return {
+                'query': query,
+                'results': [],
+                'count': 0,
+                'took_ms': int((timezone.now() - started_at).total_seconds() * 1000),
+                'mode': 'huggingface_fallback',
+                'error': f'Erreur génération Hugging Face: {str(e)}'
             }
 
     def _search_document_content(self, query: str, k: int, scope: str,
@@ -531,65 +570,78 @@ Réponse:"""
 
         # Ensuite, générer une réponse si on a des résultats
         if similarity_results.get('count', 0) > 0:
+            # Essayer d'abord Gemini
             try:
-                from .huggingface_rag import huggingface_rag_service
+                if GEMINI_AVAILABLE:
+                    api_key = getattr(settings, 'GOOGLE_AI_API_KEY', os.getenv('GOOGLE_AI_API_KEY'))
+                    if api_key:
+                        genai.configure(api_key=api_key)
+                        context_texts = [r.get('text', '') for r in similarity_results.get('results', [])]
+                        context = "\n\n".join(context_texts[:3])
+                        gemini_response = self._generate_with_gemini(query, context)
 
-                # Utiliser les résultats de similarité comme contexte
-                context_texts = [r.get('text', '') for r in similarity_results.get('results', [])]
-                context = "\n\n".join(context_texts[:3])  # Limiter à 3 documents
+                        took_ms = int((timezone.now() - started_at).total_seconds() * 1000)
 
-                # Générer une réponse avec ce contexte
-                generation_response = huggingface_rag_service.generate_response(
-                    f"Context: {context}\n\nQuestion: {query}",
-                    use_custom_context=False  # On fournit déjà le contexte
-                )
-
-                # Combiner les résultats
-                took_ms = int((timezone.now() - started_at).total_seconds() * 1000)
-
-                return {
-                    **similarity_results,
-                    'mode': RAGMode.HYBRID.value,
-                    'took_ms': took_ms,
-                    'generated_response': generation_response.get('response', ''),
-                    'generation_metadata': {
-                        'generation_took_ms': generation_response.get('took_ms', 0),
-                        'generation_method': generation_response.get('generation_method', ''),
-                        'error': generation_response.get('error')
-                    }
-                }
-
-            except Exception as e:
-                logger.warning(f'Erreur génération Hugging Face en mode hybride: {str(e)}, tentative avec Gemini')
-                try:
-                    # Fallback vers Gemini pour la génération
-                    if GEMINI_AVAILABLE:
-                        api_key = getattr(settings, 'GOOGLE_AI_API_KEY', os.getenv('GOOGLE_AI_API_KEY'))
-                        if api_key:
-                            genai.configure(api_key=api_key)
-                            context_texts = [r.get('text', '') for r in similarity_results.get('results', [])]
-                            context = "\n\n".join(context_texts[:3])
-                            gemini_response = self._generate_with_gemini(query, context)
-
-                            return {
-                                **similarity_results,
-                                'mode': RAGMode.HYBRID.value,
-                                'generated_response': gemini_response,
-                                'generation_metadata': {
-                                    'generation_method': 'gemini_fallback',
-                                    'fallback_reason': 'huggingface_error'
-                                }
+                        return {
+                            **similarity_results,
+                            'mode': RAGMode.HYBRID.value,
+                            'took_ms': took_ms,
+                            'generated_response': gemini_response,
+                            'generation_metadata': {
+                                'generation_method': 'gemini_primary',
+                                'generation_took_ms': took_ms,
+                                'error': None
                             }
-                except Exception as gemini_error:
-                    logger.warning(f'Fallback Gemini également échoué: {str(gemini_error)}')
+                        }
+                    else:
+                        logger.warning('Clé API Google manquante, fallback vers Hugging Face en mode hybride')
+                        raise Exception("Clé API manquante")
+                else:
+                    logger.warning('Gemini non disponible, fallback vers Hugging Face en mode hybride')
+                    raise Exception("Gemini non disponible")
 
-                # Retourner au moins les résultats de similarité
-                return {
-                    **similarity_results,
-                    'mode': RAGMode.HYBRID.value,
-                    'generated_response': None,
-                    'generation_error': str(e)
-                }
+            except Exception as gemini_error:
+                logger.warning(f'Erreur génération Gemini en mode hybride: {str(gemini_error)}, tentative avec Hugging Face')
+                try:
+                    # Fallback vers Hugging Face pour la génération
+                    from .huggingface_rag import huggingface_rag_service
+
+                    # Utiliser les résultats de similarité comme contexte
+                    context_texts = [r.get('text', '') for r in similarity_results.get('results', [])]
+                    context = "\n\n".join(context_texts[:3])  # Limiter à 3 documents
+
+                    # Générer une réponse avec ce contexte
+                    generation_response = huggingface_rag_service.generate_response(
+                        f"Context: {context}\n\nQuestion: {query}",
+                        use_custom_context=False  # On fournit déjà le contexte
+                    )
+
+                    # Combiner les résultats
+                    took_ms = int((timezone.now() - started_at).total_seconds() * 1000)
+
+                    return {
+                        **similarity_results,
+                        'mode': RAGMode.HYBRID.value,
+                        'took_ms': took_ms,
+                        'generated_response': generation_response.get('response', ''),
+                        'generation_metadata': {
+                            'generation_took_ms': generation_response.get('took_ms', 0),
+                            'generation_method': 'huggingface_fallback',
+                            'fallback_reason': 'gemini_error',
+                            'error': generation_response.get('error')
+                        }
+                    }
+
+                except Exception as hf_error:
+                    logger.warning(f'Fallback Hugging Face également échoué: {str(hf_error)}')
+
+                    # Retourner au moins les résultats de similarité
+                    return {
+                        **similarity_results,
+                        'mode': RAGMode.HYBRID.value,
+                        'generated_response': None,
+                        'generation_error': f'Erreur Gemini: {str(gemini_error)}, Erreur HF: {str(hf_error)}'
+                    }
         else:
             return {
                 **similarity_results,
