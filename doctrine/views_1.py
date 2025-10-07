@@ -33,7 +33,7 @@ from .serializers import (
     PageContentSerializer, PageContentResponseSerializer
 )
 from .services.document_processor import document_processor
-from .services.rag import rag_retriever, RAGMode
+from .services.rag_service import PDFRAGService
 from .storage import DocumentStorage
 from .permissions import CanViewDocument, CanManageDocument
 from .tasks import process_document_content
@@ -1455,80 +1455,73 @@ class SearchContentView(generics.GenericAPIView):
 
         return content[:max_length] + ('...' if len(content) > max_length else '')
 
+
+
+PDF_PATH = "media/doctrine_fiscale.pdf"
+
+
 class RAGQueryView(APIView):
-    """APIView RAG multimode: recherche sémantique avec possibilité de génération"""
+    """APIView RAG unifié pour PDF: recherche sémantique avec génération Gemini"""
     permission_classes = []  # Accès public
     authentication_classes = []
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.rag_service = PDFRAGService(media_folder="media")
+
     @extend_schema(
-        summary="RAG - Recherche sémantique multimode",
+        summary="RAG - Recherche sémantique sur PDF avec génération",
         description=(
-            "Récupère les top-k passages pertinents avec support de 3 modes:\n"
-            "- similarity_only: Similarité simple avec embeddings (défaut)\n"
-            "- huggingface_rag: RAG complet avec génération Hugging Face\n"
-            "- hybrid: Combinaison similarité + génération\n"
-            "Requiert sentence-transformers et optionnellement transformers pour la génération."
+            "Récupère les top-k passages pertinents du PDF spécifié avec génération Gemini.\n"
+            "Mode toujours 'pdf_gemini_rag' (unifié).\n"
+            "Requiert google-generativeai et langchain pour le traitement PDF."
         ),
         request=RAGQuerySerializer,
         responses={200: RAGResponseSerializer}
     )
     def post(self, request):
-        """Recherche RAG avec différents modes de traitement"""
+        """Recherche RAG sur PDF avec génération"""
         serializer = RAGQuerySerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         validated_data = serializer.validated_data
         query = validated_data['query']
-        mode_str = validated_data.get('mode', RAGMode.SIMILARITY_ONLY.value)
         k = validated_data.get('k', 5)
-        scope = validated_data.get('scope', 'all')
-        document_id = validated_data.get('document_id')
 
-        # Convertir le mode string en enum
-        try:
-            mode = RAGMode(mode_str)
-        except ValueError:
-            mode = RAGMode.SIMILARITY_ONLY
+        data = self.rag_service.query(question=query, k=k)
 
-        # Récupérer le document si nécessaire
-        document = None
-        if scope == 'document' and document_id:
-            try:
-                document = Document.objects.get(id=document_id, is_deleted=False)
-            except Document.DoesNotExist:
-                return Response({'error': 'Document introuvable'}, status=status.HTTP_404_NOT_FOUND)
+        adapted_data = {
+            "query": data["query"],
+            "scope": "pdf",  # Fixed for PDF
+            "k": k,
+            "count": data["count"],
+            "took_ms": data["took_ms"],
+            "mode": data["mode"],
+            "results": data["context_documents"],
+            "generated_response": data["answer"],
+            "generation_metadata": data["generation_metadata"]
+        }
 
-        # Effectuer la recherche RAG avec le mode spécifié
-        data = rag_retriever.retrieve(query, k=k, scope=scope, document=document, mode=mode)
-
-        # Déterminer le status code
         status_code = status.HTTP_200_OK
-        if data.get('error'):
-            # Dependencies missing or other soft errors
+        if data.get('generation_metadata', {}).get('error'):
             status_code = status.HTTP_503_SERVICE_UNAVAILABLE
 
-        return Response(data, status=status_code)
+        return Response(adapted_data, status=status_code)
 
     @extend_schema(
-        summary="RAG - Recherche simple (GET, rétrocompatibilité)",
+        summary="RAG - Recherche simple sur PDF (GET, rétrocompatibilité)",
         description="Endpoint GET pour rétrocompatibilité avec l'ancienne API",
         parameters=[
             OpenApiParameter(name='q', type=OpenApiTypes.STR, required=True, location=OpenApiParameter.QUERY,
                              description='Question / requête utilisateur'),
             OpenApiParameter(name='k', type=OpenApiTypes.INT, required=False, location=OpenApiParameter.QUERY,
                              description='Nombre de passages à retourner (top-k)'),
-            OpenApiParameter(name='scope', type=OpenApiTypes.STR, required=False, location=OpenApiParameter.QUERY,
-                             description="Domaine de recherche: 'all' ou 'document'"),
-            OpenApiParameter(name='document_id', type=OpenApiTypes.STR, required=False, location=OpenApiParameter.QUERY,
-                             description='UUID du document si scope=document'),
-            OpenApiParameter(name='mode', type=OpenApiTypes.STR, required=False, location=OpenApiParameter.QUERY,
-                             description="Mode RAG: 'similarity_only', 'huggingface_rag', 'hybrid'")
         ],
         responses={200: OpenApiTypes.OBJECT}
     )
     def get(self, request):
-        """Endpoint GET pour rétrocompatibilité (mode similarité uniquement par défaut)"""
+        """Endpoint GET pour rétrocompatibilité"""
         q = (request.query_params.get('q') or '').strip()
         if not q:
             return Response({'error': 'Paramètre q requis'}, status=status.HTTP_400_BAD_REQUEST)
@@ -1539,28 +1532,27 @@ class RAGQueryView(APIView):
             k = 5
         k = max(1, min(50, k))
 
-        scope = (request.query_params.get('scope') or 'all').strip().lower()
-        document_id = request.query_params.get('document_id')
-        mode_str = request.query_params.get('mode', RAGMode.SIMILARITY_ONLY.value)
+        data = self.rag_service.query(question=q, k=k)
 
-        # Convertir le mode
-        try:
-            mode = RAGMode(mode_str)
-        except ValueError:
-            mode = RAGMode.SIMILARITY_ONLY
+        adapted_data = {
+            "query": data["query"],
+            "scope": "pdf",
+            "k": k,
+            "count": data["count"],
+            "took_ms": data["took_ms"],
+            "mode": data["mode"],
+            "results": data["context_documents"],
+            "generated_response": data["answer"],
+            "generation_metadata": data["generation_metadata"]
+        }
 
-        document = None
-        if scope == 'document' and document_id:
-            try:
-                document = Document.objects.get(id=document_id, is_deleted=False)
-            except Document.DoesNotExist:
-                return Response({'error': 'Document introuvable'}, status=status.HTTP_404_NOT_FOUND)
-
-        data = rag_retriever.retrieve(q, k=k, scope=scope, document=document, mode=mode)
         status_code = status.HTTP_200_OK
-        if data.get('error'):
+        if data.get('generation_metadata', {}).get('error'):
             status_code = status.HTTP_503_SERVICE_UNAVAILABLE
-        return Response(data, status=status_code)
+        return Response(adapted_data, status=status_code)
+
+
+
 
 
 class HuggingFaceRAGView(generics.GenericAPIView):
@@ -1683,6 +1675,11 @@ class ChatCompletionView(generics.GenericAPIView):
                     'code': 'generation_failed'
                 }
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
 
 
 class RAGModelInfoView(generics.GenericAPIView):

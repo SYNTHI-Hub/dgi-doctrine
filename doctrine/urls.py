@@ -33,21 +33,6 @@ urlpatterns = [
          processing_views.RAGQueryView.as_view(),
          name='rag-query'),
 
-    # Hugging Face RAG generation endpoint
-    path('api/v1/processing/rag/generate/',
-         processing_views.HuggingFaceRAGView.as_view(),
-         name='rag-generate'),
-
-    # Chat completion endpoint (compatible OpenAI)
-    path('api/v1/processing/rag/chat/completions/',
-         processing_views.ChatCompletionView.as_view(),
-         name='rag-chat-completions'),
-
-    # RAG model information endpoint
-    path('api/v1/processing/rag/models/info/',
-         processing_views.RAGModelInfoView.as_view(),
-         name='rag-model-info'),
-
     # Endpoint non-protégé pour tous les contenus extraits
     path('api/v1/public/all-extracted-content/',
          processing_views.AllExtractedContentView.as_view(),
@@ -65,3 +50,21 @@ urlpatterns = [
 ]
 
 app_name = 'doctrine'
+
+
+"""
+    # Hugging Face RAG generation endpoint
+    path('api/v1/processing/rag/generate/',
+         processing_views.HuggingFaceRAGView.as_view(),
+         name='rag-generate'),
+
+    # Chat completion endpoint (compatible OpenAI)
+    path('api/v1/processing/rag/chat/completions/',
+         processing_views.ChatCompletionView.as_view(),
+         name='rag-chat-completions'),
+
+    # RAG model information endpoint
+    path('api/v1/processing/rag/models/info/',
+         processing_views.RAGModelInfoView.as_view(),
+         name='rag-model-info'),
+  """

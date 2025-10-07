@@ -265,16 +265,16 @@ class RAGRetriever:
 
     def _retrieve_with_generation(self, query: str, k: int, scope: str,
                                   document: Optional[Document], started_at) -> Dict[str, Any]:
-        """Mode RAG avec génération Gemini + Database en priorité"""
-        # Priorité 1: Gemini + Database direct
-        logger.info('Tentative avec Gemini + Database direct en priorité')
+        """Mode RAG avec génération Gemini API + Database en priorité"""
+        # Priorité 1: API Gemini + Database simple (pas de dépendances lourdes)
+        logger.info('Tentative avec API Gemini + Database simple en priorité')
 
         try:
-            from .gemini_database_rag import gemini_database_rag_service
+            from .simple_api_rag import simple_api_rag_service
 
-            # Utiliser le service Gemini Database RAG
+            # Utiliser le service Simple API RAG
             document_id = str(document.id) if document else None
-            result = gemini_database_rag_service.query(query, k=k, document_id=document_id, scope=scope)
+            result = simple_api_rag_service.query(query, k=k, document_id=document_id, scope=scope)
 
             # Adapter le format de retour pour la compatibilité
             took_ms = int((timezone.now() - started_at).total_seconds() * 1000)
@@ -285,21 +285,22 @@ class RAGRetriever:
                 'k': k,
                 'count': result.get('count', 0),
                 'took_ms': took_ms,
-                'mode': 'gemini_database_primary',
+                'mode': 'gemini_api_database_primary',
                 'results': result.get('context_documents', []),
                 'generated_response': result.get('answer', ''),
                 'generation_metadata': {
                     'generation_took_ms': result.get('took_ms', 0),
-                    'generation_method': 'gemini_database_direct',
+                    'generation_method': 'gemini_api_direct',
                     'knowledge_source': 'django_database_tables',
                     'tables_used': ['Topic', 'Section', 'Document'],
+                    'search_method': 'textual_search',
                     'error': None
                 }
             }
 
         except Exception as e:
-            logger.warning('Erreur Gemini Database: %s, tentative avec LangChain fallback', e)
-            return self._try_langchain_fallback(query, k, scope, document, started_at, str(e))
+            logger.warning('Erreur Simple API RAG: %s, tentative avec fallback', e)
+            return self._try_legacy_fallback(query, k, scope, document, started_at, str(e))
 
     def _try_langchain_fallback(self, query: str, k: int, scope: str,
                                document: Optional[Document], started_at, error: str = None) -> Dict[str, Any]:

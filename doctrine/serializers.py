@@ -6,7 +6,14 @@ from .models import (
     User, Theme, DocumentCategory, Document, DocumentContent,
     Topic, Section, Paragraph, Table
 )
-from .services.rag import RAGMode
+from enum import Enum
+
+class RAGMode(Enum):
+    """Modes de traitement RAG"""
+    SIMILARITY_ONLY = "similarity_only"
+    HUGGINGFACE_RAG = "huggingface_rag"
+    LANGCHAIN_RAG = "langchain_rag"
+    HYBRID = "hybrid"
 
 User = get_user_model()
 
