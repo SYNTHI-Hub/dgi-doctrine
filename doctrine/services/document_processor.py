@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 class ExtractionResult:
     """Classe de données pour les résultats d'extraction"""
     success: bool
-    content: str = ""
+    content: Dict[str, str] = None  # {page_number: page_content}
     topics: List[Dict] = None
     sections: List[Dict] = None
     paragraphs: List[Dict] = None
@@ -32,6 +32,8 @@ class ExtractionResult:
     processing_time: float = 0.0
 
     def __post_init__(self):
+        if self.content is None:
+            self.content = {}
         if self.topics is None:
             self.topics = []
         if self.sections is None:
@@ -68,28 +70,68 @@ class PDFContentExtractor(ContentExtractorInterface):
         return file_extension.lower() in self.supported_formats
 
     def extract(self, file_path: str) -> ExtractionResult:
-        """Extraction du contenu PDF avec PyMuPDF"""
+        """Extraction du contenu PDF avec PyMuPDF optimisée pour les gros documents"""
         start_time = timezone.now()
         result = ExtractionResult(success=False)
 
         try:
             doc = fitz.open(file_path)
+            page_count = doc.page_count
 
-            full_text = ""
+            # Optimisation pour les gros documents (>100 pages)
+            is_large_document = page_count > 100
+
+            if is_large_document:
+                logger.info(f"Traitement optimisé pour document de {page_count} pages")
+
+            page_content_dict = {}  # {page_number: page_content}
             page_contents = []
+            chunk_size = 50 if is_large_document else page_count  # Traitement par chunks de 50 pages
 
-            for page_num in range(doc.page_count):
-                page = doc[page_num]
-                page_text = page.get_text()
-                page_contents.append({
-                    'page_number': page_num + 1,
-                    'content': page_text,
-                    'bbox': [page.rect.x0, page.rect.y0, page.rect.x1, page.rect.y1]
-                })
-                full_text += f"\n--- Page {page_num + 1} ---\n{page_text}"
+            # Traitement par chunks pour éviter la surcharge mémoire
+            for chunk_start in range(0, page_count, chunk_size):
+                chunk_end = min(chunk_start + chunk_size, page_count)
+
+                chunk_pages = []
+
+                for page_num in range(chunk_start, chunk_end):
+                    try:
+                        page = doc[page_num]
+                        page_text = page.get_text()
+                        page_number = str(page_num + 1)
+
+                        # Pour les gros documents, ne stocker que le texte essentiel
+                        if is_large_document:
+                            # Limiter le contenu stocké
+                            content = page_text[:5000] if len(page_text) > 5000 else page_text
+                            chunk_pages.append({
+                                'page_number': page_num + 1,
+                                'content': content,
+                                'has_content': bool(page_text.strip())
+                            })
+                        else:
+                            chunk_pages.append({
+                                'page_number': page_num + 1,
+                                'content': page_text,
+                                'bbox': [page.rect.x0, page.rect.y0, page.rect.x1, page.rect.y1]
+                            })
+
+                        # Stocker dans le dictionnaire page-contenu
+                        page_content_dict[page_number] = page_text[:5000] if is_large_document and len(page_text) > 5000 else page_text
+
+                    except Exception as e:
+                        logger.warning(f"Erreur traitement page {page_num + 1}: {str(e)}")
+                        continue
+
+                page_contents.extend(chunk_pages)
+
+                # Log de progression pour les gros documents
+                if is_large_document:
+                    progress = ((chunk_end / page_count) * 100)
+                    logger.info(f"Progression extraction: {progress:.1f}% ({chunk_end}/{page_count} pages)")
 
             metadata = {
-                'page_count': doc.page_count,
+                'page_count': page_count,
                 'title': doc.metadata.get('title', ''),
                 'author': doc.metadata.get('author', ''),
                 'subject': doc.metadata.get('subject', ''),
@@ -97,17 +139,33 @@ class PDFContentExtractor(ContentExtractorInterface):
                 'producer': doc.metadata.get('producer', ''),
                 'creation_date': doc.metadata.get('creationDate', ''),
                 'modification_date': doc.metadata.get('modDate', ''),
-                'page_contents': page_contents
+                'is_large_document': is_large_document,
+                'processing_optimized': is_large_document
             }
 
-            # Extraction des structures (titres, sections, etc.)
-            topics = self._extract_topics(doc, page_contents)
-            sections = self._extract_sections(page_contents)
-            paragraphs = self._extract_paragraphs(page_contents)
-            tables = self._extract_tables(doc)
+            # Pour les gros documents, stocker seulement les métadonnées de pages avec contenu
+            if is_large_document:
+                metadata['content_pages'] = [p for p in page_contents if p.get('has_content')]
+                metadata['total_content_pages'] = len(metadata['content_pages'])
+            else:
+                metadata['page_contents'] = page_contents
+
+            # Extraction des structures avec optimisation
+            if is_large_document:
+                # Extraction simplifiée pour les gros documents
+                topics = self._extract_topics_optimized(doc, page_contents)
+                sections = self._extract_sections_optimized(page_contents)
+                paragraphs = self._extract_paragraphs_optimized(page_contents)
+                tables = self._extract_tables_optimized(doc, max_pages=200)  # Limiter l'extraction de tableaux
+            else:
+                # Extraction complète pour les petits documents
+                topics = self._extract_topics(doc, page_contents)
+                sections = self._extract_sections(page_contents)
+                paragraphs = self._extract_paragraphs(page_contents)
+                tables = self._extract_tables(doc)
 
             result.success = True
-            result.content = full_text
+            result.content = page_content_dict  # Dictionnaire {page_number: page_content}
             result.topics = topics
             result.sections = sections
             result.paragraphs = paragraphs
@@ -291,6 +349,165 @@ class PDFContentExtractor(ContentExtractorInterface):
 
         return tables
 
+    def _extract_topics_optimized(self, doc, page_contents: List[Dict]) -> List[Dict]:
+        """Extraction optimisée des topics pour les gros documents"""
+        topics = []
+        current_topic = None
+
+        # Patterns simplifiés pour la rapidité
+        topic_patterns = [
+            r'^CHAPITRE\s+[IVXLCDM]+|^CHAPTER\s+\d+',
+            r'^TITRE\s+[IVXLCDM]+|^TITLE\s+\d+',
+            r'^\d+\.\s+[A-Z][^.]+$'
+        ]
+
+        # Traiter seulement toutes les 5 pages pour les gros documents
+        sample_pages = page_contents[::5] if len(page_contents) > 100 else page_contents
+
+        for page_data in sample_pages:
+            lines = page_data['content'].split('\n')[:20]  # Limiter aux 20 premières lignes par page
+
+            for line in lines:
+                line = line.strip()
+                if len(line) < 5:
+                    continue
+
+                for pattern in topic_patterns:
+                    if re.match(pattern, line, re.IGNORECASE):
+                        if current_topic:
+                            topics.append(current_topic)
+
+                        current_topic = {
+                            'title': line,
+                            'topic_type': self._determine_topic_type(line),
+                            'start_page': page_data['page_number'],
+                            'content': line + '\n',
+                            'order_index': len(topics),
+                            'level': self._determine_topic_level(line)
+                        }
+                        break
+
+        if current_topic:
+            topics.append(current_topic)
+
+        return topics
+
+    def _extract_sections_optimized(self, page_contents: List[Dict]) -> List[Dict]:
+        """Extraction optimisée des sections pour les gros documents"""
+        sections = []
+        section_patterns = [r'^\d+\.\d+\s+[A-Z]', r'^[A-Z][a-z]+\s*:']
+
+        # Échantillonnage pour les gros documents
+        sample_pages = page_contents[::3] if len(page_contents) > 100 else page_contents
+
+        for page_data in sample_pages:
+            lines = page_data['content'].split('\n')[:15]  # Limiter le nombre de lignes
+
+            for line in lines:
+                line = line.strip()
+                if len(line) < 5:
+                    continue
+
+                for pattern in section_patterns:
+                    if re.match(pattern, line):
+                        sections.append({
+                            'title': line,
+                            'section_type': self._determine_section_type(line),
+                            'start_page': page_data['page_number'],
+                            'content': line + '\n',
+                            'order_index': len(sections)
+                        })
+                        break
+
+        return sections
+
+    def _extract_paragraphs_optimized(self, page_contents: List[Dict]) -> List[Dict]:
+        """Extraction optimisée des paragraphes pour les gros documents"""
+        paragraphs = []
+        max_paragraphs = 500  # Limiter le nombre de paragraphes
+
+        # Échantillonnage pour les gros documents
+        sample_pages = page_contents[::2] if len(page_contents) > 100 else page_contents
+
+        for page_data in sample_pages:
+            if len(paragraphs) >= max_paragraphs:
+                break
+
+            text = page_data['content']
+            para_texts = re.split(r'\n\s*\n', text)[:10]  # Max 10 paragraphes par page
+
+            for para_text in para_texts:
+                para_text = para_text.strip()
+                if 100 <= len(para_text) <= 2000:  # Filtrer par taille
+                    paragraphs.append({
+                        'content': para_text,
+                        'paragraph_type': self._determine_paragraph_type(para_text),
+                        'order_index': len(paragraphs),
+                        'start_page': page_data['page_number'],
+                        'word_count': len(para_text.split()),
+                        'sentence_count': len(re.split(r'[.!?]+', para_text))
+                    })
+
+                if len(paragraphs) >= max_paragraphs:
+                    break
+
+        return paragraphs
+
+    def _extract_tables_optimized(self, doc, max_pages: int = 200) -> List[Dict]:
+        """Extraction optimisée des tableaux pour les gros documents"""
+        tables = []
+        max_tables = 50  # Limiter le nombre de tableaux
+
+        # Limiter le nombre de pages à traiter
+        page_count = min(doc.page_count, max_pages)
+
+        for page_num in range(0, page_count, 5):  # Traiter toutes les 5 pages
+            if len(tables) >= max_tables:
+                break
+
+            try:
+                page = doc[page_num]
+                table_candidates_obj = page.find_tables()
+
+                if not table_candidates_obj:
+                    continue
+
+                table_iterable = getattr(table_candidates_obj, 'tables', table_candidates_obj)
+
+                for table in table_iterable:
+                    if len(tables) >= max_tables:
+                        break
+
+                    try:
+                        table_data = table.extract()
+
+                        if table_data and len(table_data) > 1:
+                            headers = table_data[0] if table_data else []
+                            data_rows = table_data[1:] if len(table_data) > 1 else []
+
+                            tables.append({
+                                'title': f'Tableau {len(tables) + 1} - Page {page_num + 1}',
+                                'table_type': 'data',
+                                'headers': headers,
+                                'data': {'rows': data_rows, 'raw_data': table_data},
+                                'row_count': len(data_rows),
+                                'column_count': len(headers) if headers else 0,
+                                'start_page': page_num + 1,
+                                'order_index': len(tables),
+                                'extraction_confidence': 0.7,
+                                'extraction_method': 'pymupdf_optimized'
+                            })
+
+                    except Exception as e:
+                        logger.warning(f"Erreur extraction tableau page {page_num + 1}: {str(e)}")
+                        continue
+
+            except Exception as e:
+                logger.warning(f"Erreur page {page_num + 1}: {str(e)}")
+                continue
+
+        return tables
+
     def _determine_topic_type(self, title: str) -> str:
         """Détermine le type de topic basé sur le titre"""
         title_lower = title.lower()
@@ -392,11 +609,10 @@ class DocumentProcessorService:
                 return extractor
         return None
 
-    @transaction.atomic
     def process_document(self, document: Document) -> bool:
-        """Traite un document complet et sauvegarde les résultats"""
+        """Traite un document complet et sauvegarde les résultats avec transactions optimisées"""
         try:
-            # Mettre à jour le statut
+            # Mise à jour initiale du statut sans transaction atomique
             document.status = Document.StatusChoices.PROCESSING
             document.save(update_fields=['status'])
 
@@ -407,37 +623,22 @@ class DocumentProcessorService:
             if not extractor:
                 raise ValueError(f"Aucun extracteur disponible pour le type: {file_extension}")
 
-            # Extraction du contenu
+            # Extraction du contenu (hors transaction pour éviter les locks longs)
             file_path = document.file_path.path
             extraction_result = extractor.extract(file_path)
 
             if not extraction_result.success:
                 raise Exception(f"Échec de l'extraction: {', '.join(extraction_result.errors)}")
 
-            # Sauvegarde du contenu principal
-            content_data = self._prepare_content_data(extraction_result, document)
-            self._save_document_content(document, content_data)
+            # Déterminer si c'est un gros document
+            is_large_document = extraction_result.metadata.get('is_large_document', False)
 
-            # Sauvegarde des structures
-            self._save_topics(document, extraction_result.topics)
-            self._save_sections(document, extraction_result.sections)
-            self._save_paragraphs(document, extraction_result.paragraphs)
-            self._save_tables(document, extraction_result.tables)
-
-            # Mise à jour du document
-            document.status = Document.StatusChoices.PROCESSED
-            document.extraction_metadata = extraction_result.metadata
-            document.processing_log.append({
-                'timestamp': timezone.now().isoformat(),
-                'action': 'content_extraction',
-                'success': True,
-                'processing_time': extraction_result.processing_time,
-                'extractor': extractor.__class__.__name__
-            })
-            document.save()
-
-            logger.info(f"Document {document.id} traité avec succès")
-            return True
+            if is_large_document:
+                # Traitement optimisé par batch pour les gros documents
+                return self._process_large_document_optimized(document, extraction_result, extractor)
+            else:
+                # Traitement normal avec transaction atomique pour les petits documents
+                return self._process_small_document_atomic(document, extraction_result, extractor)
 
         except Exception as e:
             logger.error(f"Erreur lors du traitement du document {document.id}: {str(e)}")
@@ -454,18 +655,98 @@ class DocumentProcessorService:
 
             return False
 
+    @transaction.atomic
+    def _process_small_document_atomic(self, document: Document, extraction_result: ExtractionResult, extractor) -> bool:
+        """Traitement atomique pour les petits documents (<= 100 pages)"""
+        # Sauvegarde du contenu principal
+        content_data = self._prepare_content_data(extraction_result, document)
+        self._save_document_content(document, content_data)
+
+        # Sauvegarde des structures
+        self._save_topics(document, extraction_result.topics)
+        self._save_sections(document, extraction_result.sections)
+        self._save_paragraphs(document, extraction_result.paragraphs)
+        self._save_tables(document, extraction_result.tables)
+
+        # Mise à jour du document
+        document.status = Document.StatusChoices.PROCESSED
+        document.extraction_metadata = extraction_result.metadata
+        document.processing_log.append({
+            'timestamp': timezone.now().isoformat(),
+            'action': 'content_extraction',
+            'success': True,
+            'processing_time': extraction_result.processing_time,
+            'extractor': extractor.__class__.__name__
+        })
+        document.save()
+
+        logger.info(f"Document {document.id} traité avec succès")
+        return True
+
+    def _process_large_document_optimized(self, document: Document, extraction_result: ExtractionResult, extractor) -> bool:
+        """Traitement optimisé par batch pour les gros documents (> 100 pages)"""
+        try:
+            # Sauvegarder le contenu principal d'abord
+            with transaction.atomic():
+                content_data = self._prepare_content_data(extraction_result, document)
+                self._save_document_content(document, content_data)
+
+            # Sauvegarder les structures par batch pour éviter les transactions trop longues
+            batch_size = 100
+
+            # Topics par batch
+            if extraction_result.topics:
+                self._save_topics_batch(document, extraction_result.topics, batch_size)
+
+            # Sections par batch
+            if extraction_result.sections:
+                self._save_sections_batch(document, extraction_result.sections, batch_size)
+
+            # Paragraphes par batch
+            if extraction_result.paragraphs:
+                self._save_paragraphs_batch(document, extraction_result.paragraphs, batch_size)
+
+            # Tables par batch
+            if extraction_result.tables:
+                self._save_tables_batch(document, extraction_result.tables, batch_size)
+
+            # Mise à jour finale du document
+            with transaction.atomic():
+                document.status = Document.StatusChoices.PROCESSED
+                document.extraction_metadata = extraction_result.metadata
+                document.processing_log.append({
+                    'timestamp': timezone.now().isoformat(),
+                    'action': 'content_extraction_optimized',
+                    'success': True,
+                    'processing_time': extraction_result.processing_time,
+                    'extractor': extractor.__class__.__name__,
+                    'optimization': 'large_document_batch'
+                })
+                document.save()
+
+            logger.info(f"Gros document {document.id} traité avec succès en mode optimisé")
+            return True
+
+        except Exception as e:
+            logger.error(f"Erreur lors du traitement optimisé du document {document.id}: {str(e)}")
+            raise
+
     def _prepare_content_data(self, extraction_result: ExtractionResult, document: Document) -> Dict:
         """Prépare les données de contenu"""
-        clean_content = self._clean_text(extraction_result.content)
+        # Convertir le dictionnaire page-contenu en texte complet pour la compatibilité
+        full_text = self._convert_page_dict_to_text(extraction_result.content)
+        clean_content = self._clean_text(full_text)
 
         return {
-            'raw_content': extraction_result.content,
-            'clean_content': clean_content,
+            'raw_content': extraction_result.content,  # Dictionnaire {page_number: page_content}
+            'clean_content': clean_content,  # Texte complet nettoyé
             'structured_content': {
                 'topics_count': len(extraction_result.topics),
                 'sections_count': len(extraction_result.sections),
                 'paragraphs_count': len(extraction_result.paragraphs),
-                'tables_count': len(extraction_result.tables)
+                'tables_count': len(extraction_result.tables),
+                'page_based_content': True,
+                'total_pages': len(extraction_result.content)
             },
             'content_type': DocumentContent.ContentType.STRUCTURED,
             'extraction_method': DocumentContent.ExtractionMethod.AUTOMATIC,
@@ -509,6 +790,33 @@ class DocumentProcessorService:
                 start_page=topic_data.get('start_page'),
                 word_count=len(topic_data.get('content', '').split())
             )
+
+    def _save_topics_batch(self, document: Document, topics_data: List[Dict], batch_size: int = 100):
+        """Sauvegarde les topics par batch pour les gros documents"""
+        # Supprimer les anciens topics
+        with transaction.atomic():
+            document.topics.all().delete()
+
+        for i in range(0, len(topics_data), batch_size):
+            batch = topics_data[i:i + batch_size]
+            topics_to_create = []
+
+            for topic_data in batch:
+                topics_to_create.append(Topic(
+                    document=document,
+                    title=topic_data.get('title', ''),
+                    content=topic_data.get('content', ''),
+                    topic_type=topic_data.get('topic_type', Topic.TopicType.SECTION),
+                    order_index=topic_data.get('order_index', 0),
+                    level=topic_data.get('level', 1),
+                    start_page=topic_data.get('start_page'),
+                    word_count=len(topic_data.get('content', '').split())
+                ))
+
+            with transaction.atomic():
+                Topic.objects.bulk_create(topics_to_create, batch_size=batch_size)
+
+            logger.info(f"Batch topics sauvegardé: {len(topics_to_create)} items")
 
     def _save_sections(self, document: Document, sections_data: List[Dict]):
         """Sauvegarde les sections"""
@@ -645,6 +953,20 @@ class DocumentProcessorService:
                 has_header_row=len(table_data.get('headers', [])) > 0
             )
 
+    def _convert_page_dict_to_text(self, page_content_dict: Dict[str, str]) -> str:
+        """Convertit le dictionnaire {page_number: page_content} en texte complet"""
+        if not page_content_dict:
+            return ''
+
+        # Trier les pages par numéro
+        sorted_pages = sorted(page_content_dict.items(), key=lambda x: int(x[0]))
+
+        full_text = ""
+        for page_number, page_content in sorted_pages:
+            full_text += f"\n--- Page {page_number} ---\n{page_content}"
+
+        return full_text
+
     def _clean_text(self, text: str) -> str:
         """Nettoie le texte extrait tout en préservant la structure (sauts de ligne)."""
         if not text:
@@ -663,6 +985,172 @@ class DocumentProcessorService:
         # Limiter les sauts de ligne consécutifs à 2
         text = re.sub(r'\n{3,}', '\n\n', text)
         return text.strip()
+
+    def _save_sections_batch(self, document: Document, sections_data: List[Dict], batch_size: int = 100):
+        """Sauvegarde les sections par batch pour les gros documents"""
+        topics = list(document.topics.all().order_by('order_index'))
+
+        if not topics and sections_data:
+            with transaction.atomic():
+                default_topic = Topic.objects.create(
+                    document=document,
+                    title='Contenu',
+                    content='Sections détectées',
+                    topic_type=Topic.TopicType.SECTION,
+                    order_index=0,
+                    level=1,
+                    start_page=sections_data[0].get('start_page') if sections_data else None
+                )
+                topics = [default_topic]
+
+        def find_topic_for_page(start_page: Optional[int]) -> Optional[Topic]:
+            if not topics:
+                return None
+            if not start_page:
+                return topics[0]
+            candidates = [t for t in topics if t.start_page and t.start_page <= start_page]
+            return candidates[-1] if candidates else topics[0]
+
+        for i in range(0, len(sections_data), batch_size):
+            batch = sections_data[i:i + batch_size]
+            sections_to_create = []
+
+            for section_data in batch:
+                topic = find_topic_for_page(section_data.get('start_page'))
+                if topic:
+                    sections_to_create.append(Section(
+                        topic=topic,
+                        title=section_data.get('title', ''),
+                        content=section_data.get('content', ''),
+                        section_type=section_data.get('section_type', Section.SectionType.PARAGRAPH),
+                        order_index=section_data.get('order_index', 0),
+                        start_page=section_data.get('start_page'),
+                        word_count=len(section_data.get('content', '').split())
+                    ))
+
+            if sections_to_create:
+                with transaction.atomic():
+                    Section.objects.bulk_create(sections_to_create, batch_size=batch_size)
+
+                logger.info(f"Batch sections sauvegardé: {len(sections_to_create)} items")
+
+    def _save_paragraphs_batch(self, document: Document, paragraphs_data: List[Dict], batch_size: int = 100):
+        """Sauvegarde les paragraphes par batch pour les gros documents"""
+        sections = list(Section.objects.filter(topic__document=document).order_by('start_page', 'order_index'))
+
+        if not sections and paragraphs_data:
+            with transaction.atomic():
+                topic = Topic.objects.create(
+                    document=document,
+                    title='Contenu',
+                    content='Paragraphes détectés',
+                    topic_type=Topic.TopicType.SECTION,
+                    order_index=0,
+                    level=1,
+                    start_page=paragraphs_data[0].get('start_page') if paragraphs_data else None
+                )
+                section = Section.objects.create(
+                    topic=topic,
+                    title='Paragraphes',
+                    content='',
+                    section_type=Section.SectionType.PARAGRAPH,
+                    order_index=0,
+                    start_page=paragraphs_data[0].get('start_page') or 1,
+                    word_count=0
+                )
+                sections = [section]
+
+        def find_section_for_page(start_page: Optional[int]) -> Optional[Section]:
+            if not sections:
+                return None
+            if not start_page:
+                return sections[0]
+            candidates = [s for s in sections if s.start_page and s.start_page <= start_page]
+            return candidates[-1] if candidates else sections[0]
+
+        for i in range(0, len(paragraphs_data), batch_size):
+            batch = paragraphs_data[i:i + batch_size]
+            paragraphs_to_create = []
+
+            for para_data in batch:
+                section = find_section_for_page(para_data.get('start_page'))
+                if section:
+                    paragraphs_to_create.append(Paragraph(
+                        section=section,
+                        content=para_data.get('content', ''),
+                        paragraph_type=para_data.get('paragraph_type', Paragraph.ParagraphType.NORMAL),
+                        order_index=para_data.get('order_index', 0),
+                        word_count=para_data.get('word_count', 0),
+                        sentence_count=para_data.get('sentence_count', 0)
+                    ))
+
+            if paragraphs_to_create:
+                with transaction.atomic():
+                    Paragraph.objects.bulk_create(paragraphs_to_create, batch_size=batch_size)
+
+                logger.info(f"Batch paragraphes sauvegardé: {len(paragraphs_to_create)} items")
+
+    def _save_tables_batch(self, document: Document, tables_data: List[Dict], batch_size: int = 50):
+        """Sauvegarde les tables par batch pour les gros documents"""
+        sections = list(Section.objects.filter(topic__document=document).order_by('start_page', 'order_index'))
+
+        def ensure_tables_section(start_page: Optional[int]) -> Section:
+            if sections:
+                if start_page:
+                    candidates = [s for s in sections if s.start_page and s.start_page <= start_page]
+                    return candidates[-1] if candidates else sections[0]
+                return sections[0]
+
+            with transaction.atomic():
+                topic = Topic.objects.create(
+                    document=document,
+                    title='Tables',
+                    content='Tables extraites',
+                    topic_type=Topic.TopicType.SECTION,
+                    order_index=0,
+                    level=1,
+                    start_page=start_page
+                )
+                section = Section.objects.create(
+                    topic=topic,
+                    title='Tables',
+                    content='',
+                    section_type=Section.SectionType.PARAGRAPH,
+                    order_index=0,
+                    start_page=start_page or 1,
+                    word_count=0
+                )
+                sections.append(section)
+                return section
+
+        for i in range(0, len(tables_data), batch_size):
+            batch = tables_data[i:i + batch_size]
+            tables_to_create = []
+
+            for table_data in batch:
+                section = ensure_tables_section(table_data.get('start_page'))
+                tables_to_create.append(Table(
+                    section=section,
+                    title=table_data.get('title', ''),
+                    caption=table_data.get('caption', ''),
+                    table_type=table_data.get('table_type', Table.TableType.DATA),
+                    headers=table_data.get('headers', []),
+                    data=table_data.get('data', {}),
+                    raw_data=table_data.get('data', {}),
+                    row_count=table_data.get('row_count', 0),
+                    column_count=table_data.get('column_count', 0),
+                    order_index=table_data.get('order_index', 0),
+                    extraction_confidence=Decimal(str(table_data.get('extraction_confidence', 0.0))),
+                    extraction_method=table_data.get('extraction_method', ''),
+                    bbox_coordinates=table_data.get('bbox_coordinates', {}),
+                    has_header_row=len(table_data.get('headers', [])) > 0
+                ))
+
+            if tables_to_create:
+                with transaction.atomic():
+                    Table.objects.bulk_create(tables_to_create, batch_size=batch_size)
+
+                logger.info(f"Batch tables sauvegardé: {len(tables_to_create)} items")
 
 
 # Singleton du service

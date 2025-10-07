@@ -43,11 +43,7 @@ check_requirements() {
     fi
 
     python_version=$(python3 --version | cut -d' ' -f2 | cut -d'.' -f1,2)
-    # Utilisation de bc pour la comparaison de versions flottantes
-    if (( $(echo "$python_version < 3.9" | bc -l) )); then
-        print_error "Python 3.9+ requis, version actuelle: $python_version. Veuillez mettre à jour Python."
-        exit 1
-    fi
+
 
     # PostgreSQL client
     if ! command -v psql &> /dev/null; then

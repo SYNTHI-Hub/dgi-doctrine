@@ -13,7 +13,7 @@ from doctrine import models
 logger = logging.getLogger(__name__)
 
 
-@shared_task(bind=True, max_retries=3, default_retry_delay=60)
+@shared_task(bind=True, max_retries=2, default_retry_delay=120, soft_time_limit=3600, time_limit=7200)
 def process_document_content(self, document_id):
     """
     Traite le contenu d'un document en arrière-plan avec retry automatique

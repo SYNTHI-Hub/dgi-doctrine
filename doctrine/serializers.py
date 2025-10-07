@@ -6,6 +6,7 @@ from .models import (
     User, Theme, DocumentCategory, Document, DocumentContent,
     Topic, Section, Paragraph, Table
 )
+from .services.rag import RAGMode
 
 User = get_user_model()
 
@@ -316,7 +317,7 @@ class DocumentCreateSerializer(BaseModelSerializer):
         model = Document
         fields = [
             'title', 'description', 'summary', 'original_filename',
-            'file_path', 'theme', 'category', 'visibility', 'language',
+            'file_path', 'file_size', 'theme', 'category', 'visibility', 'language',
             'priority', 'publication_date', 'effective_date', 'expiration_date',
             'legal_reference', 'regulation_number', 'jurisdiction',
             'compliance_requirements', 'metadata', 'search_keywords',
@@ -332,6 +333,23 @@ class DocumentCreateSerializer(BaseModelSerializer):
                 raise serializers.ValidationError(
                     f"Le fichier est trop volumineux. Taille maximum: {max_size / 1024 / 1024}MB")
         return value
+
+    def validate(self, attrs):
+        # Ensure file_size is set if file_path is provided
+        file_path = attrs.get('file_path')
+        if file_path and not attrs.get('file_size'):
+            file_size = getattr(file_path, 'size', None)
+            if file_size is None or file_size <= 0:
+                raise serializers.ValidationError({
+                    'file_path': 'Impossible de déterminer la taille du fichier'
+                })
+            attrs['file_size'] = file_size
+        return attrs
+
+    def create(self, validated_data):
+        # Set uploaded_by to current user
+        validated_data['uploaded_by'] = self.context['request'].user
+        return super().create(validated_data)
 
 
 class DocumentUpdateSerializer(BaseModelSerializer):
@@ -355,6 +373,8 @@ class DocumentUpdateSerializer(BaseModelSerializer):
 class DocumentContentSerializer(BaseModelSerializer):
     """Serializer pour le contenu de document"""
     document = DocumentMinimalSerializer(read_only=True)
+    total_pages = serializers.SerializerMethodField()
+    has_page_based_content = serializers.SerializerMethodField()
 
     class Meta:
         model = DocumentContent
@@ -369,14 +389,141 @@ class DocumentContentSerializer(BaseModelSerializer):
             'readability_score', 'complexity_score', 'processed_at',
             'processing_duration', 'processing_errors', 'quality_checks',
             'encoding_detected', 'language_detected', 'language_confidence',
-            'created_at', 'updated_at'
+            'total_pages', 'has_page_based_content', 'created_at', 'updated_at'
         ]
         read_only_fields = [
             'id', 'document', 'word_count', 'character_count',
             'sentence_count', 'paragraph_count', 'processed_at',
             'processing_duration', 'encoding_detected', 'language_detected',
-            'language_confidence', 'created_at', 'updated_at'
+            'language_confidence', 'total_pages', 'has_page_based_content',
+            'created_at', 'updated_at'
         ]
+
+    @extend_schema_field(serializers.IntegerField)
+    def get_total_pages(self, obj):
+        """Retourne le nombre total de pages"""
+        return obj.get_total_pages()
+
+    @extend_schema_field(serializers.BooleanField)
+    def get_has_page_based_content(self, obj):
+        """Indique si le contenu est organisé par pages"""
+        return obj.has_page_based_content()
+
+
+class PageContentSerializer(serializers.Serializer):
+    """Serializer pour récupérer le contenu d'une ou plusieurs pages"""
+    page_number = serializers.IntegerField(required=False, help_text="Numéro de page spécifique")
+    start_page = serializers.IntegerField(required=False, help_text="Page de début (pour une plage)")
+    end_page = serializers.IntegerField(required=False, help_text="Page de fin (pour une plage)")
+
+    def validate(self, data):
+        """Validation des paramètres de page"""
+        page_number = data.get('page_number')
+        start_page = data.get('start_page')
+        end_page = data.get('end_page')
+
+        if page_number and (start_page or end_page):
+            raise serializers.ValidationError(
+                "Utilisez soit 'page_number' soit 'start_page'/'end_page', pas les deux"
+            )
+
+        if not page_number and not start_page:
+            raise serializers.ValidationError(
+                "Spécifiez soit 'page_number' soit 'start_page'"
+            )
+
+        if start_page and start_page < 1:
+            raise serializers.ValidationError("start_page doit être >= 1")
+
+        if end_page and end_page < 1:
+            raise serializers.ValidationError("end_page doit être >= 1")
+
+        if start_page and end_page and start_page > end_page:
+            raise serializers.ValidationError("start_page doit être <= end_page")
+
+        return data
+
+
+class PageContentResponseSerializer(serializers.Serializer):
+    """Serializer pour la réponse de contenu par page"""
+    document_id = serializers.UUIDField()
+    document_title = serializers.CharField()
+    total_pages = serializers.IntegerField()
+    requested_pages = serializers.DictField(
+        child=serializers.CharField(),
+        help_text="Dictionnaire {page_number: page_content}"
+    )
+
+
+class DocumentContentLightSerializer(BaseModelSerializer):
+    """Serializer allégé pour le contenu de document (pour pagination rapide)"""
+    document = DocumentMinimalSerializer(read_only=True)
+
+    class Meta:
+        model = DocumentContent
+        fields = [
+            'id', 'document', 'content_type', 'extraction_method',
+            'processing_status', 'word_count', 'character_count',
+            'page_count', 'processed_at', 'created_at'
+        ]
+        read_only_fields = [
+            'id', 'document', 'word_count', 'character_count',
+            'processed_at', 'created_at'
+        ]
+
+
+class SectionPreviewSerializer(serializers.ModelSerializer):
+    """Serializer pour l'aperçu des sections - uniquement title et content"""
+
+    class Meta:
+        model = Section
+        fields = ['title', 'content']
+
+
+class DocumentContentWithPreviewSerializer(BaseModelSerializer):
+    """Serializer pour le contenu de document avec aperçu des premières sections"""
+    document = DocumentMinimalSerializer(read_only=True)
+    content_preview = serializers.SerializerMethodField()
+
+    class Meta:
+        model = DocumentContent
+        fields = [
+            'id', 'document', 'content_type', 'extraction_method',
+            'processing_status', 'word_count', 'character_count',
+            'page_count', 'processed_at', 'created_at', 'content_preview'
+        ]
+        read_only_fields = [
+            'id', 'document', 'word_count', 'character_count',
+            'processed_at', 'created_at'
+        ]
+
+    @extend_schema_field({
+        'type': 'array',
+        'items': {
+            'type': 'object',
+            'properties': {
+                'title': {'type': 'string', 'description': 'Titre de la section'},
+                'content': {'type': 'string', 'description': 'Contenu de la section'}
+            }
+        },
+        'description': 'Aperçu des 3 premières sections du document (title et content uniquement)'
+    })
+    def get_content_preview(self, obj):
+        """Retourne les 3 premières sections du document pour aperçu (title et content uniquement)"""
+        try:
+            # Récupérer les 3 premières sections du document - optimisé sans paragraphes
+            sections = Section.objects.filter(
+                topic__document=obj.document,
+                is_deleted=False
+            ).select_related('topic').only(
+                'title', 'content', 'topic__order_index', 'order_index'
+            ).order_by(
+                'topic__order_index', 'order_index'
+            )[:3]
+
+            return SectionPreviewSerializer(sections, many=True).data
+        except Exception:
+            return []
 
 
 class TopicMinimalSerializer(serializers.ModelSerializer):
@@ -548,3 +695,207 @@ class TableSerializer(BaseModelSerializer):
             'id', 'row_count', 'column_count', 'extraction_confidence',
             'created_at', 'updated_at'
         ]
+
+
+# ==========================================
+# RAG Serializers
+# ==========================================
+
+class RAGQuerySerializer(serializers.Serializer):
+    """Serializer pour les requêtes RAG"""
+    query = serializers.CharField(
+        max_length=1000,
+        required=True,
+        help_text="La question ou requête à traiter"
+    )
+    mode = serializers.ChoiceField(
+        choices=[(mode.value, mode.value) for mode in RAGMode],
+        default=RAGMode.SIMILARITY_ONLY.value,
+        required=False,
+        help_text="Mode de traitement RAG"
+    )
+    k = serializers.IntegerField(
+        min_value=1,
+        max_value=20,
+        default=5,
+        required=False,
+        help_text="Nombre de documents à récupérer"
+    )
+    scope = serializers.ChoiceField(
+        choices=[('all', 'Tous les documents'), ('document', 'Document spécifique')],
+        default='all',
+        required=False,
+        help_text="Portée de la recherche"
+    )
+    document_id = serializers.UUIDField(
+        required=False,
+        allow_null=True,
+        help_text="ID du document spécifique (si scope='document')"
+    )
+    max_new_tokens = serializers.IntegerField(
+        min_value=10,
+        max_value=500,
+        default=100,
+        required=False,
+        help_text="Nombre maximum de tokens à générer (pour mode generation)"
+    )
+    num_beams = serializers.IntegerField(
+        min_value=1,
+        max_value=10,
+        default=4,
+        required=False,
+        help_text="Nombre de beams pour la génération"
+    )
+    temperature = serializers.FloatField(
+        min_value=0.1,
+        max_value=2.0,
+        default=1.0,
+        required=False,
+        help_text="Température pour la génération (créativité)"
+    )
+    use_custom_context = serializers.BooleanField(
+        default=True,
+        required=False,
+        help_text="Utiliser la base de données comme contexte"
+    )
+
+    def validate(self, attrs):
+        """Validation inter-champs"""
+        scope = attrs.get('scope', 'all')
+        document_id = attrs.get('document_id')
+
+        if scope == 'document' and not document_id:
+            raise serializers.ValidationError(
+                "document_id est requis quand scope='document'"
+            )
+
+        return attrs
+
+
+class HuggingFaceRAGGenerationSerializer(serializers.Serializer):
+    """Serializer pour la génération Hugging Face RAG complète"""
+    query = serializers.CharField(
+        max_length=1000,
+        required=True,
+        help_text="La question à traiter"
+    )
+    max_new_tokens = serializers.IntegerField(
+        min_value=10,
+        max_value=500,
+        default=100,
+        required=False
+    )
+    num_beams = serializers.IntegerField(
+        min_value=1,
+        max_value=10,
+        default=4,
+        required=False
+    )
+    do_sample = serializers.BooleanField(
+        default=False,
+        required=False,
+        help_text="Utiliser l'échantillonnage au lieu de beam search"
+    )
+    temperature = serializers.FloatField(
+        min_value=0.1,
+        max_value=2.0,
+        default=1.0,
+        required=False
+    )
+    top_p = serializers.FloatField(
+        min_value=0.1,
+        max_value=1.0,
+        default=1.0,
+        required=False,
+        help_text="Nucleus sampling"
+    )
+    early_stopping = serializers.BooleanField(
+        default=True,
+        required=False
+    )
+    use_custom_context = serializers.BooleanField(
+        default=True,
+        required=False,
+        help_text="Utiliser notre base de données pour le contexte"
+    )
+
+
+class ChatMessage(serializers.Serializer):
+    """Serializer pour un message de chat"""
+    role = serializers.ChoiceField(
+        choices=[('user', 'User'), ('assistant', 'Assistant'), ('system', 'System')],
+        required=True,
+        help_text="Rôle du message"
+    )
+    content = serializers.CharField(
+        max_length=2000,
+        required=True,
+        help_text="Contenu du message"
+    )
+
+
+class ChatCompletionSerializer(serializers.Serializer):
+    """Serializer pour les conversations chat (compatible OpenAI)"""
+    messages = serializers.ListSerializer(
+        child=ChatMessage(),
+        min_length=1,
+        help_text="Liste des messages de conversation"
+    )
+    max_new_tokens = serializers.IntegerField(
+        min_value=10,
+        max_value=500,
+        default=100,
+        required=False
+    )
+    temperature = serializers.FloatField(
+        min_value=0.1,
+        max_value=2.0,
+        default=1.0,
+        required=False
+    )
+    top_p = serializers.FloatField(
+        min_value=0.1,
+        max_value=1.0,
+        default=1.0,
+        required=False
+    )
+    num_beams = serializers.IntegerField(
+        min_value=1,
+        max_value=10,
+        default=4,
+        required=False
+    )
+
+    def validate_messages(self, value):
+        """Valider qu'il y a au moins un message utilisateur"""
+        user_messages = [msg for msg in value if msg.get('role') == 'user']
+        if not user_messages:
+            raise serializers.ValidationError(
+                "Au moins un message avec role='user' est requis"
+            )
+        return value
+
+
+class RAGResponseSerializer(serializers.Serializer):
+    """Serializer pour les réponses RAG (en lecture seule)"""
+    query = serializers.CharField(read_only=True)
+    mode = serializers.CharField(read_only=True)
+    scope = serializers.CharField(read_only=True)
+    k = serializers.IntegerField(read_only=True)
+    count = serializers.IntegerField(read_only=True)
+    took_ms = serializers.IntegerField(read_only=True)
+    results = serializers.ListField(read_only=True)
+    generated_response = serializers.CharField(read_only=True, required=False)
+    generation_metadata = serializers.DictField(read_only=True, required=False)
+    error = serializers.CharField(read_only=True, required=False)
+
+
+class ModelInfoSerializer(serializers.Serializer):
+    """Serializer pour les informations sur les modèles RAG"""
+    model_name = serializers.CharField(read_only=True)
+    retriever_name = serializers.CharField(read_only=True)
+    device = serializers.CharField(read_only=True)
+    model_loaded = serializers.BooleanField(read_only=True)
+    use_custom_retriever = serializers.BooleanField(read_only=True)
+    use_gpu = serializers.BooleanField(read_only=True)
+    dependencies_available = serializers.BooleanField(read_only=True)

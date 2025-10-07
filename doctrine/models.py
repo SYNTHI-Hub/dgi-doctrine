@@ -560,10 +560,15 @@ class Document(TimeStampedModel, SoftDeleteModel):
         if self.file_path and not self.file_checksum:
             self.file_checksum = self._calculate_checksum()
 
-        # Mise à jour de la taille de fichier
+        # Mise à jour de la taille de fichier si pas déjà définie
         if self.file_path:
-            self.file_size = self.file_path.size
-            self.file_type = os.path.splitext(self.original_filename)[1][1:].lower()
+            if not self.file_size:
+                try:
+                    self.file_size = self.file_path.size or 0
+                except:
+                    self.file_size = 0
+            if not self.file_type and self.original_filename:
+                self.file_type = os.path.splitext(self.original_filename)[1][1:].lower()
 
         super().save(*args, **kwargs)
 
@@ -742,6 +747,50 @@ class DocumentContent(TimeStampedModel):
             words = self.clean_content.split()[:max_words]
             return ' '.join(words) + ('...' if len(words) == max_words else '')
         return ""
+
+    def get_page_content(self, page_number: int) -> str:
+        """Récupère le contenu d'une page spécifique
+
+        Args:
+            page_number: Numéro de page (commence à 1)
+
+        Returns:
+            Contenu de la page ou chaîne vide si la page n'existe pas
+        """
+        if isinstance(self.raw_content, dict) and str(page_number) in self.raw_content:
+            return self.raw_content[str(page_number)]
+        return ""
+
+    def get_pages_content(self, start_page: int = 1, end_page: int = None) -> dict:
+        """Récupère le contenu de plusieurs pages
+
+        Args:
+            start_page: Page de début (incluse)
+            end_page: Page de fin (incluse). Si None, récupère jusqu'à la fin
+
+        Returns:
+            Dictionnaire {page_number: page_content}
+        """
+        if not isinstance(self.raw_content, dict):
+            return {}
+
+        result = {}
+        for page_num_str, content in self.raw_content.items():
+            page_num = int(page_num_str)
+            if page_num >= start_page and (end_page is None or page_num <= end_page):
+                result[page_num_str] = content
+
+        return result
+
+    def get_total_pages(self) -> int:
+        """Retourne le nombre total de pages"""
+        if isinstance(self.raw_content, dict):
+            return len(self.raw_content)
+        return 0
+
+    def has_page_based_content(self) -> bool:
+        """Vérifie si le contenu est organisé par pages"""
+        return isinstance(self.raw_content, dict) and bool(self.raw_content)
 
 
 class Topic(TimeStampedModel, SoftDeleteModel):
